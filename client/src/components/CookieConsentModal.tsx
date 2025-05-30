@@ -21,11 +21,8 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
     const cookieYesConsent = document.cookie.includes('cookieyes-consent');
     
     if (!cookieChoice && !cookieYesConsent) {
-      // Show banner after a short delay
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 100);
-      return () => clearTimeout(timer);
+      // Show banner immediately
+      setIsVisible(true);
     }
   }, []);
 
@@ -113,9 +110,18 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
       {/* Bottom banner style positioned in corner */}
       <motion.div
         initial={{ opacity: 0, y: 100, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
+        animate={{ 
+          opacity: 1, 
+          y: 0, 
+          scale: 1,
+          x: [0, -10, 10, -10, 10, -5, 5, -2, 2, 0] // Shake animation
+        }}
         exit={{ opacity: 0, y: 100, scale: 0.95 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ 
+          duration: 0.4, 
+          ease: "easeOut",
+          x: { duration: 0.8, delay: 0.2 } // Shake starts after slide-in
+        }}
         className="fixed bottom-4 right-4 z-50 max-w-md w-full pointer-events-auto"
         style={{ zIndex: 9999 }}
         onClick={(e) => e.stopPropagation()}
