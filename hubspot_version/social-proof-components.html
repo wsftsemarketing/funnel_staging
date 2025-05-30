@@ -1,0 +1,238 @@
+<!--
+  Social Proof Components for Touchstone Education Webinar Landing Page
+  HubSpot HUBL Compatible
+-->
+
+<!-- 
+  INSTRUCTIONS:
+  1. Place the Social Proof Notification just before the closing </body> tag in your template
+  2. Place the Webinar Countdown Upsell just before the closing </body> tag in your template
+  3. Include the JavaScript at the end of your template, before the standard_footer_includes tag
+-->
+
+<!-- Social Proof Notification Pop-up -->
+<div id="socialProofNotification" class="fixed bottom-5 left-5 z-50 pointer-events-none max-w-[calc(100vw-40px)] sm:max-w-xs hidden">
+  <div class="bg-white p-4 rounded-lg shadow-lg border border-neutral-100 overflow-hidden pointer-events-auto">
+    <div class="flex items-center gap-3">
+      <div class="relative">
+        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold notification-initial">
+          S
+        </div>
+        <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-foreground truncate notification-message">
+          Sarah T. from Manchester
+        </p>
+        <p class="text-xs text-muted-foreground flex items-center">
+          <span class="w-2 h-2 rounded-full bg-primary inline-block mr-1"></span>
+          Registered <span class="notification-time">2 minutes ago</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Webinar Countdown Upsell - Appears after scrolling -->
+<div id="webinarCountdownUpsell" class="fixed bottom-0 right-0 left-0 z-40 bg-white border-t border-neutral-200 shadow-lg hidden">
+  <div class="container mx-auto px-4 py-3">
+    <div class="flex flex-col sm:flex-row justify-between items-center">
+      <div class="mb-3 sm:mb-0">
+        <div class="flex items-center">
+          <div class="relative mr-2">
+            <span class="flex h-3 w-3 live-indicator">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+            </span>
+          </div>
+          <span class="text-sm font-semibold">Webinar starts in:</span>
+        </div>
+        <div class="countdown-display text-primary font-bold">
+          <span class="countdown-days">2</span>d
+          <span class="countdown-hours">0</span>h
+          <span class="countdown-minutes">0</span>m
+          <span class="countdown-seconds">0</span>s
+        </div>
+      </div>
+      
+      <div class="mb-3 sm:mb-0 text-center sm:text-left">
+        <p class="text-sm font-medium mb-1">Only <span class="text-primary font-bold spots-remaining">22</span> spots remaining</p>
+        <div class="w-full bg-neutral-100 rounded-full h-2.5 mb-1">
+          <div class="bg-primary h-2.5 rounded-full transition-all duration-1000 ease-in-out registration-progress" style="width: 78%;"></div>
+        </div>
+        <p class="text-xs text-neutral-500"><span class="spots-taken">78</span> people have already registered</p>
+      </div>
+      
+      <div>
+        <a href="#register" class="conversion-btn py-2 px-4 text-sm w-full sm:w-auto">
+          Reserve Your Spot
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Social Proof JavaScript - Add this before the closing </body> tag -->
+<script>
+(function() {
+  // Sample data for notifications
+  const sampleNotifications = [
+    { name: "Sarah T.", location: "Manchester", timeAgo: "2 minutes ago", initial: "S" },
+    { name: "James M.", location: "London", timeAgo: "5 minutes ago", initial: "J" },
+    { name: "Emma P.", location: "Birmingham", timeAgo: "8 minutes ago", initial: "E" },
+    { name: "Robert K.", location: "Bristol", timeAgo: "12 minutes ago", initial: "R" },
+    { name: "Olivia S.", location: "Leeds", timeAgo: "15 minutes ago", initial: "O" },
+    { name: "William H.", location: "Liverpool", timeAgo: "18 minutes ago", initial: "W" },
+    { name: "Sophia L.", location: "Glasgow", timeAgo: "21 minutes ago", initial: "S" },
+    { name: "Noah W.", location: "Edinburgh", timeAgo: "25 minutes ago", initial: "N" },
+    { name: "Ava B.", location: "Sheffield", timeAgo: "30 minutes ago", initial: "A" },
+    { name: "Thomas R.", location: "Cardiff", timeAgo: "35 minutes ago", initial: "T" },
+    { name: "Charlotte D.", location: "Newcastle", timeAgo: "40 minutes ago", initial: "C" },
+    { name: "Henry C.", location: "Southampton", timeAgo: "45 minutes ago", initial: "H" },
+    { name: "Amelia G.", location: "Belfast", timeAgo: "48 minutes ago", initial: "A" },
+    { name: "Alexander J.", location: "York", timeAgo: "52 minutes ago", initial: "A" },
+    { name: "Mia V.", location: "Oxford", timeAgo: "55 minutes ago", initial: "M" },
+    { name: "Benjamin N.", location: "Cambridge", timeAgo: "1 hour ago", initial: "B" },
+    { name: "Evelyn T.", location: "Nottingham", timeAgo: "1 hour ago", initial: "E" },
+    { name: "Lucas B.", location: "Leicester", timeAgo: "1 hour ago", initial: "L" },
+    { name: "Scarlett P.", location: "Coventry", timeAgo: "1 hour ago", initial: "S" },
+    { name: "Jack W.", location: "Portsmouth", timeAgo: "2 hours ago", initial: "J" }
+  ];
+  
+  // Social Proof Notification functionality
+  function initSocialProofNotifications() {
+    const notificationElement = document.getElementById('socialProofNotification');
+    if (!notificationElement) return;
+    
+    const initialElement = notificationElement.querySelector('.notification-initial');
+    const messageElement = notificationElement.querySelector('.notification-message');
+    const timeElement = notificationElement.querySelector('.notification-time');
+    
+    // Show notification after a delay
+    setTimeout(() => {
+      showRandomNotification();
+    }, 5000);
+    
+    function showRandomNotification() {
+      // Get random notification
+      const randomIndex = Math.floor(Math.random() * sampleNotifications.length);
+      const notification = sampleNotifications[randomIndex];
+      
+      // Update notification content
+      if (initialElement) initialElement.textContent = notification.initial;
+      if (messageElement) messageElement.textContent = notification.name + " from " + notification.location;
+      if (timeElement) timeElement.textContent = notification.timeAgo;
+      
+      // Show notification with animation
+      notificationElement.classList.remove('hidden');
+      notificationElement.style.opacity = '1';
+      notificationElement.style.transform = 'translateY(0) translateX(0)';
+      
+      // Hide notification after a delay
+      setTimeout(() => {
+        notificationElement.style.opacity = '0';
+        notificationElement.style.transform = 'translateY(10px) translateX(0)';
+        
+        // After transition, hide element and schedule next notification
+        setTimeout(() => {
+          notificationElement.classList.add('hidden');
+          
+          // Schedule next notification after random delay
+          setTimeout(showRandomNotification, Math.random() * 20000 + 10000); // 10-30 seconds
+        }, 500);
+      }, 5000);
+    }
+  }
+  
+  // Webinar Countdown functionality
+  function initWebinarCountdown() {
+    const countdownElement = document.getElementById('webinarCountdownUpsell');
+    if (!countdownElement) return;
+    
+    const daysElement = countdownElement.querySelector('.countdown-days');
+    const hoursElement = countdownElement.querySelector('.countdown-hours');
+    const minutesElement = countdownElement.querySelector('.countdown-minutes');
+    const secondsElement = countdownElement.querySelector('.countdown-seconds');
+    const liveIndicator = countdownElement.querySelector('.live-indicator');
+    const spotsRemainingElement = countdownElement.querySelector('.spots-remaining');
+    const spotsTakenElement = countdownElement.querySelector('.spots-taken');
+    const progressBar = countdownElement.querySelector('.registration-progress');
+    
+    // Get webinar date (default: 2 days from now at 7:00 PM)
+    const webinarDate = new Date();
+    webinarDate.setDate(webinarDate.getDate() + 2);
+    webinarDate.setHours(19, 0, 0, 0);
+    
+    // Target values
+    const totalSpots = 100;
+    let spotsTaken = 78;
+    let spotsRemaining = totalSpots - spotsTaken;
+    
+    // Update countdown timer
+    function updateCountdown() {
+      const now = new Date();
+      const distance = webinarDate.getTime() - now.getTime();
+      
+      // Time calculations
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      // Update countdown display
+      if (daysElement) daysElement.textContent = days;
+      if (hoursElement) hoursElement.textContent = hours;
+      if (minutesElement) minutesElement.textContent = minutes;
+      if (secondsElement) secondsElement.textContent = seconds;
+      
+      // Continue countdown
+      setTimeout(updateCountdown, 1000);
+    }
+    
+    // Blink live indicator
+    function blinkLiveIndicator() {
+      if (liveIndicator) {
+        liveIndicator.classList.toggle('opacity-40');
+      }
+      setTimeout(blinkLiveIndicator, 1000);
+    }
+    
+    // Update registration spots (periodically decrease available spots)
+    function updateRegistrationSpots() {
+      if (spotsRemaining > 5) {
+        spotsTaken++;
+        spotsRemaining--;
+        
+        // Update display
+        if (spotsRemainingElement) spotsRemainingElement.textContent = spotsRemaining;
+        if (spotsTakenElement) spotsTakenElement.textContent = spotsTaken;
+        
+        // Update progress bar
+        const progressPercentage = (spotsTaken / totalSpots) * 100;
+        if (progressBar) progressBar.style.width = progressPercentage + '%';
+      }
+      
+      // Update again after delay (random between 35-55 seconds)
+      setTimeout(updateRegistrationSpots, Math.random() * 20000 + 35000);
+    }
+    
+    // Show the countdown element after user has been on page for a while
+    setTimeout(() => {
+      countdownElement.classList.remove('hidden');
+      countdownElement.style.opacity = '1';
+      countdownElement.style.transform = 'translateY(0)';
+      
+      // Start all the update functions
+      updateCountdown();
+      blinkLiveIndicator();
+      updateRegistrationSpots();
+    }, 15000);
+  }
+  
+  // Initialize components when DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    initSocialProofNotifications();
+    initWebinarCountdown();
+  });
+})();
+</script>
