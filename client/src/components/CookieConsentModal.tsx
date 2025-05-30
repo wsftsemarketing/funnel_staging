@@ -24,7 +24,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
       // Show banner after a short delay
       const timer = setTimeout(() => {
         setIsVisible(true);
-      }, 2000);
+      }, 100);
       return () => clearTimeout(timer);
     }
   }, []);
