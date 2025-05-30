@@ -33,7 +33,7 @@ export default function WebinarOutcomes() {
         <div className="grid md:grid-cols-12 gap-8 max-w-5xl mx-auto">
           {/* Left Column - Icon List */}
           <div className="md:col-span-5">
-            <h3 className="text-2xl md:text-4xl font-bold mb-6 v">Key <Highlight type="primary">Takeaways</Highlight>
+            <h3 className="text-2xl md:text-4xl font-bold mb-6 v">Key <Highlight type="green">Takeaways</Highlight>
             </h3>
             <div className="space-y-5">
               <div className="flex gap-4">
@@ -96,7 +96,7 @@ export default function WebinarOutcomes() {
               <div className="text-center">
                 <Button
                   onClick={scrollToRegistration}
-                  className="w-full inline-block uppercase font-bold"
+                  className="bg-[#e3bc31] hover:bg-[#d4a929] w-full inline-block uppercase font-bold"
                 >
                   Watch now{" "}
                   <ArrowRight className="ml-2 inline-block" size={18} />

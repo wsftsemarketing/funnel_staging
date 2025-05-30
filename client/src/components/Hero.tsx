@@ -87,7 +87,7 @@ export default function Hero() {
                       FREE WEBINAR
                     </div>
                     <h2 className="text-lg md:text-2xl font-black text-white leading-tight">
-                      Your 6-Figure Payday
+                      The £100K Deal Blueprint
                     </h2>
                     <p className="text-sm md:text-lg text-white/90 mb-2 max-w-md font-medium">
                       How to Find, Fund and Profit from Commercial Properties

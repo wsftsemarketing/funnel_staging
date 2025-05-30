@@ -44,7 +44,7 @@ export default function RegistrationForm() {
                   ref={(el) => {
                     if (el && !el.querySelector('script')) {
                       const script = document.createElement('script');
-                      script.src = 'https://event.webinarjam.com/register/y86q9a7p/embed-form?formButtonText=WATCH NOW&formAccentColor=%23163f45&formAccentOpacity=0.95&formBgColor=%23ffffff&formBgOpacity=1';
+                      script.src = 'https://event.webinarjam.com/register/y86q9a7p/embed-form?formButtonText=WATCH NOW&formAccentColor=%23e3bc31&formAccentOpacity=100&formBgColor=%23ffffff&formBgOpacity=1';
                       el.appendChild(script);
                     }
                   }}
