@@ -1,0 +1,19 @@
+modules = ["nodejs-20", "typescript-language-server", "web"]
+run = "npm install"
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Dev Server"
+
+[[workflows.workflow]]
+name = "Dev Server"
+author = 42162454
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[deployment]
+run = ["sh", "-c", "npm install"]
