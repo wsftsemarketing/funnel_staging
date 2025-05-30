@@ -108,7 +108,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 <img 
                   src="https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682ff6d7dd4ecdaabfdc4014_image_1748641577199.png"
                   alt="Cookie Monster"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                  className="w-14 h-14 rounded-full object-cover border-2 border-primary/30 shadow-sm"
                   onError={(e) => {
                     // Fallback to Cookie icon if image fails to load
                     e.currentTarget.style.display = 'none';
@@ -116,13 +116,13 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                     if (fallback) fallback.classList.remove('hidden');
                   }}
                 />
-                <div className="hidden w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
-                  <Cookie className="w-6 h-6 text-primary" />
+                <div className="hidden w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
+                  <Cookie className="w-7 h-7 text-primary" />
                 </div>
               </motion.div>
               
               <div>
-                <h3 className="text-lg font-bold text-foreground mb-1">
+                <h3 className="text-xl font-bold text-foreground mb-1">
                   <Highlight type="primary">Cookie Time!</Highlight>
                 </h3>
                 <div className="flex items-center space-x-1">
@@ -162,9 +162,20 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
 
           {/* Content */}
           <div className="p-4">
-            <p className="text-sm text-neutral-700 mb-4 leading-relaxed">
-              We use <strong>essential and analytics cookies</strong> to improve your experience and help us understand how you use our site.
-            </p>
+            {/* Cookie Explanation Box */}
+            <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg p-4 mb-4 border border-primary/20">
+              <div className="flex items-start space-x-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                  <Cookie className="w-4 h-4 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-foreground mb-1">Why do we use cookies?</h4>
+                  <p className="text-sm text-neutral-700 leading-relaxed">
+                    We use <strong>essential and analytics cookies</strong> to improve your experience and help us understand how you use our site.
+                  </p>
+                </div>
+              </div>
+            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-2 mb-3">
