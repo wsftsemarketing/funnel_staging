@@ -176,7 +176,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 <div className="flex-1">
                   <h4 className="font-semibold text-foreground mb-1">Why do we use cookies?</h4>
                   <p className="text-sm text-neutral-700 leading-relaxed">
-                    Cookies help us understand how you navigate our site, remember your preferences, and provide you with relevant content about our commercial property education programs.
+                    We use cookies to enhance your browsing experience, analyze website traffic, and improve our services. Essential cookies are required for basic functionality, while analytics cookies help us understand how visitors interact with our site.
                   </p>
                 </div>
               </div>
