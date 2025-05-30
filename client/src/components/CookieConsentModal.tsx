@@ -106,7 +106,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 }}
               >
                 <img 
-                  src="/attached_assets/Cookie_Monster.webp"
+                  src="https://i.ibb.co/xtZ7s7T8/Cookie-Monster.png"
                   alt="Cookie Monster"
                   className="w-14 h-14 rounded-full object-cover object-top border-2 border-primary/30 shadow-sm"
                   style={{ objectPosition: '50% 20%' }}
