@@ -178,7 +178,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
             <div className="flex flex-col gap-2 mb-3">
               <Button
                 onClick={handleAccept}
-                className="w-full font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-xs py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200"
+                className="w-half font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-xs py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200"
                 size="sm"
               >
                 Accept All
@@ -187,7 +187,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
               <Button
                 onClick={handleDecline}
                 variant="outline"
-                className="w-full font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 text-xs py-2.5 rounded-lg transition-all duration-200"
+                className="w-half font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 text-xs py-2.5 rounded-lg transition-all duration-200"
                 size="sm"
               >
                 Essential Only
