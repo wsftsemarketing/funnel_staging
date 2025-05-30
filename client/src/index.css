@@ -126,7 +126,12 @@
   
   /* Conversion-focused button */
   .conversion-btn {
-    @apply bg-primary text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105;
+    background-color: #e3bc31;
+    @apply text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105;
+  }
+  
+  .conversion-btn:hover {
+    background-color: #d4a929;
   }
   
   /* Focus on key content */
