@@ -98,46 +98,83 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
 
   return (
     <AnimatePresence>
+      {/* Background overlay with blur */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
+        style={{ zIndex: 9998 }}
+        onClick={handleClose}
+      />
+
       {/* Bottom banner style positioned in corner */}
       <motion.div
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 100 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        initial={{ opacity: 0, y: 100, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 100, scale: 0.95 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         className="fixed bottom-4 right-4 z-50 max-w-md w-full pointer-events-auto"
-        style={{ zIndex: 9999 }} // Ensure it's above CookieYes elements
+        style={{ zIndex: 9999 }}
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="bg-white rounded-xl shadow-2xl border border-neutral-200 overflow-hidden">
-          {/* Header with close button */}
-          <div className="relative p-4">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden relative">
+          {/* Subtle gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white/50 to-primary/5 pointer-events-none" />
+          
+          {/* Header with Cookie Monster and close button */}
+          <div className="relative p-6">
             <button
               onClick={handleClose}
-              className="absolute top-2 right-2 text-neutral-400 hover:text-neutral-600 transition-colors p-1 rounded-full hover:bg-neutral-100"
+              className="absolute top-3 right-3 text-neutral-400 hover:text-neutral-600 transition-all duration-200 p-1.5 rounded-full hover:bg-white/60 backdrop-blur-sm"
               aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-start space-x-3 pr-8">
-              <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <Cookie className="w-4 h-4 text-primary" />
+            <div className="flex items-start space-x-4 pr-8">
+              {/* Cookie Monster Mascot */}
+              <div className="relative flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-white/50 shadow-sm overflow-hidden">
+                  <img 
+                    src="/attached_assets/Cookie_Monster.webp" 
+                    alt="Cookie Monster" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center">
+                  <Cookie className="w-2.5 h-2.5 text-primary" />
+                </div>
               </div>
+              
               <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-sm text-foreground mb-1">Cookie Settings</h3>
-                <p className="text-xs text-primary font-medium mb-2">Touchstone Education</p>
-                <p className="text-xs text-neutral-600 leading-relaxed">
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="font-bold text-sm text-foreground">Cookie Settings</h3>
+                  <div className="px-2 py-0.5 bg-primary/10 rounded-full">
+                    <span className="text-xs text-primary font-medium">Touchstone Education</span>
+                  </div>
+                </div>
+                <p className="text-xs text-neutral-600 leading-relaxed mb-3">
                   We use cookies to enhance your experience and provide personalized content about commercial property investment.
                 </p>
+                
+                {/* Clean info box */}
+                <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
+                  <p className="text-xs text-neutral-700 leading-relaxed">
+                    Essential cookies are required for basic functionality, while analytics cookies help us understand how visitors interact with our site.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Actions */}
-          <div className="px-4 pb-4">
-            <div className="flex gap-2 mb-2">
+          <div className="relative px-6 pb-6">
+            <div className="flex gap-3 mb-3">
               <Button
                 onClick={handleAccept}
-                className="flex-1 font-semibold bg-primary hover:bg-primary/90 text-white text-xs py-2"
+                className="flex-1 font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-xs py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200"
                 size="sm"
               >
                 Accept All
@@ -146,7 +183,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
               <Button
                 onClick={handleDecline}
                 variant="outline"
-                className="flex-1 font-semibold border-neutral-300 hover:bg-neutral-50 text-xs py-2"
+                className="flex-1 font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 text-xs py-2.5 rounded-lg transition-all duration-200"
                 size="sm"
               >
                 Essential Only
@@ -154,7 +191,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
             </div>
 
             <p className="text-xs text-neutral-500 text-center">
-              <a href="/privacy-policy" className="text-primary hover:underline">
+              <a href="/privacy-policy" className="text-primary hover:text-primary/80 hover:underline transition-colors">
                 Privacy Policy
               </a>
             </p>
