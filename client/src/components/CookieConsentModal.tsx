@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Cookie } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "./ui/logo";
 
 interface CookieConsentModalProps {
   onAccept?: () => void;
@@ -136,24 +137,21 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
             <div className="flex items-start space-x-4 pr-8">
               {/* Cookie Monster Mascot */}
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-white/50 shadow-sm overflow-hidden">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-white/50 shadow-sm overflow-hidden">
                   <img 
-                    src="/attached_assets/Cookie_Monster.webp" 
+                    src="https://i.scdn.co/image/ab6761610000e5eba3a7cba23d68a4e73c3b8155" 
                     alt="Cookie Monster" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center">
-                  <Cookie className="w-2.5 h-2.5 text-primary" />
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
+                  <Cookie className="w-4 h-4 text-white" />
                 </div>
               </div>
               
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-bold text-sm text-foreground">Cookie Settings</h3>
-                  <div className="px-2 py-0.5 bg-primary/10 rounded-full">
-                    <span className="text-xs text-primary font-medium">Touchstone Education</span>
-                  </div>
                 </div>
                 <p className="text-xs text-neutral-600 leading-relaxed mb-3">
                   We use cookies to enhance your experience and provide personalized content about commercial property investment.
