@@ -97,12 +97,19 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   ease: "easeInOut"
                 }}
               >
-                {/* Touchstone Education Mini Logomark */}
-                <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
-                  <div className="flex items-center space-x-0.5">
-                    <span className="text-2xl font-black text-primary font-serif tracking-tight">T</span>
-                    <span className="text-2xl font-bold text-secondary font-serif">E</span>
-                  </div>
+                <img 
+                  src="https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682ff6d7dd4ecdaabfdc4014_image_1748641577199.png"
+                  alt="Cookie Monster"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                  onError={(e) => {
+                    // Fallback to Cookie icon if image fails to load
+                    e.currentTarget.style.display = 'none';
+                    const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.classList.remove('hidden');
+                  }}
+                />
+                <div className="hidden w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
+                  <Cookie className="w-8 h-8 text-primary" />
                 </div>
               </motion.div>
               
@@ -110,9 +117,12 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 <h3 className="text-xl font-bold text-foreground mb-1">
                   <Highlight type="primary">Cookie Time!</Highlight>
                 </h3>
-                <p className="text-sm text-neutral-600">
-                  Touchstone Education 🍪
-                </p>
+                <div className="flex items-center space-x-1">
+                  <span className="text-xs font-semibold text-primary tracking-wide">TOUCHSTONE</span>
+                  <span className="text-xs text-neutral-400">•</span>
+                  <span className="text-xs font-medium text-neutral-600">Education</span>
+                  <span className="text-sm">🍪</span>
+                </div>
               </div>
             </div>
 
