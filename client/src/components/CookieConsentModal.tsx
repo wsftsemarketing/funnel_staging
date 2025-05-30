@@ -66,6 +66,14 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
 
   return (
     <AnimatePresence>
+      {/* Background blur overlay */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm"
+      />
+      
       <div className="fixed inset-0 z-50 flex items-end justify-end p-4 pointer-events-none">
         <motion.div
           initial={{ opacity: 0, scale: 0.8, y: 50 }}
@@ -75,16 +83,16 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           className="bg-white rounded-xl shadow-2xl border border-neutral-200 max-w-md w-full pointer-events-auto overflow-hidden"
         >
           {/* Header with Cookie Monster */}
-          <div className="relative bg-gradient-to-r from-primary/5 to-secondary/5 p-6 border-b border-neutral-100">
+          <div className="relative bg-gradient-to-r from-primary/5 to-secondary/5 p-4 border-b border-neutral-100">
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 transition-colors"
+              className="absolute top-3 right-3 text-neutral-400 hover:text-neutral-600 transition-colors"
               aria-label="Close"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <motion.div 
                 className="flex-shrink-0"
                 animate={isEating ? { 
@@ -100,7 +108,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 <img 
                   src="https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682ff6d7dd4ecdaabfdc4014_image_1748641577199.png"
                   alt="Cookie Monster"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
                   onError={(e) => {
                     // Fallback to Cookie icon if image fails to load
                     e.currentTarget.style.display = 'none';
@@ -108,13 +116,13 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                     if (fallback) fallback.classList.remove('hidden');
                   }}
                 />
-                <div className="hidden w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
-                  <Cookie className="w-8 h-8 text-primary" />
+                <div className="hidden w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
+                  <Cookie className="w-6 h-6 text-primary" />
                 </div>
               </motion.div>
               
               <div>
-                <h3 className="text-xl font-bold text-foreground mb-1">
+                <h3 className="text-lg font-bold text-foreground mb-1">
                   <Highlight type="primary">Cookie Time!</Highlight>
                 </h3>
                 <div className="flex items-center space-x-1">
@@ -153,32 +161,18 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           </div>
 
           {/* Content */}
-          <div className="p-6">
-            <p className="text-neutral-700 mb-4 leading-relaxed">
-              We use <strong>essential and analytics cookies</strong> to improve your experience and help us understand how you use our site. 
-              These help us serve you better content about commercial property investment strategies.
+          <div className="p-4">
+            <p className="text-sm text-neutral-700 mb-4 leading-relaxed">
+              We use <strong>essential and analytics cookies</strong> to improve your experience and help us understand how you use our site.
             </p>
 
-            <div className="bg-neutral-50 rounded-lg p-4 mb-6 border border-neutral-100">
-              <div className="flex items-start space-x-3">
-                <Cookie className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-neutral-800 mb-1">What we track:</h4>
-                  <ul className="text-sm text-neutral-600 space-y-1">
-                    <li>• Essential site functionality</li>
-                    <li>• Anonymous usage analytics</li>
-                    <li>• Performance improvements</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 mb-3">
               <Button
                 onClick={handleAccept}
                 disabled={isEating}
-                className="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold transition-all duration-300 hover:translate-y-[-2px] shadow-sm hover:shadow-md"
+                size="sm"
+                className="flex-1 font-semibold"
               >
                 {isEating ? "NOM NOM! 🍪" : "Accept All Cookies"}
               </Button>
@@ -187,15 +181,16 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 onClick={handleDecline}
                 disabled={isEating}
                 variant="outline"
-                className="flex-1 border-2 border-neutral-200 hover:border-primary/40 bg-white hover:bg-neutral-50 text-neutral-700 font-semibold"
+                size="sm"
+                className="flex-1 font-semibold"
               >
                 Essential Only
               </Button>
             </div>
 
-            <p className="text-xs text-neutral-500 mt-4 text-center">
-              You can change your preferences anytime in our{" "}
-              <a href="/privacy-policy" className="text-primary hover:underline">
+            <p className="text-xs text-neutral-500 text-center">
+              You can change preferences in our{" "}
+              <a href="/privacy-policy" className="text-primary hover:underline font-medium">
                 Privacy Policy
               </a>
             </p>
