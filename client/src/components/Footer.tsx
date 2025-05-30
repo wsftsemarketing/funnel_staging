@@ -1,13 +1,6 @@
 import { memo } from "react";
-import {
-  Facebook,
-  Linkedin,
-  Instagram,
-  Youtube,
-  MapPin,
-  Phone,
-  Mail,
-} from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, Linkedin, Instagram, Youtube } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 // Memoized social media icons to prevent unnecessary re-renders
 const SocialIcons = memo(() => (
@@ -195,8 +188,8 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-6 border-b border-neutral-700">
           <div>
-            <div className="text-2xl font-bold mb-6">
-              <span className="font-serif">Touchstone</span> Education
+            <div className="mb-6">
+              <Logo variant="white" size="md" />
             </div>
             <p className="text-neutral-400 mb-6">
               Empowering property investors with education, strategies, and
@@ -206,7 +199,7 @@ export default function Footer() {
           </div>
 
           {/* <QuickLinks />
-          
+
           <ResourceLinks /> */}
 
           <ContactInfo />
