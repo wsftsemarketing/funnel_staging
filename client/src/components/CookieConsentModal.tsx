@@ -142,15 +142,15 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
             <div className="flex items-start space-x-3 md:space-x-4 pr-8">
               {/* Cookie Monster Mascot */}
               <div className="relative flex-shrink-0">
-                <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-white/50 shadow-sm overflow-hidden">
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-white/50 shadow-sm overflow-hidden">
                   <img 
                     src="https://i.scdn.co/image/ab6761610000e5eba3a7cba23d68a4e73c3b8155" 
                     alt="Cookie Monster" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 md:w-6 md:h-6 bg-secondary rounded-full flex items-center justify-center">
-                  <Cookie className="w-3 h-3 md:w-4 md:h-4 text-white" />
+                <div className="absolute -bottom-1 -right-1 w-7 h-7 md:w-6 md:h-6 bg-secondary rounded-full flex items-center justify-center">
+                  <Cookie className="w-5 h-5 md:w-4 md:h-4 text-white" />
                 </div>
               </div>
 
