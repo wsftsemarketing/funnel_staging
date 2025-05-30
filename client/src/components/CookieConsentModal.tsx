@@ -1,21 +1,23 @@
-
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Cookie, X } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Cookie, X } from "lucide-react";
 
 interface CookieConsentModalProps {
   onAccept?: () => void;
   onDecline?: () => void;
 }
 
-export default function CookieConsentModal({ onAccept, onDecline }: CookieConsentModalProps) {
+export default function CookieConsentModal({
+  onAccept,
+  onDecline,
+}: CookieConsentModalProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isEating, setIsEating] = useState(false);
 
   useEffect(() => {
     // Check if user has already made a choice
-    const hasConsent = localStorage.getItem('cookie-consent');
+    const hasConsent = localStorage.getItem("cookie-consent");
     if (!hasConsent) {
       // Delay showing the modal slightly
       const timer = setTimeout(() => {
@@ -27,13 +29,13 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
 
   const handleAccept = () => {
     setIsEating(true);
-    localStorage.setItem('cookie-consent', 'accepted');
-    
+    localStorage.setItem("cookie-consent", "accepted");
+
     // Trigger CookieYes acceptance if available
     if (window.cookieyes) {
       window.cookieyes.acceptAll();
     }
-    
+
     setTimeout(() => {
       setIsVisible(false);
       onAccept?.();
@@ -41,13 +43,13 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   };
 
   const handleDecline = () => {
-    localStorage.setItem('cookie-consent', 'declined');
-    
+    localStorage.setItem("cookie-consent", "declined");
+
     // Trigger CookieYes decline if available
     if (window.cookieyes) {
       window.cookieyes.rejectAll();
     }
-    
+
     setIsVisible(false);
     onDecline?.();
   };
@@ -68,7 +70,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
             className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50"
             onClick={handleClose}
           />
-          
+
           {/* Modal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -88,22 +90,26 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
               {/* Cookie Monster Character */}
               <div className="relative bg-gradient-to-br from-blue-400 to-blue-600 p-6 text-center">
                 <motion.div
-                  animate={isEating ? { 
-                    scale: [1, 1.1, 1], 
-                    rotate: [0, -5, 5, 0] 
-                  } : { 
-                    y: [0, -5, 0] 
-                  }}
-                  transition={{ 
-                    duration: isEating ? 0.5 : 2, 
+                  animate={
+                    isEating
+                      ? {
+                          scale: [1, 1.1, 1],
+                          rotate: [0, -5, 5, 0],
+                        }
+                      : {
+                          y: [0, -5, 0],
+                        }
+                  }
+                  transition={{
+                    duration: isEating ? 0.5 : 2,
                     repeat: isEating ? 3 : Infinity,
-                    ease: "easeInOut"
+                    ease: "easeInOut",
                   }}
                   className="text-6xl mb-2"
                 >
                   🍪👹
                 </motion.div>
-                
+
                 {isEating && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0 }}
@@ -125,7 +131,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                     </div>
                   </motion.div>
                 )}
-                
+
                 <h3 className="text-white font-bold text-lg">
                   Me Want Cookies! 🍪
                 </h3>
@@ -134,14 +140,16 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
               {/* Content */}
               <div className="p-6">
                 <p className="text-gray-700 mb-4 text-sm leading-relaxed">
-                  Me Cookie Monster! Me love cookies, and this website uses cookies too! 
-                  They help make your experience better and remember your preferences.
+                  Me Cookie Monster! Me love cookies, and this website uses
+                  cookies too! They help make your experience better and
+                  remember your preferences.
                 </p>
-                
+
                 <div className="flex items-center gap-2 mb-4 p-3 bg-blue-50 rounded-lg">
                   <Cookie className="h-4 w-4 text-blue-600" />
                   <span className="text-xs text-gray-600">
-                    We use essential and analytics cookies to improve your experience
+                    We use essential and analytics cookies to improve your
+                    experience
                   </span>
                 </div>
 
@@ -154,7 +162,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   >
                     {isEating ? "NOM NOM!" : "Me Accept! 🍪"}
                   </Button>
-                  
+
                   <Button
                     onClick={handleDecline}
                     disabled={isEating}
