@@ -130,8 +130,8 @@ export default function CaseStudies() {
                 <div key={index} className="w-full flex-shrink-0 min-h-[600px]">
                   <div className="bg-white overflow-hidden h-full min-h-[600px]">
                     <div className="p-8 flex flex-col h-full min-h-[600px]">
-                      <div className="bg-primary/10 text-primary text-sm font-bold rounded-full px-3 py-1 inline-block mb-6">
-                        CASE STUDY #{index + 1}
+                      <div className="text-primary text-sm font-bold inline-block mb-3">
+                        <Highlight type="marker">CASE STUDY #{index + 1}</Highlight>
                       </div>
                       <h4 className="text-2xl font-bold mb-2">{study.name}</h4>
                       <p className="text-neutral-600 mb-4">{study.property}</p>
@@ -142,7 +142,7 @@ export default function CaseStudies() {
                       <div className="relative rounded-xl overflow-hidden grid grid-cols-2 auto-rows-fr gap-2 md:gap-3">
                         <div className="relative bg-gradient-to-br from-primary/5 to-primary/10 p-6 rounded-xl">
                           <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
-                            <TrendingUp className="w-3.5 h-3.5 text-primary" />
+                            <TrendingUp className="w-4 h-4 text-primary" />
                           </div>
                           <div className="text-sm text-neutral-500 mb-2">Return on Investment</div>
                           <div className="text-3xl font-bold text-primary">{study.roi}</div>
@@ -150,7 +150,7 @@ export default function CaseStudies() {
                         
                         <div className="relative bg-gradient-to-br from-secondary/5 to-secondary/10 p-6 rounded-xl">
                           <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
-                            <PoundSterling className="w-3.5 h-3.5 text-secondary" />
+                            <PoundSterling className="w-4 h-4 text-secondary" />
                           </div>
                           <div className="text-sm text-neutral-500 mb-2">Total Investment</div>
                           <div className="text-3xl font-bold text-secondary">{study.investment}</div>
@@ -158,7 +158,7 @@ export default function CaseStudies() {
                         
                         <div className="relative bg-gradient-to-br from-green-600/10 to-green-600/5 p-6 rounded-xl">
                           <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
-                            <BarChart4 className="w-3.5 h-3.5 text-neutral-700" />
+                            <BarChart4 className="w-4 h-4 text-neutral-700" />
                           </div>
                           <div className="text-sm text-neutral-500 mb-2">Monthly Cash Flow</div>
                           <div className="text-3xl font-bold text-green-600">
@@ -174,9 +174,9 @@ export default function CaseStudies() {
                               alt={`${study.property} - Exterior`}
                               className="h-full w-full object-cover aspect-square" 
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
                               <div className="p-2 text-white">
-                                <div className="text-sm font-medium">{study.property}</div>
+                                <div className="text-sm font-bold">📍 {study.property}</div>
                               </div>
                             </div>
                           </div>
