@@ -97,18 +97,12 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   ease: "easeInOut"
                 }}
               >
-                <img 
-                  src="https://i.imgur.com/YourCookieMonsterImageURL.jpg" // Replace with actual uploaded image URL
-                  alt="Cookie Monster"
-                  className="w-16 h-16 rounded-full object-cover"
-                  onError={(e) => {
-                    // Fallback to Cookie icon if image fails to load
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                  }}
-                />
-                <div className="hidden w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                  <Cookie className="w-8 h-8 text-primary" />
+                {/* Touchstone Education Mini Logomark */}
+                <div className="w-16 h-16 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
+                  <div className="flex items-center space-x-0.5">
+                    <span className="text-2xl font-black text-primary font-serif tracking-tight">T</span>
+                    <span className="text-2xl font-bold text-secondary font-serif">E</span>
+                  </div>
                 </div>
               </motion.div>
               
@@ -117,7 +111,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   <Highlight type="primary">Cookie Time!</Highlight>
                 </h3>
                 <p className="text-sm text-neutral-600">
-                  Me want cookies! 🍪
+                  Touchstone Education 🍪
                 </p>
               </div>
             </div>
