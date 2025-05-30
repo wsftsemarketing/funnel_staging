@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Logo } from "@/components/ui/logo";
 import { Menu, ArrowRight } from "lucide-react";
 import AboutPaulModal from "@/components/AboutPaulModal";
 
@@ -55,7 +54,14 @@ export default function Navbar() {
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo - left aligned on all devices */}
         <div className="flex items-center">
-          <Logo variant="default" size="default" className="md:px-4" />
+          <div className="text-xl md:text-2xl font-bold select-none md:px-4">
+            <span className="font-serif tracking-tight font-black text-gray-900">
+              Touchstone
+            </span>
+            <span className="font-bold ml-1 text-[#976B47]">
+              Education
+            </span>
+          </div>
         </div>
 
         {/* Right side with About Paul always visible and menu on mobile */}
@@ -74,7 +80,14 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent side="right" className="border-none">
                 <div className="mb-8 mt-6 px-8">
-                  <Logo variant="default" size="default" />
+                  <div className="text-xl md:text-2xl font-bold select-none">
+                    <span className="font-serif tracking-tight font-black text-gray-900">
+                      Touchstone
+                    </span>
+                    <span className="font-bold ml-1 text-[#976B47]">
+                      Education
+                    </span>
+                  </div>
                 </div>
 
                 <Button
