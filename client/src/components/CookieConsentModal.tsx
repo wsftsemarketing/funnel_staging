@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Cookie } from "lucide-react";
@@ -16,10 +15,10 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   useEffect(() => {
     // Check if user has already made a choice
     const cookieChoice = localStorage.getItem('cookieConsent');
-    
+
     // Also check if CookieYes has already handled consent
     const cookieYesConsent = document.cookie.includes('cookieyes-consent');
-    
+
     if (!cookieChoice && !cookieYesConsent) {
       // Show banner immediately
       setIsVisible(true);
@@ -129,7 +128,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
         <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden relative">
           {/* Subtle gradient background */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white/50 to-primary/5 pointer-events-none" />
-          
+
           {/* Header with Cookie Monster and close button */}
           <div className="relative p-6">
             <button
@@ -154,7 +153,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   <Cookie className="w-4 h-4 text-white" />
                 </div>
               </div>
-              
+
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-bold text-sm text-foreground">Cookie Settings</h3>
@@ -162,7 +161,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 <p className="text-xs text-neutral-600 leading-relaxed mb-3">
                   We use cookies to enhance your experience and provide personalized content about commercial property investment.
                 </p>
-                
+
                 {/* Clean info box */}
                 <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
                   <p className="text-xs text-neutral-700 leading-relaxed">
@@ -175,10 +174,10 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
 
           {/* Actions */}
           <div className="relative px-6 pb-6">
-            <div className="flex flex-col gap-2 mb-3">
+            <div className="flex flex-col gap-2 mb-2 md:mb-3">
               <Button
                 onClick={handleAccept}
-                className="w-half font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-xs py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200"
+                className="w-full font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-xs py-3 md:py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200"
                 size="sm"
               >
                 Accept All
@@ -187,7 +186,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
               <Button
                 onClick={handleDecline}
                 variant="outline"
-                className="w-half font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 text-xs py-2.5 rounded-lg transition-all duration-200"
+                className="w-full font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 text-xs py-3 md:py-2.5 rounded-lg transition-all duration-200"
                 size="sm"
               >
                 Essential Only
