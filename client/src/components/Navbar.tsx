@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, ArrowRight } from "lucide-react";
 import AboutPaulModal from "@/components/AboutPaulModal";
+import { Logo } from "@/components/ui/logo";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,15 +34,6 @@ export default function Navbar() {
     }
   };
 
-  
-  // Memoized section scroll function
-  const scrollToSection = useCallback((id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-    setIsOpen(false);
-  }, []);
 
   return (
     <header
@@ -53,16 +45,8 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo - left aligned on all devices */}
-        <div className="flex items-center">
-          <div className="text-xl md:text-2xl font-bold select-none md:px-4">
-            <span className="font-serif tracking-tight font-black text-gray-900">
-              Touchstone
-            </span>
-            <span className="font-bold ml-1 text-[#976B47]">
-              Education
-            </span>
-          </div>
-        </div>
+           
+      <Logo variant="default" size="default" className="md:px-4" />
 
         {/* Right side with About Paul always visible and menu on mobile */}
         <div className="flex items-center space-x-3">
@@ -79,21 +63,14 @@ export default function Navbar() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="border-none">
-                <div className="mb-8 mt-6 px-8">
-                  <div className="text-xl md:text-2xl font-bold select-none">
-                    <span className="font-serif tracking-tight font-black text-gray-900">
-                      Touchstone
-                    </span>
-                    <span className="font-bold ml-1 text-[#976B47]">
-                      Education
-                    </span>
-                  </div>
+                <div className="mb-3 mt-6">
+                  <Logo variant="default" size="sm" />
                 </div>
 
                 <Button
                   onClick={scrollToRegistration}
                   variant="secondary"
-                  className="w-full uppercase"
+                  className="conversion-btn w-full uppercase text-white font-bold"
                 >
                   WATCH NOW{" "}
                   <ArrowRight className="ml-2 inline-block" size={18} />

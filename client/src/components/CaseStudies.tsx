@@ -17,8 +17,8 @@ const caseStudies = [
     name: "Greg McKenzie",
     property: "Industrial Estate, Scotland",
     image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d950da17a1645a3afcf5c_Screenshot%202025-05-21%20at%209.55.37%E2%80%AFam.png",
-    roi: "Approx. 95% post-debt income",
-    investment: "£1,275,000",
+    roi: "95% post-debt income",
+    investment: "£1.275m",
     monthlyIncome: "£13,917",
     story: "Greg had no prior experience in commercial property before joining Touchstone. Within 12 months, he secured three commercial sites including a 12 unit industrial estate. The strategy, backed by Touchstone's training, helped him grow to £167,000 in annual rental income and build over £200,000 in equity."
   },
@@ -26,8 +26,8 @@ const caseStudies = [
     name: "Iurie Dontu",
     property: "Commercial Conversion, Staffordshire",
     image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d961242afc6a852002709_Screenshot%202025-05-21%20at%209.59.52%E2%80%AFam.png",
-    roi: "Estimated over 30% net",
-    investment: "Approx. £800,000",
+    roi: "Estimated 30%+ net",
+    investment: "Approx. £800k",
     monthlyIncome: "£11,666",
     story: "After attending a Touchstone event in London, Iurie pivoted from flipping to commercial property. His biggest success is a school converted into an ApartHotel, generating high income with minimal overhead using a PLO strategy."
   },
@@ -36,7 +36,7 @@ const caseStudies = [
     property: "Historic Hotel Conversion, UK",
     image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d965b35f16a56ff459c03_Screenshot%202025-05-21%20at%2010.01.11%E2%80%AFam.png",
     roi: "83% valuation uplift",
-    investment: "£400,000",
+    investment: "£400k",
     monthlyIncome: "£6,667",
     story: "Ian converted an 1880s hotel into a multi-income asset using delayed completion and exchange-for-£1 strategies learned via CPBO. The project now delivers 12 income streams and tripled in value."
   },
@@ -44,8 +44,8 @@ const caseStudies = [
     name: "Greg McKenzie",
     property: "Mixed Shops & Units, Scotland",
     image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d950da17a1645a3afcf5c_Screenshot%202025-05-21%20at%209.55.37%E2%80%AFam.png",
-    roi: "13.1% current yield",
-    investment: "£175,000",
+    roi: "13% yield",
+    investment: "£175k",
     monthlyIncome: "£1,916",
     story: "Greg negotiated a discounted deal on a portfolio of shops and storage units, bought for £175k and fully let. This low-risk deal contributes to his total commercial income exceeding £13k per month."
   }
@@ -142,28 +142,28 @@ export default function CaseStudies() {
                       
                       {/* Bento Box Style Stats */}
                       <div className="relative rounded-xl overflow-hidden grid grid-cols-2 auto-rows-fr gap-2 md:gap-3">
-                        <div className="relative bg-gradient-to-br from-primary/5 to-primary/10 p-3 md:p-4 rounded-xl">
+                        <div className="relative bg-gradient-to-br from-primary/5 to-primary/10 p-6 rounded-xl">
                           <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
                             <TrendingUp className="w-3.5 h-3.5 text-primary" />
                           </div>
-                          <div className="text-xs text-neutral-500 mb-1 md:mb-2">Return on Investment</div>
-                          <div className="text-2xl md:text-3xl font-bold text-primary">{study.roi}</div>
+                          <div className="text-sm text-neutral-500 mb-2">Return on Investment</div>
+                          <div className="text-3xl font-bold text-primary">{study.roi}</div>
                         </div>
                         
-                        <div className="relative bg-gradient-to-br from-secondary/5 to-secondary/10 p-3 md:p-4 rounded-xl">
+                        <div className="relative bg-gradient-to-br from-secondary/5 to-secondary/10 p-6 rounded-xl">
                           <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
                             <PoundSterling className="w-3.5 h-3.5 text-secondary" />
                           </div>
-                          <div className="text-xs text-neutral-500 mb-1 md:mb-2">Total Investment</div>
-                          <div className="text-2xl md:text-3xl font-bold text-secondary">{study.investment}</div>
+                          <div className="text-sm text-neutral-500 mb-2">Total Investment</div>
+                          <div className="text-3xl font-bold text-secondary">{study.investment}</div>
                         </div>
                         
-                        <div className="relative bg-gradient-to-br from-green-600/10 to-green-600/5 p-3 md:p-4 rounded-xl">
+                        <div className="relative bg-gradient-to-br from-green-600/10 to-green-600/5 p-6 rounded-xl">
                           <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
                             <BarChart4 className="w-3.5 h-3.5 text-neutral-700" />
                           </div>
-                          <div className="text-xs text-neutral-500 mb-1 md:mb-2">Monthly Cash Flow</div>
-                          <div className="text-2xl md:text-3xl font-bold text-green-600">
+                          <div className="text-sm text-neutral-500 mb-2">Monthly Cash Flow</div>
+                          <div className="text-3xl font-bold text-green-600">
                             {study.monthlyIncome}
                           </div>
                         </div>
@@ -178,7 +178,7 @@ export default function CaseStudies() {
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end">
                               <div className="p-2 text-white">
-                                <div className="text-xs font-medium">{study.property}</div>
+                                <div className="text-sm font-medium">{study.property}</div>
                               </div>
                             </div>
                           </div>
