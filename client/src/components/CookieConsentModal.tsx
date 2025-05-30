@@ -106,7 +106,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
         onClick={handleClose}
       />
 
-      {/* Bottom banner style positioned in corner */}
+      {/* Mobile: Full-width banner at bottom */}
       <motion.div
         initial={{ opacity: 0, y: 100, scale: 0.95 }}
         animate={{ 
@@ -121,49 +121,49 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           ease: "easeOut",
           x: { duration: 0.8, delay: 0.2 } // Shake starts after slide-in
         }}
-        className="fixed bottom-4 right-4 z-50 max-w-md w-full pointer-events-auto"
+        className="fixed bottom-0 left-0 right-0 md:bottom-4 md:right-4 md:left-auto z-50 md:max-w-md w-full pointer-events-auto"
         style={{ zIndex: 9999 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden relative">
+        <div className="bg-white/95 backdrop-blur-md rounded-t-2xl md:rounded-2xl shadow-2xl border-t border-white/20 md:border border-white/20 overflow-hidden relative">
           {/* Subtle gradient background */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white/50 to-primary/5 pointer-events-none" />
 
           {/* Header with Cookie Monster and close button */}
-          <div className="relative p-6">
+          <div className="relative p-4 md:p-6">
             <button
               onClick={handleClose}
-              className="absolute top-3 right-3 text-neutral-400 hover:text-neutral-600 transition-all duration-200 p-1.5 rounded-full hover:bg-white/60 backdrop-blur-sm"
+              className="absolute top-2 right-2 md:top-3 md:right-3 text-neutral-400 hover:text-neutral-600 transition-all duration-200 p-1.5 rounded-full hover:bg-white/60 backdrop-blur-sm"
               aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-start space-x-4 pr-8">
+            <div className="flex items-start space-x-3 md:space-x-4 pr-8">
               {/* Cookie Monster Mascot */}
               <div className="relative flex-shrink-0">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-white/50 shadow-sm overflow-hidden">
+                <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-white/50 shadow-sm overflow-hidden">
                   <img 
                     src="https://i.scdn.co/image/ab6761610000e5eba3a7cba23d68a4e73c3b8155" 
                     alt="Cookie Monster" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-secondary rounded-full flex items-center justify-center">
-                  <Cookie className="w-4 h-4 text-white" />
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 md:w-6 md:h-6 bg-secondary rounded-full flex items-center justify-center">
+                  <Cookie className="w-3 h-3 md:w-4 md:h-4 text-white" />
                 </div>
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-bold text-sm text-foreground">Cookie Settings</h3>
+                  <h3 className="font-bold text-sm md:text-sm text-foreground">Cookie Settings</h3>
                 </div>
-                <p className="text-xs text-neutral-600 leading-relaxed mb-3">
+                <p className="text-xs text-neutral-600 leading-relaxed mb-2 md:mb-3">
                   We use cookies to enhance your experience and provide personalized content about commercial property investment.
                 </p>
 
-                {/* Clean info box */}
-                <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
+                {/* Clean info box - hidden on mobile to save space */}
+                <div className="hidden md:block bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
                   <p className="text-xs text-neutral-700 leading-relaxed">
                     Essential cookies are required for basic functionality, while analytics cookies help us understand how visitors interact with our site.
                   </p>
@@ -173,11 +173,11 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           </div>
 
           {/* Actions */}
-          <div className="relative px-6 pb-6">
+          <div className="relative px-4 pb-4 md:px-6 md:pb-6">
             <div className="flex flex-col gap-2 mb-2 md:mb-3">
               <Button
                 onClick={handleAccept}
-                className="w-full font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-xs py-3 md:py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200"
+                className="w-full font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-sm md:text-xs py-3 md:py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200"
                 size="sm"
               >
                 Accept All
@@ -186,7 +186,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
               <Button
                 onClick={handleDecline}
                 variant="outline"
-                className="w-full font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 text-xs py-3 md:py-2.5 rounded-lg transition-all duration-200"
+                className="w-full font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 text-sm md:text-xs py-3 md:py-2.5 rounded-lg transition-all duration-200"
                 size="sm"
               >
                 Essential Only
