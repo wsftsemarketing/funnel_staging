@@ -143,7 +143,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   >
                     NOM NOM NOM! 🍪
                   </motion.span>
-                </div>
+                </motion.div>
               )}
             </AnimatePresence>
           </div>
