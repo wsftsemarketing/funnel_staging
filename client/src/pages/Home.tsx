@@ -7,6 +7,7 @@ import RegistrationForm from "@/components/RegistrationForm";
 import FAQ from "@/components/FAQ";
 import TrustPilotReviews from "@/components/TrustPilotReviews";
 import Footer from "@/components/Footer";
+import CookieConsentModal from "@/components/CookieConsentModal";
 
 // Note: The following components are kept in the codebase but not currently used on the homepage
 import SocialProofNotifications from "@/components/SocialProofNotifications";
@@ -41,6 +42,7 @@ export default function Home() {
       <FAQ />
       <TrustPilotReviews />
       <SocialProofNotifications />
+      <CookieConsentModal />
       <Footer /> 
       
       {/* Note: The following conversion components have been temporarily disabled
