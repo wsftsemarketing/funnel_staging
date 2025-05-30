@@ -238,7 +238,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                     </p>
                   </div>
 
-                  {/* Analytics Cookies */}
+                  {/* All Optional Cookies - Unified Design */}
                   <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-3 border border-primary/15">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2 h-2 bg-primary rounded-full"></div>
@@ -250,33 +250,31 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                     </p>
                   </div>
 
-                  {/* Marketing Cookies */}
-                  <div className="bg-gradient-to-r from-secondary/8 to-secondary/15 rounded-lg p-3 border border-secondary/20">
+                  <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-3 border border-primary/15">
                     <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-secondary rounded-full"></div>
-                      <h5 className="text-xs font-semibold text-secondary">Marketing Cookies</h5>
-                      <span className="text-xs bg-secondary/20 text-secondary px-2 py-0.5 rounded-full">Optional</span>
+                      <div className="w-2 h-2 bg-primary rounded-full"></div>
+                      <h5 className="text-xs font-semibold text-primary">Marketing Cookies</h5>
+                      <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full">Optional</span>
                     </div>
-                    <p className="text-xs text-secondary/90 leading-relaxed">
+                    <p className="text-xs text-primary/90 leading-relaxed">
                       Enable personalized content and targeted advertising related to commercial property investment opportunities.
                     </p>
                   </div>
 
-                  {/* Functional Cookies */}
-                  <div className="bg-gradient-to-r from-neutral-50 to-muted rounded-lg p-3 border border-neutral-200">
+                  <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-3 border border-primary/15">
                     <div className="flex items-center gap-2 mb-1">
-                      <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-                      <h5 className="text-xs font-semibold text-muted-foreground">Functional Cookies</h5>
-                      <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">Optional</span>
+                      <div className="w-2 h-2 bg-primary rounded-full"></div>
+                      <h5 className="text-xs font-semibold text-primary">Functional Cookies</h5>
+                      <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full">Optional</span>
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <p className="text-xs text-primary/90 leading-relaxed">
                       Remember your preferences and provide enhanced features like live chat and webinar reminders.
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-3 p-2 bg-muted/30 rounded-lg border border-border">
-                  <p className="text-xs text-muted-foreground text-center">
+                <div className="mt-3 p-2 bg-secondary/8 rounded-lg border border-secondary/20">
+                  <p className="text-xs text-secondary/90 text-center">
                     Cookies expire after 12 months. You can change preferences anytime in your browser settings.
                   </p>
                 </div>
