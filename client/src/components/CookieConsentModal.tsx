@@ -106,9 +106,10 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 }}
               >
                 <img 
-                  src="https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682ff6d7dd4ecdaabfdc4014_image_1748641577199.png"
+                  src="/attached_assets/Cookie_Monster.webp"
                   alt="Cookie Monster"
-                  className="w-14 h-14 rounded-full object-cover border-2 border-primary/30 shadow-sm"
+                  className="w-14 h-14 rounded-full object-cover object-top border-2 border-primary/30 shadow-sm"
+                  style={{ objectPosition: '50% 20%' }}
                   onError={(e) => {
                     // Fallback to Cookie icon if image fails to load
                     e.currentTarget.style.display = 'none';
@@ -162,6 +163,10 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
 
           {/* Content */}
           <div className="p-4">
+            <p className="text-sm text-neutral-700 mb-4 leading-relaxed">
+              We use <strong>essential and analytics cookies</strong> to improve your experience and help us understand how you use our site.
+            </p>
+
             {/* Cookie Explanation Box */}
             <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg p-4 mb-4 border border-primary/20">
               <div className="flex items-start space-x-3">
@@ -171,7 +176,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 <div className="flex-1">
                   <h4 className="font-semibold text-foreground mb-1">Why do we use cookies?</h4>
                   <p className="text-sm text-neutral-700 leading-relaxed">
-                    We use <strong>essential and analytics cookies</strong> to improve your experience and help us understand how you use our site.
+                    Cookies help us understand how you navigate our site, remember your preferences, and provide you with relevant content about our commercial property education programs.
                   </p>
                 </div>
               </div>
