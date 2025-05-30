@@ -35,7 +35,7 @@ export function Highlight({
       case "glow":
         return "relative z-10 inline-block text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.3)]";
         case "green":
-        return "relative z-10 inline-block after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:right-0 after:h-[8px] after:w-full after:bg-blue-900/20 after:z-[-1] after:rounded-md";
+        return "relative z-10 inline-block after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:right-0 after:h-[8px] after:w-full after:bg-green-500/20 after:z-[-1] after:rounded-md";
       default:
         return "relative z-10 inline-block after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:right-0 after:h-[8px] after:w-full after:bg-primary/20 after:z-[-1] after:rounded-md";
     }

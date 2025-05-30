@@ -32,7 +32,7 @@ export default function Hero() {
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 leading-[1.05] tracking-tight capitalize">
             <Highlight type="secondary">Maximise</Highlight> Your Commercial
-            Property <Highlight type="accent">Returns</Highlight>
+            Property <Highlight type="green">Returns</Highlight>
           </h1>
 
           <p className="text-lg md:text-2xl text-foreground/90 mb-6 max-w-2xl mx-auto font-medium">
