@@ -118,18 +118,18 @@ export default function CaseStudies() {
           
           <div 
             ref={caseStudiesRef}
-            className={`relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-700 ${
+            className={`relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-700 min-h-[600px] ${
               caseStudiesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
           >
             <div 
-              className="flex transition-transform duration-500 ease-in-out" 
+              className="flex transition-transform duration-500 ease-in-out h-full" 
               style={{ transform: `translateX(-${activeCaseStudy * 100}%)` }}
             >
               {caseStudies.map((study, index) => (
-                <div key={index} className="w-full h-full flex-shrink-0">
-                  <div className="bg-white overflow-hidden h-full">
-                    <div className="p-8 flex flex-col justify-between h-full">
+                <div key={index} className="w-full flex-shrink-0 min-h-[600px]">
+                  <div className="bg-white overflow-hidden h-full min-h-[600px]">
+                    <div className="p-8 flex flex-col justify-between h-full min-h-[600px]">
                       <div>
                         <div className="bg-primary/10 text-primary text-sm font-bold rounded-full px-3 py-1 inline-block mb-6">
                           CASE STUDY #{index + 1}
