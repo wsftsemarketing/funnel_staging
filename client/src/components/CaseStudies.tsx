@@ -128,8 +128,8 @@ export default function CaseStudies() {
             >
               {caseStudies.map((study, index) => (
                 <div key={index} className="w-full h-full flex-shrink-0">
-                  <div className="bg-white overflow-hidden">
-                    <div className="p-8 flex flex-col justify-between">
+                  <div className="bg-white overflow-hidden h-full">
+                    <div className="p-8 flex flex-col justify-between h-full">
                       <div>
                         <div className="bg-primary/10 text-primary text-sm font-bold rounded-full px-3 py-1 inline-block mb-6">
                           CASE STUDY #{index + 1}
