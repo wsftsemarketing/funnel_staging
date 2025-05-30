@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const logoVariants = cva(
-  "font-bold rounded px-2 py-2 select-none",
+  "font-bold select-none",
   {
     variants: {
       variant: {
@@ -13,10 +13,10 @@ const logoVariants = cva(
         white: "text-white"
       },
       size: {
-        sm: "text-lg md:text-xl px-2 py-1",
-        default: "text-xl md:text-2xl px-2 py-2",
-        lg: "text-2xl md:text-3xl px-3 py-2",
-        xl: "text-3xl md:text-4xl px-4 py-3"
+        sm: "text-lg md:text-xl",
+        default: "text-xl md:text-2xl",
+        lg: "text-2xl md:text-3xl",
+        xl: "text-3xl md:text-4xl"
       }
     },
     defaultVariants: {
@@ -63,12 +63,7 @@ export function Logo({ variant, size, className }: LogoProps) {
       <span className={cn("font-serif tracking-tight font-black", colors.primary)}>
         Touchstone
       </span>
-      <span className={cn("font-bold ml-1", colors.secondary, 
-        size === "sm" ? "text-base" : 
-        size === "lg" ? "text-xl md:text-2xl" :
-        size === "xl" ? "text-2xl md:text-3xl" :
-        "text-lg"
-      )}>
+      <span className={cn("font-bold ml-1", colors.secondary)}>
         Education
       </span>
     </div>
