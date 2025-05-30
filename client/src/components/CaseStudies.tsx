@@ -129,16 +129,14 @@ export default function CaseStudies() {
               {caseStudies.map((study, index) => (
                 <div key={index} className="w-full flex-shrink-0 min-h-[600px]">
                   <div className="bg-white overflow-hidden h-full min-h-[600px]">
-                    <div className="p-8 flex flex-col justify-between h-full min-h-[600px]">
-                      <div>
-                        <div className="bg-primary/10 text-primary text-sm font-bold rounded-full px-3 py-1 inline-block mb-6">
-                          CASE STUDY #{index + 1}
-                        </div>
-                        <h4 className="text-2xl font-bold mb-2">{study.name}</h4>
-                        <p className="text-neutral-600 mb-4">{study.property}</p>
-                        
-                        <p className="text-neutral-700 mb-6">{study.story}</p>
+                    <div className="p-8 flex flex-col h-full min-h-[600px]">
+                      <div className="bg-primary/10 text-primary text-sm font-bold rounded-full px-3 py-1 inline-block mb-6">
+                        CASE STUDY #{index + 1}
                       </div>
+                      <h4 className="text-2xl font-bold mb-2">{study.name}</h4>
+                      <p className="text-neutral-600 mb-4">{study.property}</p>
+                      
+                      <p className="text-neutral-700 mb-8">{study.story}</p>
                       
                       {/* Bento Box Style Stats */}
                       <div className="relative rounded-xl overflow-hidden grid grid-cols-2 auto-rows-fr gap-2 md:gap-3">
