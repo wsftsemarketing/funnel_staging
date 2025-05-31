@@ -21,8 +21,12 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
     const cookieYesConsent = document.cookie.includes('cookieyes-consent');
 
     if (!cookieChoice && !cookieYesConsent) {
-      // Show banner immediately
-      setIsVisible(true);
+      // Delay showing banner slightly to prevent conflicts
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 100);
+      
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -160,43 +164,50 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   };
 
   const handleClose = () => {
-    setIsVisible(false);
+    // Only allow manual closing, not automatic hiding from conflicts
+    if (isVisible) {
+      setIsVisible(false);
+    }
   };
 
   if (!isVisible) return null;
 
   return (
-    <AnimatePresence>
-      {/* Background overlay with blur */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
-        style={{ zIndex: 9998 }}
-        onClick={handleClose}
-      />
+    <AnimatePresence mode="wait" key="cookie-consent-modal">
+      {isVisible && (
+        <>
+          {/* Background overlay with blur */}
+          <motion.div
+            key="cookie-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
+            style={{ zIndex: 9998 }}
+            onClick={handleClose}
+          />
 
       {/* Mobile: Full-width banner at bottom */}
-      <motion.div
-        initial={{ opacity: 0, y: 100, scale: 0.95 }}
-        animate={{ 
-          opacity: 1, 
-          y: 0, 
-          scale: 1,
-          x: [0, -10, 10, -10, 10, -5, 5, -2, 2, 0] // Shake animation
-        }}
-        exit={{ opacity: 0, y: 100, scale: 0.95 }}
-        transition={{ 
-          duration: 0.4, 
-          ease: "easeOut",
-          x: { duration: 0.8, delay: 0.2 } // Shake starts after slide-in
-        }}
-        className="fixed bottom-0 left-0 right-0 md:bottom-4 md:right-4 md:left-auto z-50 md:max-w-md w-full pointer-events-auto"
-        style={{ zIndex: 9999 }}
-        onClick={(e) => e.stopPropagation()}
-      >
+          <motion.div
+            key="cookie-modal"
+            initial={{ opacity: 0, y: 100, scale: 0.95 }}
+            animate={{ 
+              opacity: 1, 
+              y: 0, 
+              scale: 1,
+              x: [0, -10, 10, -10, 10, -5, 5, -2, 2, 0] // Shake animation
+            }}
+            exit={{ opacity: 0, y: 100, scale: 0.95 }}
+            transition={{ 
+              duration: 0.4, 
+              ease: "easeOut",
+              x: { duration: 0.8, delay: 0.2 } // Shake starts after slide-in
+            }}
+            className="fixed bottom-0 left-0 right-0 md:bottom-4 md:right-4 md:left-auto z-50 md:max-w-md w-full pointer-events-auto"
+            style={{ zIndex: 9999 }}
+            onClick={(e) => e.stopPropagation()}
+          >
         <div className="bg-white/95 backdrop-blur-md rounded-t-2xl md:rounded-2xl shadow-2xl border-t border-white/20 md:border border-white/20 overflow-hidden relative">
           {/* Subtle gradient background */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white/50 to-primary/5 pointer-events-none" />
@@ -355,7 +366,9 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
             </motion.div>
           </div>
         </div>
-      </motion.div>
+          </motion.div>
+        </>
+      )}
     </AnimatePresence>
   );
 }
