@@ -107,7 +107,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   <h3 className="font-bold text-sm text-foreground">Cookie Settings</h3>
                 </div>
                 <p className="text-xs text-neutral-600 leading-relaxed mb-3">
-                  We use cookies to enhance your experience and provide personalised content about commercial property investment.
+                  We use cookies to enhance your experience and provide personalised content.
                 </p>
                 
                 {/* Show More/Less Button */}
@@ -147,7 +147,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                           <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full">Optional</span>
                         </div>
                         <p className="text-xs text-primary/90 leading-relaxed">
-                          Help us understand visitor behavior and improve our webinar experience through anonymous usage statistics.
+                          Help us understand visitor behaviour and improve our webinar experience through anonymous usage statistics.
                         </p>
                       </div>
 
@@ -159,7 +159,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                           <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full">Optional</span>
                         </div>
                         <p className="text-xs text-primary/90 leading-relaxed">
-                          Enable personalized content and targeted advertising related to commercial property investment opportunities.
+                          Enable personalised content and targeted advertising related to property investments.
                         </p>
                       </div>
 
@@ -183,23 +183,15 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                       </div>
                     </motion.div>
                   )}
-                </AnimatePresence>
+                </AnimatePresence>                
 
-                {/* Basic info when collapsed */}
-                {!showDetails && (
-                  <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50 mb-3">
-                    <p className="text-xs text-neutral-700 leading-relaxed">
-                      Essential cookies are required for basic functionality, while analytics cookies help us understand how visitors interact with our site.
-                    </p>
-                  </div>
-                )}
-
-                {/* Prototype Mode Notice */}
+                {/* Prototype Mode Notice 
                 <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
                   <p className="text-xs text-neutral-700 leading-relaxed">
                     <strong>Prototype Mode:</strong> Buttons are non-functional and for demonstration purposes only.
                   </p>
                 </div>
+                */}
               </div>
             </div>
           </div>
@@ -218,7 +210,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
               <Button
                 onClick={handleDecline}
                 variant="outline"
-                className="flex-1 font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 text-xs py-2.5 rounded-lg transition-all duration-200"
+                className="flex-1 font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-secondary/20 hover:text-secondary hover:border-secondary/20 text-xs py-2.5 rounded-lg transition-all duration-200"
                 size="sm"
               >
                 Essential Only
