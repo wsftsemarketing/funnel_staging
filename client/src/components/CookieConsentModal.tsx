@@ -53,17 +53,53 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   const handleAccept = () => {
     localStorage.setItem('cookieConsent', 'accepted');
 
-    // Trigger CookieYes acceptance if available
-    if (window.cookieyes) {
-      if (typeof window.cookieyes.acceptAll === 'function') {
-        window.cookieyes.acceptAll();
-      } else if (typeof window.cookieyes.setConsentValue === 'function') {
-        window.cookieyes.setConsentValue('all', true);
+    // Multiple approaches to trigger CookieYes acceptance
+    try {
+      if (window.cookieyes) {
+        // Try different CookieYes API methods
+        if (typeof window.cookieyes.acceptAll === 'function') {
+          window.cookieyes.acceptAll();
+        } else if (typeof window.cookieyes.setConsentValue === 'function') {
+          // Set consent for all categories
+          window.cookieyes.setConsentValue('necessary', true);
+          window.cookieyes.setConsentValue('functional', true);
+          window.cookieyes.setConsentValue('analytics', true);
+          window.cookieyes.setConsentValue('performance', true);
+          window.cookieyes.setConsentValue('advertisement', true);
+          window.cookieyes.setConsentValue('other', true);
+        } else if (typeof window.cookieyes.updateConsent === 'function') {
+          window.cookieyes.updateConsent({
+            necessary: true,
+            functional: true,
+            analytics: true,
+            performance: true,
+            advertisement: true,
+            other: true
+          });
+        }
+        
+        // Fire consent events
+        if (typeof window.cookieyes.fireEvent === 'function') {
+          window.cookieyes.fireEvent('consent_accept');
+        }
       }
+    } catch (error) {
+      console.log('CookieYes API call failed, using fallback:', error);
     }
 
-    // Set cookie manually as fallback
-    document.cookie = 'cookieyes-consent=accepted; path=/; max-age=31536000; SameSite=Lax';
+    // Set multiple cookie variations as fallback
+    const cookieOptions = '; path=/; max-age=31536000; SameSite=Lax';
+    document.cookie = 'cookieyes-consent=accepted' + cookieOptions;
+    document.cookie = 'cky-consent=accepted' + cookieOptions;
+    document.cookie = 'cookie-consent=accepted' + cookieOptions;
+
+    // Dispatch custom events for other tracking scripts
+    try {
+      window.dispatchEvent(new CustomEvent('cookieConsentAccepted', { detail: { all: true } }));
+      window.dispatchEvent(new CustomEvent('cookieyes_consent_update', { detail: { consent: 'accepted' } }));
+    } catch (error) {
+      console.log('Event dispatch failed:', error);
+    }
 
     setIsVisible(false);
     onAccept?.();
@@ -72,17 +108,52 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   const handleDecline = () => {
     localStorage.setItem('cookieConsent', 'declined');
 
-    // Trigger CookieYes decline if available
-    if (window.cookieyes) {
-      if (typeof window.cookieyes.rejectAll === 'function') {
-        window.cookieyes.rejectAll();
-      } else if (typeof window.cookieyes.setConsentValue === 'function') {
-        window.cookieyes.setConsentValue('all', false);
+    // Multiple approaches to trigger CookieYes decline
+    try {
+      if (window.cookieyes) {
+        if (typeof window.cookieyes.rejectAll === 'function') {
+          window.cookieyes.rejectAll();
+        } else if (typeof window.cookieyes.setConsentValue === 'function') {
+          // Only allow necessary cookies
+          window.cookieyes.setConsentValue('necessary', true);
+          window.cookieyes.setConsentValue('functional', false);
+          window.cookieyes.setConsentValue('analytics', false);
+          window.cookieyes.setConsentValue('performance', false);
+          window.cookieyes.setConsentValue('advertisement', false);
+          window.cookieyes.setConsentValue('other', false);
+        } else if (typeof window.cookieyes.updateConsent === 'function') {
+          window.cookieyes.updateConsent({
+            necessary: true,
+            functional: false,
+            analytics: false,
+            performance: false,
+            advertisement: false,
+            other: false
+          });
+        }
+        
+        // Fire consent events
+        if (typeof window.cookieyes.fireEvent === 'function') {
+          window.cookieyes.fireEvent('consent_reject');
+        }
       }
+    } catch (error) {
+      console.log('CookieYes API call failed, using fallback:', error);
     }
 
-    // Set cookie manually as fallback
-    document.cookie = 'cookieyes-consent=declined; path=/; max-age=31536000; SameSite=Lax';
+    // Set multiple cookie variations as fallback
+    const cookieOptions = '; path=/; max-age=31536000; SameSite=Lax';
+    document.cookie = 'cookieyes-consent=declined' + cookieOptions;
+    document.cookie = 'cky-consent=declined' + cookieOptions;
+    document.cookie = 'cookie-consent=declined' + cookieOptions;
+
+    // Dispatch custom events
+    try {
+      window.dispatchEvent(new CustomEvent('cookieConsentDeclined', { detail: { essentialOnly: true } }));
+      window.dispatchEvent(new CustomEvent('cookieyes_consent_reject', { detail: { consent: 'declined' } }));
+    } catch (error) {
+      console.log('Event dispatch failed:', error);
+    }
 
     setIsVisible(false);
     onDecline?.();
@@ -289,7 +360,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   );
 }
 
-// Extended window object for TypeScript with more CookieYes methods
+// Extended window object for TypeScript with comprehensive CookieYes API
 declare global {
   interface Window {
     cookieyes?: {
@@ -298,6 +369,11 @@ declare global {
       setConsentValue?: (category: string, value: boolean) => void;
       getConsentValue?: (category: string) => boolean;
       openPreferences?: () => void;
+      updateConsent?: (consents: Record<string, boolean>) => void;
+      fireEvent?: (eventName: string) => void;
+      show?: () => void;
+      hide?: () => void;
+      reset?: () => void;
     };
   }
 }
