@@ -160,7 +160,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   <h3 className="font-bold text-sm md:text-sm text-foreground">Cookie Settings</h3>
                 </div>
                 <p className="text-xs text-neutral-600 leading-relaxed mb-2 md:mb-3">
-                  We use cookies to enhance your experience and provide personalised content about commercial property investment.
+                 <b>We care about your pribacy.</b> We use cookies to enhance your experience and provide personalised content about commercial property investment.
                 </p>
 
                 {/* Clean info box - hidden on mobile to save space */}
