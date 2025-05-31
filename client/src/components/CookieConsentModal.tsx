@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Cookie } from "lucide-react";
+import { X, Cookie, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./ui/logo";
 
@@ -12,6 +12,7 @@ interface CookieConsentModalProps {
 
 export default function CookieConsentModal({ onAccept, onDecline }: CookieConsentModalProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     // Show modal immediately for prototype purposes
@@ -37,20 +38,24 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   if (!isVisible) return null;
 
   return (
-    <AnimatePresence>
-      {/* Background overlay with blur */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
-        style={{ zIndex: 9998 }}
-        onClick={handleClose}
-      />
+    <AnimatePresence mode="wait">
+      {isVisible && (
+        <>
+          {/* Background overlay with blur */}
+          <motion.div
+            key="backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
+            style={{ zIndex: 9998 }}
+            onClick={handleClose}
+          />
 
-      {/* Bottom banner style positioned in corner */}
-      <motion.div
+          {/* Bottom banner style positioned in corner */}
+          <motion.div
+            key="modal"
         initial={{ opacity: 0, y: 100, scale: 0.95 }}
         animate={{ 
           opacity: 1, 
@@ -105,12 +110,91 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   We use cookies to enhance your experience and provide personalised content about commercial property investment.
                 </p>
                 
-                {/* Clean info box */}
-                <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
-                  <p className="text-xs text-neutral-700 leading-relaxed">
-                    Essential cookies are required for basic functionality, while analytics cookies help us understand how visitors interact with our site.
-                  </p>
-                </div>
+                {/* Show More/Less Button */}
+                <button
+                  onClick={() => setShowDetails(!showDetails)}
+                  className="flex items-center gap-2 text-xs text-primary hover:text-primary/80 transition-colors mb-3 font-medium"
+                >
+                  {showDetails ? (
+                    <>
+                      <ChevronUp className="w-3 h-3" />
+                      Show Less
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="w-3 h-3" />
+                      Show More Details
+                    </>
+                  )}
+                </button>
+
+                {/* Expandable Cookie Details */}
+                <AnimatePresence>
+                  {showDetails && (
+                    <motion.div
+                      key="cookie-details"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="space-y-2 mb-3 overflow-hidden"
+                    >
+                      {/* Analytics Cookies */}
+                      <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-3 border border-primary/15">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-2 h-2 bg-primary rounded-full"></div>
+                          <h5 className="text-xs font-semibold text-primary">Analytics Cookies</h5>
+                          <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full">Optional</span>
+                        </div>
+                        <p className="text-xs text-primary/90 leading-relaxed">
+                          Help us understand visitor behavior and improve our webinar experience through anonymous usage statistics.
+                        </p>
+                      </div>
+
+                      {/* Marketing Cookies */}
+                      <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-3 border border-primary/15">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-2 h-2 bg-primary rounded-full"></div>
+                          <h5 className="text-xs font-semibold text-primary">Marketing Cookies</h5>
+                          <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full">Optional</span>
+                        </div>
+                        <p className="text-xs text-primary/90 leading-relaxed">
+                          Enable personalized content and targeted advertising related to commercial property investment opportunities.
+                        </p>
+                      </div>
+
+                      {/* Functional Cookies */}
+                      <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-3 border border-primary/15">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-2 h-2 bg-primary rounded-full"></div>
+                          <h5 className="text-xs font-semibold text-primary">Functional Cookies</h5>
+                          <span className="text-xs bg-primary/15 text-primary px-2 py-0.5 rounded-full">Optional</span>
+                        </div>
+                        <p className="text-xs text-primary/90 leading-relaxed">
+                          Remember your preferences and provide enhanced features like live chat and webinar reminders.
+                        </p>
+                      </div>
+
+                      {/* Cookie Expiry Info */}
+                      <div className="mt-3 p-2 bg-secondary/8 rounded-lg border border-secondary/20">
+                        <p className="text-xs text-secondary/90 text-center">
+                          Cookies expire after 12 months. You can change preferences anytime in your browser settings.
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Basic info when collapsed */}
+                {!showDetails && (
+                  <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50 mb-3">
+                    <p className="text-xs text-neutral-700 leading-relaxed">
+                      Essential cookies are required for basic functionality, while analytics cookies help us understand how visitors interact with our site.
+                    </p>
+                  </div>
+                )}
+
+                {/* Prototype Mode Notice */}
                 <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
                   <p className="text-xs text-neutral-700 leading-relaxed">
                     <strong>Prototype Mode:</strong> Buttons are non-functional and for demonstration purposes only.
@@ -149,6 +233,8 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           </div>
         </div>
       </motion.div>
+        </>
+      )}
     </AnimatePresence>
   );
 }
