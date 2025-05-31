@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { X, Cookie } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,15 +7,18 @@ interface CookieConsentModalProps {
   onDecline?: () => void;
 }
 
-export default function CookieConsentModal({ onAccept, onDecline }: CookieConsentModalProps) {
+export default function CookieConsentModal({
+  onAccept,
+  onDecline,
+}: CookieConsentModalProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     // Check if user has already made a choice
-    const cookieChoice = localStorage.getItem('cookieConsent');
-    const cookieYesConsent = document.cookie.includes('cookieyes-consent');
+    const cookieChoice = localStorage.getItem("cookieConsent");
+    const cookieYesConsent = document.cookie.includes("cookieyes-consent");
 
     if (!cookieChoice && !cookieYesConsent) {
       const timer = setTimeout(() => {
@@ -32,50 +34,62 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   // Listen for CookieYes events if available
   useEffect(() => {
     const handleCookieYesAccept = () => {
-      localStorage.setItem('cookieConsent', 'accepted');
+      localStorage.setItem("cookieConsent", "accepted");
       handleClose();
       onAccept?.();
     };
 
     const handleCookieYesReject = () => {
-      localStorage.setItem('cookieConsent', 'declined');
+      localStorage.setItem("cookieConsent", "declined");
       handleClose();
       onDecline?.();
     };
 
-    window.addEventListener('cookieyes_consent_update', handleCookieYesAccept);
-    window.addEventListener('cookieyes_consent_reject', handleCookieYesReject);
+    window.addEventListener("cookieyes_consent_update", handleCookieYesAccept);
+    window.addEventListener("cookieyes_consent_reject", handleCookieYesReject);
 
     return () => {
-      window.removeEventListener('cookieyes_consent_update', handleCookieYesAccept);
-      window.removeEventListener('cookieyes_consent_reject', handleCookieYesReject);
+      window.removeEventListener(
+        "cookieyes_consent_update",
+        handleCookieYesAccept,
+      );
+      window.removeEventListener(
+        "cookieyes_consent_reject",
+        handleCookieYesReject,
+      );
     };
   }, [onAccept, onDecline]);
 
   const handleAccept = () => {
-    localStorage.setItem('cookieConsent', 'accepted');
+    localStorage.setItem("cookieConsent", "accepted");
 
     // CookieYes integration
     try {
       if (window.cookieyes) {
-        if (typeof window.cookieyes.acceptAll === 'function') {
+        if (typeof window.cookieyes.acceptAll === "function") {
           window.cookieyes.acceptAll();
         }
       }
     } catch (error) {
-      console.log('CookieYes API call failed:', error);
+      console.log("CookieYes API call failed:", error);
     }
 
-    const cookieOptions = '; path=/; max-age=31536000; SameSite=Lax';
-    document.cookie = 'cookieyes-consent=accepted' + cookieOptions;
-    document.cookie = 'cky-consent=accepted' + cookieOptions;
-    document.cookie = 'cookie-consent=accepted' + cookieOptions;
+    const cookieOptions = "; path=/; max-age=31536000; SameSite=Lax";
+    document.cookie = "cookieyes-consent=accepted" + cookieOptions;
+    document.cookie = "cky-consent=accepted" + cookieOptions;
+    document.cookie = "cookie-consent=accepted" + cookieOptions;
 
     try {
-      window.dispatchEvent(new CustomEvent('cookieConsentAccepted', { detail: { all: true } }));
-      window.dispatchEvent(new CustomEvent('cookieyes_consent_update', { detail: { consent: 'accepted' } }));
+      window.dispatchEvent(
+        new CustomEvent("cookieConsentAccepted", { detail: { all: true } }),
+      );
+      window.dispatchEvent(
+        new CustomEvent("cookieyes_consent_update", {
+          detail: { consent: "accepted" },
+        }),
+      );
     } catch (error) {
-      console.log('Event dispatch failed:', error);
+      console.log("Event dispatch failed:", error);
     }
 
     handleClose();
@@ -83,28 +97,36 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   };
 
   const handleDecline = () => {
-    localStorage.setItem('cookieConsent', 'declined');
+    localStorage.setItem("cookieConsent", "declined");
 
     try {
       if (window.cookieyes) {
-        if (typeof window.cookieyes.rejectAll === 'function') {
+        if (typeof window.cookieyes.rejectAll === "function") {
           window.cookieyes.rejectAll();
         }
       }
     } catch (error) {
-      console.log('CookieYes API call failed:', error);
+      console.log("CookieYes API call failed:", error);
     }
 
-    const cookieOptions = '; path=/; max-age=31536000; SameSite=Lax';
-    document.cookie = 'cookieyes-consent=declined' + cookieOptions;
-    document.cookie = 'cky-consent=declined' + cookieOptions;
-    document.cookie = 'cookie-consent=declined' + cookieOptions;
+    const cookieOptions = "; path=/; max-age=31536000; SameSite=Lax";
+    document.cookie = "cookieyes-consent=declined" + cookieOptions;
+    document.cookie = "cky-consent=declined" + cookieOptions;
+    document.cookie = "cookie-consent=declined" + cookieOptions;
 
     try {
-      window.dispatchEvent(new CustomEvent('cookieConsentDeclined', { detail: { essentialOnly: true } }));
-      window.dispatchEvent(new CustomEvent('cookieyes_consent_reject', { detail: { consent: 'declined' } }));
+      window.dispatchEvent(
+        new CustomEvent("cookieConsentDeclined", {
+          detail: { essentialOnly: true },
+        }),
+      );
+      window.dispatchEvent(
+        new CustomEvent("cookieyes_consent_reject", {
+          detail: { consent: "declined" },
+        }),
+      );
     } catch (error) {
-      console.log('Event dispatch failed:', error);
+      console.log("Event dispatch failed:", error);
     }
 
     handleClose();
@@ -201,12 +223,12 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
       `}</style>
 
       <div
-        className={`cookie-modal-backdrop ${isAnimating ? 'animate-in' : ''}`}
+        className={`cookie-modal-backdrop ${isAnimating ? "animate-in" : ""}`}
         onClick={handleClose}
       />
 
       <div
-        className={`cookie-modal-container ${isAnimating ? 'animate-in cookie-modal-shake' : ''}`}
+        className={`cookie-modal-container ${isAnimating ? "animate-in cookie-modal-shake" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-white/95 backdrop-blur-md rounded-t-2xl md:rounded-2xl shadow-2xl border-t border-white/20 md:border border-white/20 overflow-hidden relative">
@@ -227,9 +249,9 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
               {/* Cookie Monster Mascot */}
               <div className="relative flex-shrink-0">
                 <div className="w-14 h-14 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-100 to-blue-50 border-2 border-white/50 shadow-sm overflow-hidden">
-                  <img 
-                    src="https://i.scdn.co/image/ab6761610000e5eba3a7cba23d68a4e73c3b8155" 
-                    alt="Cookie Monster" 
+                  <img
+                    src="https://i.scdn.co/image/ab6761610000e5eba3a7cba23d68a4e73c3b8155"
+                    alt="Cookie Monster"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -240,16 +262,21 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-bold text-sm md:text-sm text-foreground">Cookie Settings</h3>
+                  <h3 className="font-bold text-sm md:text-sm text-foreground">
+                    Cookie Settings
+                  </h3>
                 </div>
                 <p className="text-xs text-neutral-600 leading-relaxed mb-2 md:mb-3">
-                 <b>We care about your privacy.</b> We use cookies to enhance your experience and provide personalised content about commercial property investment.
+                  We use cookies to enhance your experience and provide
+                  personalised content about commercial property investment.
                 </p>
 
                 {/* Clean info box - hidden on mobile to save space */}
                 <div className="hidden md:block bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
                   <p className="text-xs text-neutral-700 leading-relaxed">
-                    Essential cookies are required for basic functionality, while analytics cookies help us understand how visitors interact with our site.
+                    Essential cookies are required for basic functionality,
+                    while analytics cookies help us understand how visitors
+                    interact with our site.
                   </p>
                 </div>
               </div>
@@ -282,18 +309,23 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 onClick={() => setShowDetails(!showDetails)}
                 className="text-xs text-neutral-600 hover:text-primary transition-colors mb-2 underline underline-offset-2"
               >
-                {showDetails ? 'Show less' : 'Show more'}
+                {showDetails ? "Show less" : "Show more"}
               </button>
 
               <p className="text-xs text-neutral-500">
-                <a href="/privacy-policy" className="text-primary hover:text-primary/80 hover:underline transition-colors">
+                <a
+                  href="/privacy-policy"
+                  className="text-primary hover:text-primary/80 hover:underline transition-colors"
+                >
                   Privacy Policy
                 </a>
               </p>
             </div>
 
             {/* Expandable Cookie Details */}
-            <div className={`cookie-details-expand ${showDetails ? 'show' : ''}`}>
+            <div
+              className={`cookie-details-expand ${showDetails ? "show" : ""}`}
+            >
               <div className="mt-4 pt-4 border-t border-neutral-200">
                 <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                   <Cookie className="w-4 h-4 text-secondary" />
@@ -305,11 +337,16 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-3 border border-primary/15">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2 h-2 bg-neutral-600 rounded-full"></div>
-                      <h5 className="text-xs font-semibold text-neutral-800">Essential Cookies</h5>
-                      <span className="text-xs bg-green-200/50 text-green-700 px-2 py-0.5 rounded-full">Always Active</span>
+                      <h5 className="text-xs font-semibold text-neutral-800">
+                        Essential Cookies
+                      </h5>
+                      <span className="text-xs bg-green-200/50 text-green-700 px-2 py-0.5 rounded-full">
+                        Always Active
+                      </span>
                     </div>
                     <p className="text-xs text-neutral-700 leading-relaxed">
-                      Required for basic website functionality, security, and user authentication. These cannot be disabled.
+                      Required for basic website functionality, security, and
+                      user authentication. These cannot be disabled.
                     </p>
                   </div>
 
@@ -317,11 +354,16 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   <div className="bg-gradient-to-r from-neutral-50 to-neutral-100/30 rounded-lg p-3 border border-neutral-200">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-                      <h5 className="text-xs font-semibold text-muted-foreground">Analytics Cookies</h5>
-                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Optional</span>
+                      <h5 className="text-xs font-semibold text-muted-foreground">
+                        Analytics Cookies
+                      </h5>
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                        Optional
+                      </span>
                     </div>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      Help us understand visitor behaviour and improve our webinar experience through anonymous usage statistics.
+                      Help us understand visitor behaviour and improve our
+                      webinar experience through anonymous usage statistics.
                     </p>
                   </div>
 
@@ -329,11 +371,17 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   <div className="bg-gradient-to-r from-neutral-50 to-neutral-100/30 rounded-lg p-3 border border-neutral-200">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-                      <h5 className="text-xs font-semibold text-muted-foreground">Marketing Cookies</h5>
-                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Optional</span>
+                      <h5 className="text-xs font-semibold text-muted-foreground">
+                        Marketing Cookies
+                      </h5>
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                        Optional
+                      </span>
                     </div>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      Enable personalised content and targeted advertising related to property investment education and opportunities.
+                      Enable personalised content and targeted advertising
+                      related to property investment education and
+                      opportunities.
                     </p>
                   </div>
 
@@ -341,18 +389,24 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   <div className="bg-gradient-to-r from-neutral-50 to-neutral-100/30 rounded-lg p-3 border border-neutral-200">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-                      <h5 className="text-xs font-semibold text-muted-foreground">Functional Cookies</h5>
-                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Optional</span>
+                      <h5 className="text-xs font-semibold text-muted-foreground">
+                        Functional Cookies
+                      </h5>
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                        Optional
+                      </span>
                     </div>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      Remember your preferences and provide enhanced features like live chat and webinar reminders.
+                      Remember your preferences and provide enhanced features
+                      like live chat and webinar reminders.
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-3 p-2 bg-blue-100/20 rounded-lg border border-blue-100">
                   <p className="text-xs text-muted-foreground text-center">
-                    Cookies expire after 12 months. You can change preferences anytime in your browser settings.
+                    Cookies expire after 12 months. You can change preferences
+                    anytime in your browser settings.
                   </p>
                 </div>
               </div>
