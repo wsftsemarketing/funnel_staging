@@ -17,7 +17,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/ba74d679167be442cbd18b9c/script.js"></script> <!-- End cookieyes banner -->
     
+    <!-- CookieYes configuration -->
+    <script>
+      window.addEventListener('load', function() {
+        // Ensure CookieYes doesn't conflict with our custom banner
+        if (window.cookieyes) {
+          // Hide default CookieYes banner if it exists
+          const cookieyesBanner = document.querySelector('[id*="cookieyes"]');
+          if (cookieyesBanner) {
+            cookieyesBanner.style.display = 'none';
+          }
+        }
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>
