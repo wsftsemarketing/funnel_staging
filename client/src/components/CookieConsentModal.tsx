@@ -23,8 +23,10 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
     if (!cookieChoice && !cookieYesConsent) {
       // Delay showing banner slightly to prevent conflicts
       const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 100);
+        if (!cookieChoice && !cookieYesConsent) { // Double-check before showing
+          setIsVisible(true);
+        }
+      }, 200); // Increased delay slightly
       
       return () => clearTimeout(timer);
     }
@@ -173,12 +175,11 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   if (!isVisible) return null;
 
   return (
-    <AnimatePresence mode="wait" key="cookie-consent-modal">
+    <AnimatePresence mode="wait">
       {isVisible && (
-        <>
+        <div key="cookie-consent-wrapper">
           {/* Background overlay with blur */}
           <motion.div
-            key="cookie-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -188,9 +189,8 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
             onClick={handleClose}
           />
 
-      {/* Mobile: Full-width banner at bottom */}
+          {/* Mobile: Full-width banner at bottom */}
           <motion.div
-            key="cookie-modal"
             initial={{ opacity: 0, y: 100, scale: 0.95 }}
             animate={{ 
               opacity: 1, 
@@ -367,7 +367,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           </div>
         </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );
