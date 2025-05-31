@@ -22,8 +22,8 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
       const timer = setTimeout(() => {
         setIsVisible(true);
         // Trigger animation after render
-        setTimeout(() => setIsAnimating(true), 50);
-      }, 500);
+        setTimeout(() => setIsAnimating(true), 100);
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
@@ -126,9 +126,10 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           inset: 0;
           background: rgba(0, 0, 0, 0.2);
           backdrop-filter: blur(4px);
-          z-index: 9998;
+          z-index: 999998;
           opacity: 0;
           transition: opacity 0.3s ease-out;
+          pointer-events: auto;
         }
         
         .cookie-modal-backdrop.animate-in {
@@ -140,7 +141,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           bottom: 0;
           left: 0;
           right: 0;
-          z-index: 9999;
+          z-index: 999999;
           width: 100%;
           pointer-events: auto;
           transform: translateY(100%) scale(0.95);
@@ -189,6 +190,13 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
         .cookie-details-expand.show {
           opacity: 1;
           max-height: 1000px;
+        }
+        
+        /* Force override any conflicting styles */
+        .cookie-modal-backdrop,
+        .cookie-modal-container {
+          display: block !important;
+          visibility: visible !important;
         }
       `}</style>
 
