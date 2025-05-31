@@ -14,76 +14,18 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Check if user has already made a choice
-    const cookieChoice = localStorage.getItem('cookieConsent');
-    
-    // Also check if CookieYes has already handled consent
-    const cookieYesConsent = document.cookie.includes('cookieyes-consent');
-    
-    if (!cookieChoice && !cookieYesConsent) {
-      // Show banner immediately
-      setIsVisible(true);
-    }
+    // Show modal immediately for prototype purposes
+    setIsVisible(true);
   }, []);
 
-  // Listen for CookieYes events if available
-  useEffect(() => {
-    const handleCookieYesAccept = () => {
-      localStorage.setItem('cookieConsent', 'accepted');
-      setIsVisible(false);
-      onAccept?.();
-    };
-
-    const handleCookieYesReject = () => {
-      localStorage.setItem('cookieConsent', 'declined');
-      setIsVisible(false);
-      onDecline?.();
-    };
-
-    // Listen for CookieYes events
-    window.addEventListener('cookieyes_consent_update', handleCookieYesAccept);
-    window.addEventListener('cookieyes_consent_reject', handleCookieYesReject);
-
-    return () => {
-      window.removeEventListener('cookieyes_consent_update', handleCookieYesAccept);
-      window.removeEventListener('cookieyes_consent_reject', handleCookieYesReject);
-    };
-  }, [onAccept, onDecline]);
-
   const handleAccept = () => {
-    localStorage.setItem('cookieConsent', 'accepted');
-
-    // Trigger CookieYes acceptance if available
-    if (window.cookieyes) {
-      if (typeof window.cookieyes.acceptAll === 'function') {
-        window.cookieyes.acceptAll();
-      } else if (typeof window.cookieyes.setConsentValue === 'function') {
-        window.cookieyes.setConsentValue('all', true);
-      }
-    }
-
-    // Set cookie manually as fallback
-    document.cookie = 'cookieyes-consent=accepted; path=/; max-age=31536000; SameSite=Lax';
-
+    // Simply close the modal - no backend functionality
     setIsVisible(false);
     onAccept?.();
   };
 
   const handleDecline = () => {
-    localStorage.setItem('cookieConsent', 'declined');
-
-    // Trigger CookieYes decline if available
-    if (window.cookieyes) {
-      if (typeof window.cookieyes.rejectAll === 'function') {
-        window.cookieyes.rejectAll();
-      } else if (typeof window.cookieyes.setConsentValue === 'function') {
-        window.cookieyes.setConsentValue('all', false);
-      }
-    }
-
-    // Set cookie manually as fallback
-    document.cookie = 'cookieyes-consent=declined; path=/; max-age=31536000; SameSite=Lax';
-
+    // Simply close the modal - no backend functionality
     setIsVisible(false);
     onDecline?.();
   };
@@ -211,15 +153,4 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   );
 }
 
-// Extended window object for TypeScript with more CookieYes methods
-declare global {
-  interface Window {
-    cookieyes?: {
-      acceptAll?: () => void;
-      rejectAll?: () => void;
-      setConsentValue?: (category: string, value: boolean) => void;
-      getConsentValue?: (category: string) => boolean;
-      openPreferences?: () => void;
-    };
-  }
-}
+
