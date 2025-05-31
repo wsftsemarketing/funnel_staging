@@ -160,13 +160,18 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                   <h3 className="font-bold text-sm text-foreground">Cookie Settings</h3>
                 </div>
                 <p className="text-xs text-neutral-600 leading-relaxed mb-3">
-                  We use cookies to enhance your experience and provide personalized content about commercial property investment.
+                  We use cookies to enhance your experience and provide personalised content about commercial property investment.
                 </p>
                 
                 {/* Clean info box */}
                 <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
                   <p className="text-xs text-neutral-700 leading-relaxed">
                     Essential cookies are required for basic functionality, while analytics cookies help us understand how visitors interact with our site.
+                  </p>
+                </div>
+                <div className="bg-gradient-to-r from-blue-50/80 to-primary/5 rounded-lg p-3 border border-blue-100/50">
+                  <p className="text-xs text-neutral-700 leading-relaxed">
+                    <strong>Prototype Mode:</strong> Buttons are non-functional and for demonstration purposes only.
                   </p>
                 </div>
               </div>
