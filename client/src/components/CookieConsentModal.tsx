@@ -1,5 +1,5 @@
+
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { X, Cookie } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +11,7 @@ interface CookieConsentModalProps {
 export default function CookieConsentModal({ onAccept, onDecline }: CookieConsentModalProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     // Check if user has already made a choice
@@ -20,6 +21,8 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
     if (!cookieChoice && !cookieYesConsent) {
       const timer = setTimeout(() => {
         setIsVisible(true);
+        // Trigger animation after render
+        setTimeout(() => setIsAnimating(true), 50);
       }, 500);
 
       return () => clearTimeout(timer);
@@ -30,13 +33,13 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   useEffect(() => {
     const handleCookieYesAccept = () => {
       localStorage.setItem('cookieConsent', 'accepted');
-      setIsVisible(false);
+      handleClose();
       onAccept?.();
     };
 
     const handleCookieYesReject = () => {
       localStorage.setItem('cookieConsent', 'declined');
-      setIsVisible(false);
+      handleClose();
       onDecline?.();
     };
 
@@ -75,7 +78,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
       console.log('Event dispatch failed:', error);
     }
 
-    setIsVisible(false);
+    handleClose();
     onAccept?.();
   };
 
@@ -104,39 +107,98 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
       console.log('Event dispatch failed:', error);
     }
 
-    setIsVisible(false);
+    handleClose();
     onDecline?.();
   };
 
   const handleClose = () => {
-    setIsVisible(false);
+    setIsAnimating(false);
+    setTimeout(() => setIsVisible(false), 300);
   };
 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50" style={{ zIndex: 9999 }}>
-      {/* Background overlay */}
+    <>
+      <style>{`
+        .cookie-modal-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.2);
+          backdrop-filter: blur(4px);
+          z-index: 9998;
+          opacity: 0;
+          transition: opacity 0.3s ease-out;
+        }
+        
+        .cookie-modal-backdrop.animate-in {
+          opacity: 1;
+        }
+        
+        .cookie-modal-container {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 9999;
+          width: 100%;
+          pointer-events: auto;
+          transform: translateY(100%) scale(0.95);
+          opacity: 0;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .cookie-modal-container.animate-in {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        
+        @media (min-width: 768px) {
+          .cookie-modal-container {
+            bottom: 1rem;
+            right: 1rem;
+            left: auto;
+            max-width: 28rem;
+          }
+        }
+        
+        .cookie-modal-shake {
+          animation: shake 0.8s ease-out 0.2s;
+        }
+        
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10% { transform: translateX(-10px); }
+          20% { transform: translateX(10px); }
+          30% { transform: translateX(-10px); }
+          40% { transform: translateX(10px); }
+          50% { transform: translateX(-5px); }
+          60% { transform: translateX(5px); }
+          70% { transform: translateX(-2px); }
+          80% { transform: translateX(2px); }
+          90% { transform: translateX(0); }
+        }
+        
+        .cookie-details-expand {
+          opacity: 0;
+          max-height: 0;
+          overflow: hidden;
+          transition: all 0.3s ease-out;
+        }
+        
+        .cookie-details-expand.show {
+          opacity: 1;
+          max-height: 1000px;
+        }
+      `}</style>
+
       <div
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm"
+        className={`cookie-modal-backdrop ${isAnimating ? 'animate-in' : ''}`}
         onClick={handleClose}
       />
 
-      {/* Modal container */}
-      <motion.div
-        initial={{ opacity: 0, y: 100, scale: 0.95 }}
-        animate={{ 
-          opacity: 1, 
-          y: 0, 
-          scale: 1,
-          x: [0, -10, 10, -10, 10, -5, 5, -2, 2, 0]
-        }}
-        transition={{ 
-          duration: 0.4, 
-          ease: "easeOut",
-          x: { duration: 0.8, delay: 0.2 }
-        }}
-        className="fixed bottom-0 left-0 right-0 md:bottom-4 md:right-4 md:left-auto md:max-w-md w-full pointer-events-auto"
+      <div
+        className={`cookie-modal-container ${isAnimating ? 'animate-in cookie-modal-shake' : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-white/95 backdrop-blur-md rounded-t-2xl md:rounded-2xl shadow-2xl border-t border-white/20 md:border border-white/20 overflow-hidden relative">
@@ -223,81 +285,74 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
             </div>
 
             {/* Expandable Cookie Details */}
-            {showDetails && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
-              >
-                <div className="mt-4 pt-4 border-t border-neutral-200">
-                  <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <Cookie className="w-4 h-4 text-secondary" />
-                    Cookie Information
-                  </h4>
+            <div className={`cookie-details-expand ${showDetails ? 'show' : ''}`}>
+              <div className="mt-4 pt-4 border-t border-neutral-200">
+                <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Cookie className="w-4 h-4 text-secondary" />
+                  Cookie Information
+                </h4>
 
-                  <div className="space-y-3">
-                    {/* Essential Cookies */}
-                    <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-3 border border-primary/15">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-2 h-2 bg-neutral-600 rounded-full"></div>
-                        <h5 className="text-xs font-semibold text-neutral-800">Essential Cookies</h5>
-                        <span className="text-xs bg-green-200/50 text-green-700 px-2 py-0.5 rounded-full">Always Active</span>
-                      </div>
-                      <p className="text-xs text-neutral-700 leading-relaxed">
-                        Required for basic website functionality, security, and user authentication. These cannot be disabled.
-                      </p>
+                <div className="space-y-3">
+                  {/* Essential Cookies */}
+                  <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-3 border border-primary/15">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-neutral-600 rounded-full"></div>
+                      <h5 className="text-xs font-semibold text-neutral-800">Essential Cookies</h5>
+                      <span className="text-xs bg-green-200/50 text-green-700 px-2 py-0.5 rounded-full">Always Active</span>
                     </div>
-
-                    {/* Analytics Cookies */}
-                    <div className="bg-gradient-to-r from-neutral-50 to-neutral-100/30 rounded-lg p-3 border border-neutral-200">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-                        <h5 className="text-xs font-semibold text-muted-foreground">Analytics Cookies</h5>
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Optional</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        Help us understand visitor behaviour and improve our webinar experience through anonymous usage statistics.
-                      </p>
-                    </div>
-
-                    {/* Marketing Cookies */}
-                    <div className="bg-gradient-to-r from-neutral-50 to-neutral-100/30 rounded-lg p-3 border border-neutral-200">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-                        <h5 className="text-xs font-semibold text-muted-foreground">Marketing Cookies</h5>
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Optional</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        Enable personalised content and targeted advertising related to property investment education and opportunities.
-                      </p>
-                    </div>
-
-                    {/* Functional Cookies */}
-                    <div className="bg-gradient-to-r from-neutral-50 to-neutral-100/30 rounded-lg p-3 border border-neutral-200">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
-                        <h5 className="text-xs font-semibold text-muted-foreground">Functional Cookies</h5>
-                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Optional</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        Remember your preferences and provide enhanced features like live chat and webinar reminders.
-                      </p>
-                    </div>
+                    <p className="text-xs text-neutral-700 leading-relaxed">
+                      Required for basic website functionality, security, and user authentication. These cannot be disabled.
+                    </p>
                   </div>
 
-                  <div className="mt-3 p-2 bg-blue-100/20 rounded-lg border border-blue-100">
-                    <p className="text-xs text-muted-foreground text-center">
-                      Cookies expire after 12 months. You can change preferences anytime in your browser settings.
+                  {/* Analytics Cookies */}
+                  <div className="bg-gradient-to-r from-neutral-50 to-neutral-100/30 rounded-lg p-3 border border-neutral-200">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
+                      <h5 className="text-xs font-semibold text-muted-foreground">Analytics Cookies</h5>
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Optional</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Help us understand visitor behaviour and improve our webinar experience through anonymous usage statistics.
+                    </p>
+                  </div>
+
+                  {/* Marketing Cookies */}
+                  <div className="bg-gradient-to-r from-neutral-50 to-neutral-100/30 rounded-lg p-3 border border-neutral-200">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
+                      <h5 className="text-xs font-semibold text-muted-foreground">Marketing Cookies</h5>
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Optional</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Enable personalised content and targeted advertising related to property investment education and opportunities.
+                    </p>
+                  </div>
+
+                  {/* Functional Cookies */}
+                  <div className="bg-gradient-to-r from-neutral-50 to-neutral-100/30 rounded-lg p-3 border border-neutral-200">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-2 h-2 bg-muted-foreground rounded-full"></div>
+                      <h5 className="text-xs font-semibold text-muted-foreground">Functional Cookies</h5>
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">Optional</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Remember your preferences and provide enhanced features like live chat and webinar reminders.
                     </p>
                   </div>
                 </div>
-              </motion.div>
-            )}
+
+                <div className="mt-3 p-2 bg-blue-100/20 rounded-lg border border-blue-100">
+                  <p className="text-xs text-muted-foreground text-center">
+                    Cookies expire after 12 months. You can change preferences anytime in your browser settings.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </>
   );
 }
 
