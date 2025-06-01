@@ -2,7 +2,35 @@
 # Mixpanel Analytics Implementation Guide
 
 ## Overview
-This implementation provides comprehensive tracking for your webinar landing page with a focus on conversion optimization, user journey mapping, and revenue attribution.
+This implementation provides comprehensive tracking for your webinar landing page with a focus on conversion optimization, user journey mapping, and revenue attribution. The system automatically tracks user behavior, conversions, A/B tests, and integrates with external tracking systems like Hyros for complete attribution.
+
+## Complete Setup Instructions
+
+### 1. Initial Setup
+1. **Create Mixpanel Account**: Sign up at [mixpanel.com](https://mixpanel.com)
+2. **Get Project Token**: Copy your project token from Project Settings
+3. **Add to Environment**: Create `.env` file in `/client/` directory:
+   ```bash
+   VITE_MIXPANEL_TOKEN=your_actual_mixpanel_token_here
+   ```
+4. **Install Dependencies**: Already installed via `npm install mixpanel-browser`
+
+### 2. Automatic Implementation
+The analytics system is automatically initialized when your app loads and includes:
+- ✅ **Page View Tracking** - Every page load with full context
+- ✅ **Button Click Tracking** - All buttons, links, and interactive elements  
+- ✅ **Scroll Depth Tracking** - 25%, 50%, 75%, 90%, 100% milestones
+- ✅ **Time on Page Tracking** - Updated every 10 seconds
+- ✅ **Exit Intent Detection** - Mouse leaves viewport
+- ✅ **Form Submission Tracking** - Both internal and external forms
+- ✅ **UTM Parameter Capture** - All marketing attribution data
+- ✅ **Session Management** - Cross-page session tracking
+- ✅ **Revenue Attribution** - Purchase and conversion tracking
+- ✅ **A/B Testing Framework** - Built-in variant testing
+- ✅ **Hyros Integration** - Automatic tag capture and attribution
+
+### 3. Hyros Integration
+The system automatically captures and integrates Hyros tracking data for complete attribution.
 
 ## Quick Start
 
@@ -138,7 +166,63 @@ function MyComponent() {
 
 ## UTM and Attribution Tracking
 
-### Supported Parameters
+## Hyros Integration & Advanced Attribution
+
+### Hyros Data Capture
+The system automatically captures Hyros tracking data from URLs and integrates it into your Mixpanel events:
+
+#### Supported Hyros Parameters
+- `tag` - Primary Hyros tracking tag
+- `hyros_tag` - Alternative Hyros tag parameter
+- `hyros_id` - Hyros campaign identifier
+- `h_source` - Hyros traffic source
+- `h_medium` - Hyros traffic medium
+- `h_campaign` - Hyros campaign name
+
+#### How Hyros Data Flows to Mixpanel
+1. **URL Parameter Capture**: When users visit with Hyros tags:
+   ```
+   yoursite.com?tag=facebook_ad_123&utm_source=facebook&utm_campaign=webinar_jan
+   ```
+
+2. **Automatic Registration**: Hyros data is automatically:
+   - Stored in localStorage for session persistence
+   - Added to user properties in Mixpanel
+   - Included in every subsequent event
+   - Preserved across page views and sessions
+
+3. **Event Attribution**: Every Mixpanel event includes Hyros context:
+   ```json
+   {
+     "event": "Webinar Registration",
+     "properties": {
+       "hyros_tag": "facebook_ad_123",
+       "utm_source": "facebook",
+       "utm_campaign": "webinar_jan",
+       "session_id": "session_123",
+       "revenue_attribution": "hyros_facebook_ad_123"
+     }
+   }
+   ```
+
+#### Hyros Revenue Attribution
+When tracking revenue, the system automatically attributes it to the original Hyros tag:
+```typescript
+// Revenue gets attributed to original Hyros source
+analytics.trackRevenue(297, {
+  product: 'webinar_course',
+  hyros_original_tag: 'facebook_ad_123', // Preserved from first visit
+  attribution_model: 'first_touch'
+});
+```
+
+#### Cross-Platform Attribution
+- **First-Touch Attribution**: Original Hyros tag preserved for lifetime value
+- **Multi-Touch Attribution**: All Hyros touchpoints tracked
+- **Cross-Device Tracking**: Hyros data persists via user identification
+- **Campaign Performance**: Full funnel attribution from Hyros → Mixpanel
+
+### Supported Parameters (All Platforms)
 - `utm_source` - Traffic source
 - `utm_medium` - Marketing medium  
 - `utm_campaign` - Campaign name
@@ -148,6 +232,7 @@ function MyComponent() {
 - `gclid` - Google Ads click ID
 - `fbclid` - Facebook Ads click ID
 - `hyros_tag` - Hyros tracking tags
+- `tag` - Hyros primary tag parameter
 
 ### Attribution Logic
 - **First-touch attribution** - Stored on first visit
@@ -247,6 +332,9 @@ analytics.trackConversion('Webinar Registration', {
 5. **Revenue Attribution** - Channel ROI analysis
 6. **Engagement Metrics** - Time on site, scroll depth
 7. **Drop-off Analysis** - Where users leave
+8. **Hyros Campaign Performance** - Hyros tag attribution analysis
+9. **Cross-Platform Attribution** - Hyros → Mixpanel revenue mapping
+10. **Customer Lifetime Value by Hyros Source** - LTV by original Hyros tag
 
 ### Custom Properties
 Set up these custom properties in Mixpanel:
@@ -254,6 +342,8 @@ Set up these custom properties in Mixpanel:
 - `session_id`, `user_segment`, `page_title`
 - `scroll_depth`, `time_on_page`, `referrer`
 - `form_name`, `button_location`, `conversion_type`
+- `hyros_tag`, `hyros_original_tag`, `hyros_campaign`
+- `attribution_model`, `revenue_attribution`, `hyros_source`
 
 ## Best Practices
 
