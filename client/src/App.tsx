@@ -5,6 +5,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/lib/analytics"; // Initialize analytics
+const AdvancedAnalyticsDemo = lazy(() => import("@/components/AdvancedAnalyticsDemo"));
+
 
 // Eagerly load the Home page for fastest initial load
 import Home from "@/pages/Home";
@@ -72,6 +74,13 @@ function Router() {
       <Route path="/all-emails">
         <Suspense fallback={<PageLoading />}>
           <EmailsAll />
+        </Suspense>
+      </Route>
+
+      {/* Analytics page */}
+      <Route path="/analytics">
+        <Suspense fallback={<PageLoading />}>
+          <AdvancedAnalyticsDemo />
         </Suspense>
       </Route>
 
