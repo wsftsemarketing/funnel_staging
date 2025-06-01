@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { X, Cookie } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 interface CookieConsentModalProps {
   onAccept?: () => void;
@@ -9,6 +10,7 @@ interface CookieConsentModalProps {
 }
 
 export default function CookieConsentModal({ onAccept, onDecline }: CookieConsentModalProps) {
+  const { track } = useAnalytics();
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -32,12 +34,20 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
 
   const handleAccept = () => {
     localStorage.setItem('cookieConsent', 'accepted');
+    track('Cookie Consent', {
+      action: 'accepted',
+      consent_type: 'all_cookies'
+    });
     handleClose();
     onAccept?.();
   };
 
   const handleDecline = () => {
     localStorage.setItem('cookieConsent', 'declined');
+    track('Cookie Consent', {
+      action: 'declined',
+      consent_type: 'essential_only'
+    });
     handleClose();
     onDecline?.();
   };
@@ -194,6 +204,9 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 onClick={handleAccept}
                 className="w-full font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-sm md:text-xs py-3 md:py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200"
                 size="sm"
+                data-track="button"
+                data-track-event="Cookie Accept"
+                data-track-properties='{"cookie_action": "accept_all"}'
               >
                 Accept All
               </Button>
@@ -203,6 +216,9 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 variant="outline"
                 className="w-full font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-white/80 text-sm md:text-xs py-3 md:py-2.5 rounded-lg transition-all duration-200"
                 size="sm"
+                data-track="button"
+                data-track-event="Cookie Decline"
+                data-track-properties='{"cookie_action": "essential_only"}'
               >
                 Essential Only
               </Button>

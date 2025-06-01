@@ -2,12 +2,15 @@ import { useRef, useState } from "react";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { Highlight } from "@/components/ui/highlight";
 import { LockIcon, Calendar } from "lucide-react";
+import { useTrackSection, useAnalytics } from "@/hooks/useAnalytics";
 
 export default function RegistrationForm() {
-  
+  useTrackSection('Registration Form');
+  const { trackFormInteraction, trackConversion } = useAnalytics();
+
   const contentRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
-  
+
   const contentInView = useIntersectionObserver(contentRef, { threshold: 0.1 });
 
   return (

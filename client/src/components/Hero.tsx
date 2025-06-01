@@ -2,10 +2,12 @@ import { useRef } from "react";
 import { Highlight } from "@/components/ui/highlight";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { ArrowRight, Clock, CheckCircle } from "lucide-react";
+import { useTrackSection, useAnalytics } from "@/hooks/useAnalytics";
 
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useIntersectionObserver(ref, { threshold: 0.1 });
+  const { trackButtonClick } = useAnalytics();
 
   const webinarDate = new Date();
   webinarDate.setDate(webinarDate.getDate() + 7);
