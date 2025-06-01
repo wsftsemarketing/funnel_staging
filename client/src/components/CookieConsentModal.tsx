@@ -204,7 +204,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 className="flex-1 font-semibold bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white text-xs py-2.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200"
                 size="sm"
               >
-                Accept All
+                Accept All Cookies
               </Button>
 
               <Button
@@ -213,7 +213,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
                 className="flex-1 font-semibold border-neutral-200 bg-white/60 backdrop-blur-sm hover:bg-secondary/20 hover:text-secondary hover:border-secondary/20 text-xs py-2.5 rounded-lg transition-all duration-200"
                 size="sm"
               >
-                Essential Only
+                Essential Cookies Only
               </Button>
             </div>
 
