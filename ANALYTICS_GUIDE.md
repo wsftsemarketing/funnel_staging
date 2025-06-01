@@ -1,4 +1,3 @@
-
 # Mixpanel Analytics Implementation Guide
 
 ## Overview
@@ -99,14 +98,14 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 
 function MyComponent() {
   const { track, trackButtonClick, trackConversion } = useAnalytics();
-  
+
   const handleSpecialAction = () => {
     track('Special Action', {
       action_type: 'premium_feature',
       user_segment: 'high_value'
     });
   };
-  
+
   const handlePurchase = () => {
     trackConversion('Purchase', {
       amount: 297,
@@ -125,7 +124,7 @@ function HeroSection() {
     variant: 'v2',
     test_group: 'control'
   });
-  
+
   return <div>...</div>;
 }
 ```
@@ -137,7 +136,7 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 function MyComponent() {
   const { useABTest } = useAnalytics();
   const buttonVariant = useABTest('hero_button_test', ['blue', 'green', 'red']);
-  
+
   return (
     <button className={`btn-${buttonVariant}`}>
       Register Now

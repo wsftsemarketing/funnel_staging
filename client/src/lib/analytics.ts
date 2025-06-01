@@ -61,6 +61,41 @@ interface SessionData {
   landing_page: string;
 }
 
+interface CohortData {
+  cohort_id: string;
+  cohort_type: 'time' | 'behavior' | 'source';
+  cohort_value: string;
+  registration_date: string;
+  first_visit_date: string;
+}
+
+interface EngagementData {
+  webinar_attendance: number;
+  webinar_completion_rate: number;
+  email_engagement_score: number;
+  page_revisit_count: number;
+  total_time_on_site: number;
+  key_page_time: number;
+  form_interactions: number;
+  video_watch_time: number;
+}
+
+interface PredictiveMetrics {
+  purchase_likelihood: number;
+  churn_probability: number;
+  engagement_trend: 'increasing' | 'stable' | 'decreasing';
+  optimal_contact_time: string;
+  lead_score: number;
+}
+
+interface FunnelStep {
+  step_name: string;
+  step_order: number;
+  timestamp: number;
+  session_id: string;
+  time_from_previous: number;
+}
+
 class Analytics {
   private sessionData: SessionData;
   private scrollDepth = 0;
@@ -68,15 +103,22 @@ class Analytics {
   private pageStartTime = Date.now();
   private scrollTimer: NodeJS.Timeout | null = null;
   private isExitIntentTracked = false;
+  private cohortData: CohortData | null = null;
+  private engagementData: EngagementData;
+  private funnelSteps: FunnelStep[] = [];
+  private behavioralTriggers: Set<string> = new Set();
 
   constructor() {
     this.sessionData = this.initializeSession();
     this.captureUTMParams();
+    this.initializeEngagementData();
+    this.initializeCohortData();
     
     // Only set up tracking on production domains
     if (shouldInitializeMixpanel) {
       this.setupAutomaticTracking();
       this.identifyUser();
+      this.setupBehavioralTriggers();
     } else {
       console.log(`[Analytics] Analytics disabled for development/staging domain: ${window.location.hostname}`);
     }
@@ -518,9 +560,373 @@ class Analytics {
     return Math.abs(hash);
   }
 
+  // Initialize engagement tracking
+  private initializeEngagementData(): void {
+    const stored = localStorage.getItem('engagement_data');
+    this.engagementData = stored ? JSON.parse(stored) : {
+      webinar_attendance: 0,
+      webinar_completion_rate: 0,
+      email_engagement_score: 0,
+      page_revisit_count: 1,
+      total_time_on_site: 0,
+      key_page_time: 0,
+      form_interactions: 0,
+      video_watch_time: 0
+    };
+  }
+
+  // Initialize cohort tracking
+  private initializeCohortData(): void {
+    let cohort = localStorage.getItem('cohort_data');
+    if (!cohort) {
+      const now = new Date();
+      const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      
+      const source = this.getTrafficSource();
+      
+      this.cohortData = {
+        cohort_id: `${weekStart.getFullYear()}-W${Math.ceil(weekStart.getDate() / 7)}`,
+        cohort_type: 'time',
+        cohort_value: monthStart.toISOString().slice(0, 7), // YYYY-MM
+        registration_date: now.toISOString(),
+        first_visit_date: now.toISOString()
+      };
+      
+      localStorage.setItem('cohort_data', JSON.stringify(this.cohortData));
+    } else {
+      this.cohortData = JSON.parse(cohort);
+    }
+  }
+
+  // Get traffic source for cohort analysis
+  private getTrafficSource(): string {
+    const utmParams = localStorage.getItem('utm_params');
+    if (utmParams) {
+      const params = JSON.parse(utmParams);
+      return params.utm_source || params.hyros_tag || 'direct';
+    }
+    return document.referrer ? 'referral' : 'direct';
+  }
+
+  // Setup behavioral triggers and alerts
+  private setupBehavioralTriggers(): void {
+    // High engagement detection
+    setInterval(() => {
+      this.checkHighEngagementTriggers();
+    }, 30000); // Check every 30 seconds
+
+    // Exit intent with high engagement
+    document.addEventListener('mouseout', (e) => {
+      if (e.clientY <= 0 && this.calculateEngagementScore() > 70 && !this.behavioralTriggers.has('high_intent_exit')) {
+        this.behavioralTriggers.add('high_intent_exit');
+        this.triggerBehavioralAlert('High Intent Exit Detected', {
+          engagement_score: this.calculateEngagementScore(),
+          time_on_site: this.timeOnPage,
+          recommendation: 'Show premium offer or personal consultation'
+        });
+      }
+    });
+  }
+
+  // Check for high engagement behavioral triggers
+  private checkHighEngagementTriggers(): void {
+    const engagementScore = this.calculateEngagementScore();
+    const timeOnSite = this.timeOnPage;
+    
+    // VIP user identification
+    if (engagementScore > 80 && timeOnSite > 300 && !this.behavioralTriggers.has('vip_identified')) {
+      this.behavioralTriggers.add('vip_identified');
+      this.triggerBehavioralAlert('VIP User Identified', {
+        engagement_score: engagementScore,
+        time_on_site: timeOnSite,
+        recommendation: 'Prioritize for personal outreach'
+      });
+    }
+    
+    // At-risk user detection
+    if (engagementScore < 30 && timeOnSite > 120 && !this.behavioralTriggers.has('at_risk_detected')) {
+      this.behavioralTriggers.add('at_risk_detected');
+      this.triggerBehavioralAlert('At-Risk User Detected', {
+        engagement_score: engagementScore,
+        time_on_site: timeOnSite,
+        recommendation: 'Show exit intent offer or social proof'
+      });
+    }
+    
+    // High intent behavior
+    if (this.scrollDepth > 75 && timeOnSite > 180 && this.engagementData.form_interactions > 1 && !this.behavioralTriggers.has('high_intent')) {
+      this.behavioralTriggers.add('high_intent');
+      this.triggerBehavioralAlert('High Intent Behavior', {
+        engagement_score: engagementScore,
+        scroll_depth: this.scrollDepth,
+        form_interactions: this.engagementData.form_interactions,
+        recommendation: 'Show limited time offer or schedule call CTA'
+      });
+    }
+  }
+
+  // Trigger behavioral alert
+  private triggerBehavioralAlert(alertType: string, data: TrackingData): void {
+    this.track('Behavioral Alert Triggered', {
+      alert_type: alertType,
+      trigger_data: data,
+      session_id: this.sessionData.session_id,
+      user_segment: this.getUserSegment(),
+      ...this.getBaseEventData()
+    });
+  }
+
+  // Calculate engagement score (0-100)
+  private calculateEngagementScore(): number {
+    const weights = {
+      timeOnSite: 0.2,
+      scrollDepth: 0.15,
+      pageViews: 0.15,
+      formInteractions: 0.2,
+      videoTime: 0.15,
+      pageRevisits: 0.15
+    };
+    
+    const normalizedMetrics = {
+      timeOnSite: Math.min(this.timeOnPage / 600, 1), // Max 10 minutes
+      scrollDepth: this.scrollDepth / 100,
+      pageViews: Math.min(this.sessionData.page_views / 10, 1), // Max 10 pages
+      formInteractions: Math.min(this.engagementData.form_interactions / 5, 1), // Max 5 interactions
+      videoTime: Math.min(this.engagementData.video_watch_time / 1800, 1), // Max 30 minutes
+      pageRevisits: Math.min(this.engagementData.page_revisit_count / 5, 1) // Max 5 revisits
+    };
+    
+    const score = Object.entries(normalizedMetrics).reduce((total, [key, value]) => {
+      return total + (value * weights[key as keyof typeof weights]);
+    }, 0);
+    
+    return Math.round(score * 100);
+  }
+
+  // Get user segment based on behavior
+  private getUserSegment(): string {
+    const engagementScore = this.calculateEngagementScore();
+    const source = this.getTrafficSource();
+    
+    if (engagementScore > 80) return 'vip';
+    if (engagementScore > 60) return 'high_intent';
+    if (engagementScore > 40) return 'engaged';
+    if (engagementScore > 20) return 'casual';
+    return 'low_engagement';
+  }
+
+  // Calculate predictive metrics
+  private calculatePredictiveMetrics(): PredictiveMetrics {
+    const engagementScore = this.calculateEngagementScore();
+    const timeOnSite = this.timeOnPage;
+    const source = this.getTrafficSource();
+    const dayOfWeek = new Date().getDay();
+    const hourOfDay = new Date().getHours();
+    
+    // Purchase likelihood based on engagement and behavior
+    let purchaseLikelihood = 0;
+    if (engagementScore > 70) purchaseLikelihood += 40;
+    if (timeOnSite > 300) purchaseLikelihood += 25;
+    if (this.engagementData.form_interactions > 2) purchaseLikelihood += 20;
+    if (this.scrollDepth > 80) purchaseLikelihood += 15;
+    
+    // Churn probability (inverse of engagement)
+    const churnProbability = Math.max(0, 100 - engagementScore);
+    
+    // Engagement trend
+    const recentEngagement = this.calculateRecentEngagementTrend();
+    
+    // Optimal contact time (based on current activity)
+    const optimalTime = this.calculateOptimalContactTime(dayOfWeek, hourOfDay, engagementScore);
+    
+    return {
+      purchase_likelihood: Math.min(purchaseLikelihood, 100),
+      churn_probability: churnProbability,
+      engagement_trend: recentEngagement,
+      optimal_contact_time: optimalTime,
+      lead_score: Math.round((purchaseLikelihood + (100 - churnProbability)) / 2)
+    };
+  }
+
+  // Calculate recent engagement trend
+  private calculateRecentEngagementTrend(): 'increasing' | 'stable' | 'decreasing' {
+    const currentScore = this.calculateEngagementScore();
+    const historicalScore = this.getHistoricalEngagementScore();
+    
+    if (currentScore > historicalScore + 10) return 'increasing';
+    if (currentScore < historicalScore - 10) return 'decreasing';
+    return 'stable';
+  }
+
+  // Get historical engagement score
+  private getHistoricalEngagementScore(): number {
+    const stored = localStorage.getItem('historical_engagement');
+    return stored ? JSON.parse(stored).average_score || 50 : 50;
+  }
+
+  // Calculate optimal contact time
+  private calculateOptimalContactTime(dayOfWeek: number, hour: number, engagement: number): string {
+    if (engagement > 70) return 'immediate';
+    if (dayOfWeek >= 1 && dayOfWeek <= 5 && hour >= 9 && hour <= 17) return 'business_hours';
+    if (hour >= 18 && hour <= 21) return 'evening';
+    return 'next_business_day';
+  }
+
+  // Advanced funnel tracking
+  public trackFunnelStep(stepName: string, stepOrder: number, properties: TrackingData = {}): void {
+    const now = Date.now();
+    const previousStep = this.funnelSteps[this.funnelSteps.length - 1];
+    const timeFromPrevious = previousStep ? now - previousStep.timestamp : 0;
+    
+    const funnelStep: FunnelStep = {
+      step_name: stepName,
+      step_order: stepOrder,
+      timestamp: now,
+      session_id: this.sessionData.session_id,
+      time_from_previous: timeFromPrevious
+    };
+    
+    this.funnelSteps.push(funnelStep);
+    
+    this.track('Funnel Step Completed', {
+      ...funnelStep,
+      ...properties,
+      total_funnel_time: now - this.sessionData.session_start,
+      funnel_progress: stepOrder,
+      cohort_data: this.cohortData,
+      engagement_score: this.calculateEngagementScore(),
+      predictive_metrics: this.calculatePredictiveMetrics(),
+      ...this.getBaseEventData()
+    });
+    
+    // Check for funnel drop-off alerts
+    if (timeFromPrevious > 300000 && previousStep) { // 5 minutes
+      this.triggerBehavioralAlert('Funnel Drop-off Risk', {
+        previous_step: previousStep.step_name,
+        current_step: stepName,
+        time_delay: timeFromPrevious,
+        recommendation: 'Send re-engagement message or offer assistance'
+      });
+    }
+  }
+
+  // Cohort analysis tracking
+  public trackCohortEvent(eventName: string, properties: TrackingData = {}): void {
+    this.track(eventName, {
+      ...properties,
+      cohort_data: this.cohortData,
+      cohort_week: this.cohortData?.cohort_id,
+      cohort_month: this.cohortData?.cohort_value,
+      cohort_source: this.getTrafficSource(),
+      days_since_first_visit: this.getDaysSinceFirstVisit(),
+      user_segment: this.getUserSegment(),
+      engagement_score: this.calculateEngagementScore(),
+      ...this.getBaseEventData()
+    });
+  }
+
+  // Get days since first visit
+  private getDaysSinceFirstVisit(): number {
+    if (!this.cohortData) return 0;
+    const firstVisit = new Date(this.cohortData.first_visit_date);
+    const now = new Date();
+    return Math.floor((now.getTime() - firstVisit.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  // Update engagement metrics
+  public updateEngagementMetric(metric: keyof EngagementData, value: number): void {
+    this.engagementData[metric] = value;
+    localStorage.setItem('engagement_data', JSON.stringify(this.engagementData));
+    
+    // Track significant engagement increases
+    if (metric === 'webinar_completion_rate' && value > 80) {
+      this.triggerBehavioralAlert('High Webinar Engagement', {
+        completion_rate: value,
+        recommendation: 'Priority follow-up for course enrollment'
+      });
+    }
+  }
+
+  // Revenue attribution with cohort analysis
+  public trackRevenueWithAttribution(amount: number, properties: TrackingData = {}): void {
+    const attributionData = {
+      ...properties,
+      cohort_data: this.cohortData,
+      attribution_source: this.getTrafficSource(),
+      customer_lifetime_value: this.calculateCustomerLTV(amount),
+      time_to_purchase: this.getDaysSinceFirstVisit(),
+      engagement_score_at_purchase: this.calculateEngagementScore(),
+      funnel_completion_time: this.funnelSteps.length > 0 ? 
+        Date.now() - this.funnelSteps[0].timestamp : 0,
+      ...this.getBaseEventData()
+    };
+    
+    this.track('Revenue with Attribution', {
+      amount,
+      currency: 'GBP',
+      ...attributionData
+    });
+    
+    if (shouldInitializeMixpanel) {
+      mixpanel.people.track_charge(amount, {
+        $time: new Date(),
+        ...attributionData
+      });
+    }
+  }
+
+  // Calculate customer LTV
+  private calculateCustomerLTV(currentPurchase: number): number {
+    const stored = localStorage.getItem('customer_purchases');
+    const purchases = stored ? JSON.parse(stored) : [];
+    purchases.push(currentPurchase);
+    localStorage.setItem('customer_purchases', JSON.stringify(purchases));
+    
+    return purchases.reduce((total: number, amount: number) => total + amount, 0);
+  }
+
+  // Advanced user segmentation
+  public identifyUserSegment(): string {
+    const segment = this.getUserSegment();
+    const source = this.getTrafficSource();
+    const daysSinceFirst = this.getDaysSinceFirstVisit();
+    
+    this.setUserProperties({
+      user_segment: segment,
+      traffic_source: source,
+      days_since_first_visit: daysSinceFirst,
+      engagement_score: this.calculateEngagementScore(),
+      cohort_data: this.cohortData,
+      predictive_metrics: this.calculatePredictiveMetrics()
+    });
+    
+    return segment;
+  }
+
   // Get current session data
   public getSessionData(): SessionData {
     return { ...this.sessionData };
+  }
+
+  // Get engagement data
+  public getEngagementData(): EngagementData {
+    return { ...this.engagementData };
+  }
+
+  // Get cohort data
+  public getCohortData(): CohortData | null {
+    return this.cohortData ? { ...this.cohortData } : null;
+  }
+
+  // Get predictive metrics
+  public getPredictiveMetrics(): PredictiveMetrics {
+    return this.calculatePredictiveMetrics();
+  }
+
+  // Get funnel progress
+  public getFunnelProgress(): FunnelStep[] {
+    return [...this.funnelSteps];
   }
 }
 

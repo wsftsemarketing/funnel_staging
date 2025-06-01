@@ -32,7 +32,7 @@ function Router() {
     <Switch>
       {/* Home page is eagerly loaded for fastest main route render */}
       <Route path="/" component={Home} />
-      
+
       {/* All other routes are lazy-loaded */}
       <Route path="/email-1">
         <Suspense fallback={<PageLoading />}>
@@ -74,7 +74,7 @@ function Router() {
           <EmailsAll />
         </Suspense>
       </Route>
-      
+
       {/* Fallback 404 route (also lazy-loaded) */}
       <Route>
         <Suspense fallback={<PageLoading />}>
