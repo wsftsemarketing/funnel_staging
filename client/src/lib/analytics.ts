@@ -1,8 +1,7 @@
-
 import mixpanel from 'mixpanel-browser';
 
 // Mixpanel configuration
-const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || 'your-mixpanel-token';
+const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || '79f20bfb126b3ffe57192638f36ee883';
 
 // Initialize Mixpanel
 mixpanel.init(MIXPANEL_TOKEN, {
@@ -418,7 +417,7 @@ class Analytics {
   public trackRevenue(amount: number, properties: TrackingData = {}): void {
     this.track('Revenue', {
       amount,
-      currency: 'USD',
+      currency: 'GBP',
       ...properties
     });
     
