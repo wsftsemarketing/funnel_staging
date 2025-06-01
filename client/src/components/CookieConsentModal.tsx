@@ -16,9 +16,8 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   useEffect(() => {
     // Check if user has already made a choice
     const cookieChoice = localStorage.getItem('cookieConsent');
-    const cookieYesConsent = document.cookie.includes('cookieyes-conseånt');
 
-    if (!cookieChoice && !cookieYesConsent) {
+    if (!cookieChoice) {
       const timer = setTimeout(() => {
         setIsVisible(true);
         // Trigger animation after render
@@ -29,84 +28,16 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
     }
   }, []);
 
-  // Listen for CookieYes events if available
-  useEffect(() => {
-    const handleCookieYesAccept = () => {
-      localStorage.setItem('cookieConsent', 'accepted');
-      handleClose();
-      onAccept?.();
-    };
-
-    const handleCookieYesReject = () => {
-      localStorage.setItem('cookieConsent', 'declined');
-      handleClose();
-      onDecline?.();
-    };
-
-    window.addEventListener('cookieyes_consent_update', handleCookieYesAccept);
-    window.addEventListener('cookieyes_consent_reject', handleCookieYesReject);
-
-    return () => {
-      window.removeEventListener('cookieyes_consent_update', handleCookieYesAccept);
-      window.removeEventListener('cookieyes_consent_reject', handleCookieYesReject);
-    };
-  }, [onAccept, onDecline]);
+  
 
   const handleAccept = () => {
     localStorage.setItem('cookieConsent', 'accepted');
-
-    // CookieYes integration
-    try {
-      if (window.cookieyes) {
-        if (typeof window.cookieyes.acceptAll === 'function') {
-          window.cookieyes.acceptAll();
-        }
-      }
-    } catch (error) {
-      console.log('CookieYes API call failed:', error);
-    }
-
-    const cookieOptions = '; path=/; max-age=31536000; SameSite=Lax';
-    document.cookie = 'cookieyes-consent=accepted' + cookieOptions;
-    document.cookie = 'cky-consent=accepted' + cookieOptions;
-    document.cookie = 'cookie-consent=accepted' + cookieOptions;
-
-    try {
-      window.dispatchEvent(new CustomEvent('cookieConsentAccepted', { detail: { all: true } }));
-      window.dispatchEvent(new CustomEvent('cookieyes_consent_update', { detail: { consent: 'accepted' } }));
-    } catch (error) {
-      console.log('Event dispatch failed:', error);
-    }
-
     handleClose();
     onAccept?.();
   };
 
   const handleDecline = () => {
     localStorage.setItem('cookieConsent', 'declined');
-
-    try {
-      if (window.cookieyes) {
-        if (typeof window.cookieyes.rejectAll === 'function') {
-          window.cookieyes.rejectAll();
-        }
-      }
-    } catch (error) {
-      console.log('CookieYes API call failed:', error);
-    }
-
-    const cookieOptions = '; path=/; max-age=31536000; SameSite=Lax';
-    document.cookie = 'cookieyes-consent=declined' + cookieOptions;
-    document.cookie = 'cky-consent=declined' + cookieOptions;
-    document.cookie = 'cookie-consent=declined' + cookieOptions;
-
-    try {
-      window.dispatchEvent(new CustomEvent('cookieConsentDeclined', { detail: { essentialOnly: true } }));
-      window.dispatchEvent(new CustomEvent('cookieyes_consent_reject', { detail: { consent: 'declined' } }));
-    } catch (error) {
-      console.log('Event dispatch failed:', error);
-    }
-
     handleClose();
     onDecline?.();
   };
@@ -364,20 +295,4 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
   );
 }
 
-// Extended window object for TypeScript
-declare global {
-  interface Window {
-    cookieyes?: {
-      acceptAll?: () => void;
-      rejectAll?: () => void;
-      setConsentValue?: (category: string, value: boolean) => void;
-      getConsentValue?: (category: string) => boolean;
-      openPreferences?: () => void;
-      updateConsent?: (consents: Record<string, boolean>) => void;
-      fireEvent?: (eventName: string) => void;
-      show?: () => void;
-      hide?: () => void;
-      reset?: () => void;
-    };
-  }
-}
+
