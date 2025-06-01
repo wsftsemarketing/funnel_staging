@@ -40,6 +40,12 @@ Add your Mixpanel token to your environment variables:
 VITE_MIXPANEL_TOKEN=your_mixpanel_project_token_here
 ```
 
+### 2. Domain Filtering
+Analytics automatically filters by domain to prevent data pollution:
+- ✅ **Production**: `commercial.touchstoneeducation.com`, `touchstoneeducation.com`
+- ❌ **Blocked**: Replit domains, Vercel staging domains, localhost
+- 🔧 **Configurable**: Add domains to `PRODUCTION_DOMAINS` array in `analytics.ts`
+
 ### 2. Automatic Tracking
 The analytics system automatically tracks:
 - **Page views** with full referrer and UTM attribution

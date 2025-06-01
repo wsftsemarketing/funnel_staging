@@ -3,17 +3,36 @@ import mixpanel from 'mixpanel-browser';
 // Mixpanel configuration
 const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || '79f20bfb126b3ffe57192638f36ee883';
 
-// Initialize Mixpanel
-mixpanel.init(MIXPANEL_TOKEN, {
-  debug: import.meta.env.DEV,
-  track_pageview: true,
-  persistence: 'localStorage',
-  property_blacklist: ['$current_url', '$initial_referrer', '$referrer'],
-  save_referrer: true,
-  cross_subdomain_cookie: false,
-  secure_cookie: true,
-  ip: false, // Respect privacy
-});
+// Production domain whitelist
+const PRODUCTION_DOMAINS = [
+  'commercial.touchstoneeducation.com',
+  'touchstoneeducation.com' // Add any other production domains
+];
+
+// Check if current domain is production
+const isProductionDomain = (): boolean => {
+  const currentDomain = window.location.hostname;
+  return PRODUCTION_DOMAINS.includes(currentDomain);
+};
+
+// Only initialize Mixpanel on production domains
+const shouldInitializeMixpanel = isProductionDomain();
+
+if (shouldInitializeMixpanel) {
+  // Initialize Mixpanel
+  mixpanel.init(MIXPANEL_TOKEN, {
+    debug: import.meta.env.DEV,
+    track_pageview: true,
+    persistence: 'localStorage',
+    property_blacklist: ['$current_url', '$initial_referrer', '$referrer'],
+    save_referrer: true,
+    cross_subdomain_cookie: false,
+    secure_cookie: true,
+    ip: false, // Respect privacy
+  });
+} else {
+  console.log(`[Analytics] Skipping Mixpanel initialization for domain: ${window.location.hostname}`);
+}
 
 // Types for better TypeScript support
 interface TrackingData {
@@ -53,8 +72,14 @@ class Analytics {
   constructor() {
     this.sessionData = this.initializeSession();
     this.captureUTMParams();
-    this.setupAutomaticTracking();
-    this.identifyUser();
+    
+    // Only set up tracking on production domains
+    if (shouldInitializeMixpanel) {
+      this.setupAutomaticTracking();
+      this.identifyUser();
+    } else {
+      console.log(`[Analytics] Analytics disabled for development/staging domain: ${window.location.hostname}`);
+    }
   }
 
   private initializeSession(): SessionData {
@@ -111,7 +136,10 @@ class Analytics {
     // Store UTM data in localStorage for attribution
     if (Object.keys(utmParams).length > 0) {
       localStorage.setItem('utm_params', JSON.stringify(utmParams));
-      mixpanel.register(utmParams);
+      
+      if (shouldInitializeMixpanel) {
+        mixpanel.register(utmParams);
+      }
     }
   }
 
@@ -121,6 +149,11 @@ class Analytics {
     if (!userId) {
       userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       localStorage.setItem('user_id', userId);
+    }
+    
+    if (!shouldInitializeMixpanel) {
+      console.log(`[Analytics] User identification skipped for domain: ${window.location.hostname}`);
+      return;
     }
     
     mixpanel.identify(userId);
@@ -397,6 +430,11 @@ class Analytics {
 
   // Public methods for manual tracking
   public track(eventName: string, properties: TrackingData = {}): void {
+    if (!shouldInitializeMixpanel) {
+      console.log(`[Analytics] Track blocked for domain: ${window.location.hostname} - Event: ${eventName}`);
+      return;
+    }
+    
     mixpanel.track(eventName, {
       ...properties,
       session_id: this.sessionData.session_id,
@@ -405,16 +443,31 @@ class Analytics {
   }
 
   public identify(userId: string, traits: TrackingData = {}): void {
+    if (!shouldInitializeMixpanel) {
+      console.log(`[Analytics] Identify blocked for domain: ${window.location.hostname}`);
+      return;
+    }
+    
     mixpanel.identify(userId);
     mixpanel.people.set(traits);
     localStorage.setItem('user_id', userId);
   }
 
   public setUserProperties(properties: TrackingData): void {
+    if (!shouldInitializeMixpanel) {
+      console.log(`[Analytics] Set user properties blocked for domain: ${window.location.hostname}`);
+      return;
+    }
+    
     mixpanel.people.set(properties);
   }
 
   public trackRevenue(amount: number, properties: TrackingData = {}): void {
+    if (!shouldInitializeMixpanel) {
+      console.log(`[Analytics] Revenue tracking blocked for domain: ${window.location.hostname}`);
+      return;
+    }
+    
     this.track('Revenue', {
       amount,
       currency: 'GBP',
