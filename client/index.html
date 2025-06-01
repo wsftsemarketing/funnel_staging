@@ -16,6 +16,123 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/ba74d679167be442cbd18b9c/script.js"></script> <!-- End cookieyes banner -->
+    
+    <!-- CookieYes configuration and robust blocking -->
+    <script>
+      // Immediate execution to block CookieYes as early as possible
+      (function() {
+        let hideAttempts = 0;
+        const maxHideAttempts = 50;
+        
+        // Function to aggressively hide CookieYes elements
+        function hideCookieYesElements() {
+          hideAttempts++;
+          
+          // Multiple selectors to catch different CookieYes implementations
+          const selectors = [
+            '[id*="cookieyes"]',
+            '[class*="cookieyes"]',
+            '[data-cookieyes]',
+            '.cky-notice-wrapper',
+            '.cky-notice',
+            '.cky-modal',
+            '.cky-overlay',
+            '#cookieConsentContainer',
+            '[id*="cookie-notice"]',
+            '[class*="cookie-notice"]',
+            '[id*="cookie-banner"]',
+            '[class*="cookie-banner"]',
+            'div[style*="z-index: 9999"]',
+            'div[style*="z-index: 99999"]'
+          ];
+          
+          let hiddenCount = 0;
+          
+          selectors.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(element => {
+              if (element && element.style.display !== 'none') {
+                element.style.setProperty('display', 'none', 'important');
+                element.style.setProperty('visibility', 'hidden', 'important');
+                element.style.setProperty('opacity', '0', 'important');
+                element.style.setProperty('pointer-events', 'none', 'important');
+                element.style.setProperty('position', 'absolute', 'important');
+                element.style.setProperty('top', '-9999px', 'important');
+                element.style.setProperty('left', '-9999px', 'important');
+                hiddenCount++;
+              }
+            });
+          });
+          
+          // Continue monitoring if we're still finding elements or haven't reached max attempts
+          if ((hiddenCount > 0 || hideAttempts < 10) && hideAttempts < maxHideAttempts) {
+            setTimeout(hideCookieYesElements, 100);
+          }
+        }
+        
+        // Start hiding immediately
+        hideCookieYesElements();
+        
+        // Also hide on DOM content loaded
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', hideCookieYesElements);
+        } else {
+          hideCookieYesElements();
+        }
+        
+        // Continue monitoring after page load
+        window.addEventListener('load', function() {
+          hideCookieYesElements();
+          
+          // Set up mutation observer to catch dynamically added CookieYes elements
+          if (window.MutationObserver) {
+            const observer = new MutationObserver(function(mutations) {
+              let shouldHide = false;
+              mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length > 0) {
+                  mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1) { // Element node
+                      const id = node.id || '';
+                      const className = node.className || '';
+                      if (id.includes('cookie') || className.includes('cookie') || 
+                          id.includes('cky') || className.includes('cky')) {
+                        shouldHide = true;
+                      }
+                    }
+                  });
+                }
+              });
+              
+              if (shouldHide) {
+                setTimeout(hideCookieYesElements, 50);
+              }
+            });
+            
+            observer.observe(document.body, {
+              childList: true,
+              subtree: true,
+              attributes: true,
+              attributeFilter: ['style', 'class', 'id']
+            });
+          }
+        });
+        
+        // Override CookieYes functions to prevent showing
+        window.addEventListener('load', function() {
+          if (window.cookieyes) {
+            const originalShow = window.cookieyes.show;
+            if (originalShow) {
+              window.cookieyes.show = function() {
+                console.log('CookieYes show() blocked - using custom modal');
+                hideCookieYesElements();
+              };
+            }
+          }
+        });
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
