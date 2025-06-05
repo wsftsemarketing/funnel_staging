@@ -106,7 +106,7 @@ export default function CaseStudies() {
           <div className="inline-block px-3 py-1 mb-6 text-sm font-bold text-primary uppercase tracking-wide">
             Success Stories
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">Hear from our {" "}<Highlight type="primary"> graduates</Highlight> 
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">Hear from Recent {" "}<Highlight type="primary"> graduates</Highlight> 
           </h2>
           <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto">
             Thousands of people have transformed their property portfolios after attending our commercial webinar. Here's some of their projects.
@@ -190,10 +190,9 @@ export default function CaseStudies() {
                           </div>
                           
                           {/* Property label */}
-                          <div className="absolute bottom-4 left-4 right-4">
-                            <div className="bg-white/90 backdrop-blur-sm rounded-lg p-2">
-                              <div className="text-sm font-bold text-gray-800">📍 {study.property}</div>
-                            </div>
+                          <div className="text-shadow-md absolute">
+                              <div className="text-sm font-bold text-white">📍 {study.property}</div>
+                            
                           </div>
                         </div>
                         
