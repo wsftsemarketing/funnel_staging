@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Highlight } from "@/components/ui/highlight";
-import { useTrackSection } from "@/hooks/useAnalytics";
+import { useMixpanelTracking } from "@/hooks/useMixpanelTracking";
 import { 
   Calendar, 
   Clock, 
@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 export default function WebinarAgenda() {
-  useTrackSection('Webinar Agenda');
+  useMixpanelTracking('Webinar Agenda');
 
   return (
     <section id="agenda" className="py-12 md:py-20 bg-white">
