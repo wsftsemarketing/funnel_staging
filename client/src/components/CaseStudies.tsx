@@ -166,18 +166,33 @@ export default function CaseStudies() {
                           </div>
                         </div>
                         
-                        {/* Property Images - First image */}
-                        <div className="relative bg-white p-0 rounded-lg overflow-hidden md:w-1/2 sm:w-full">
-                          <div className="h-full w-full">
+                        {/* Property Images */}
+                        <div className="relative bg-white p-6 rounded-xl overflow-hidden">
+                          {/* Blurred background image */}
+                          <div 
+                            className="absolute inset-0 bg-cover bg-center"
+                            style={{ 
+                              backgroundImage: `url(${study.image})`,
+                              filter: 'blur(8px)',
+                              transform: 'scale(1.1)'
+                            }}
+                          />
+                          {/* Dark overlay */}
+                          <div className="absolute inset-0 bg-black/30" />
+                          
+                          {/* Main image container */}
+                          <div className="relative h-full flex items-center justify-center">
                             <img 
                               src={study.image}
                               alt={`${study.property} - Exterior`}
-                              className="h-full w-full object-cover aspect-square" 
+                              className="max-h-full max-w-full object-contain rounded-lg shadow-lg" 
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-                              <div className="p-2 text-white">
-                                <div className="text-sm font-bold">📍 {study.property}</div>
-                              </div>
+                          </div>
+                          
+                          {/* Property label */}
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <div className="bg-white/90 backdrop-blur-sm rounded-lg p-2">
+                              <div className="text-sm font-bold text-gray-800">📍 {study.property}</div>
                             </div>
                           </div>
                         </div>
