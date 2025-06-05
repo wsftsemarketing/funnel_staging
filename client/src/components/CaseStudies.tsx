@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Highlight } from "@/components/ui/highlight";
 import { useIntersectionObserver } from "@/lib/utils/animations";
-import { useTrackSection, useAnalytics } from "@/hooks/useAnalytics";
+import { useTrackSection, useMixpanelTracking } from "@/hooks/useMixpanelTracking";
 import { Star, StarHalf, ChevronLeft, ChevronRight, TrendingUp, PoundSterling, ArrowRight, BarChart4 } from "lucide-react";
 
 const scrollToRegistration = () => {
@@ -68,7 +68,7 @@ const caseStudies = [
 
 export default function CaseStudies() {
   useTrackSection('Case Studies');
-  const { track, trackFunnelStep } = useAnalytics();
+  const { track, trackFunnelStep } = useMixpanelTracking();
   
   const [activeCaseStudy, setActiveCaseStudy] = useState(0);
   const trustpilotRef = useRef<HTMLDivElement>(null);
@@ -111,7 +111,7 @@ export default function CaseStudies() {
   const showQuote = !!currentCaseStudy.quote;
 
   return (
-    <section id="case-studies" className="py-12 bg-neutral-50">
+    <section id="case-studies" data-section="case-studies" className="py-12 bg-neutral-50">
       <div className="container mx-auto px-4">
         {/* TrustPilot Style Rating Box with 4.5 stars */}
         <div 

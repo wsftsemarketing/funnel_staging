@@ -2,11 +2,11 @@ import { useRef, useState } from "react";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { Highlight } from "@/components/ui/highlight";
 import { LockIcon, Calendar } from "lucide-react";
-import { useTrackSection, useAnalytics } from "@/hooks/useAnalytics";
+import { useTrackSection, useMixpanelTracking } from "@/hooks/useMixpanelTracking";
 
 export default function RegistrationForm() {
   useTrackSection('Registration Form');
-  const { trackFormInteraction, trackConversion } = useAnalytics();
+  const { trackFormInteraction, trackConversion } = useMixpanelTracking();
 
   const contentRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
@@ -14,7 +14,7 @@ export default function RegistrationForm() {
   const contentInView = useIntersectionObserver(contentRef, { threshold: 0.1 });
 
   return (
-    <section id="register" className="py-12 bg-neutral-50">
+    <section id="register" data-section="registration" className="py-12 bg-neutral-50">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
