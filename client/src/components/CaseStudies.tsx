@@ -14,13 +14,13 @@ const scrollToRegistration = () => {
 // Case studies with ROI metrics
 const caseStudies = [
   {
-    name: "Greg McKenzie",
-    property: "Industrial Estate, Scotland",
-    image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d950da17a1645a3afcf5c_Screenshot%202025-05-21%20at%209.55.37%E2%80%AFam.png",
-    roi: "95% post-debt income",
-    investment: "£1.2m",
-    monthlyIncome: "£13,917",
-    story: "Greg had no prior experience in commercial property before joining Touchstone. Within 12 months, he secured three commercial sites including a 12 unit industrial estate. The strategy, backed by Touchstone's training, helped him grow to £167,000 in annual rental income and build over £200,000 in equity."
+    name: "Ben Roberts",
+    property: "The Old Fire Station, Worcester",
+    image: "https://i.ibb.co/XfXc4WDx/Screenshot-2025-06-05-at-12-04-36-pm.png",
+    roi: "",
+    investment: "",
+    monthlyIncome: "",
+    story: "Ben Roberts transitioned from a 25-year career with the British Army to become a full-time professional property developer in 2014. Since then, he has gained extensive experience in the field. Despite being a seasoned property developer, he joined Wealth Academy at a critical point in his career. Ben’s flagship project, the Old Fire Station in Worcester, is a landmark building that has been meticulously restored. With commercial space on the ground floor and 28 apartments spread across the upper three floors, the completed development is valued at £10 million."
   },
   {
     name: "Iurie Dontu",
@@ -48,7 +48,16 @@ const caseStudies = [
     investment: "£175k",
     monthlyIncome: "£1,916",
     story: "Greg negotiated a discounted deal on a portfolio of shops and storage units, bought for £175k and fully let. This low-risk deal contributes to his total commercial income exceeding £13k per month."
-  }
+  },
+  {
+    name: "Greg McKenzie",
+    property: "Industrial Estate, Scotland",
+    image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d950da17a1645a3afcf5c_Screenshot%202025-05-21%20at%209.55.37%E2%80%AFam.png",
+    roi: "95% post-debt income",
+    investment: "£1.2m",
+    monthlyIncome: "£13,917",
+    story: "Greg had no prior experience in commercial property before joining Touchstone. Within 12 months, he secured three commercial sites including a 12 unit industrial estate. The strategy, backed by Touchstone's training, helped him grow to £167,000 in annual rental income and build over £200,000 in equity."
+  },
 ];
 
 export default function CaseStudies() {
@@ -106,10 +115,10 @@ export default function CaseStudies() {
           <div className="inline-block px-3 py-1 mb-6 text-sm font-bold text-primary uppercase tracking-wide">
             Success Stories
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">Hear from Recent {" "}<Highlight type="primary"> graduates</Highlight> 
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">Hear from our {" "}<Highlight type="primary"> community</Highlight> 
           </h2>
           <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto">
-            Thousands of people have transformed their property portfolios after attending our commercial webinar. Here's some of their projects.
+            Thousands of investors have transformed their property portfolios after attending our commercial property edge webinar. Take a look at some of their projects.
           </p>
         </div>
         
