@@ -26,7 +26,7 @@ const caseStudies = [
     name: "Iurie Dontu",
     property: "Commercial Conversion, Staffordshire",
     image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d961242afc6a852002709_Screenshot%202025-05-21%20at%209.59.52%E2%80%AFam.png",
-    roi: "Estimated 30%+ net",
+    roi: "30%+ net",
     investment: "~£800k",
     monthlyIncome: "£11,666",
     story: "After attending a Touchstone event in London, Iurie pivoted from flipping to commercial property. His biggest success is a school converted into an ApartHotel, generating high income with minimal overhead using a PLO strategy."
@@ -167,7 +167,7 @@ export default function CaseStudies() {
                         </div>
                         
                         {/* Property Images */}
-                        <div className="relative bg-white p-6 rounded-xl overflow-hidden">
+                        <div className="relative bg-white p-0 md:p-6 rounded-xl overflow-hidden">
                           {/* Blurred background image */}
                           <div 
                             className="absolute inset-0 bg-cover bg-center"
@@ -181,18 +181,17 @@ export default function CaseStudies() {
                           <div className="absolute inset-0 bg-black/30" />
                           
                           {/* Main image container */}
-                          <div className="relative h-full flex items-center justify-center">
+                          <div className="relative h-full flex items-center justify-center p-6 md:p-0">
                             <img 
                               src={study.image}
                               alt={`${study.property} - Exterior`}
-                              className="max-h-full max-w-full object-contain rounded-lg shadow-lg" 
+                              className="w-full h-full md:max-h-full md:max-w-full object-cover md:object-contain rounded-lg shadow-lg" 
                             />
                           </div>
                           
-                          {/* Property label */}
-                          <div className="text-shadow-md absolute">
-                              <div className="text-sm font-bold text-white">📍 {study.property}</div>
-                            
+                          {/* Property label with gradient backdrop */}
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4">
+                            <div className="text-sm font-bold text-white">📍 {study.property}</div>
                           </div>
                         </div>
                         
