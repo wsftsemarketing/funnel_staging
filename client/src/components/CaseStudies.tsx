@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Highlight } from "@/components/ui/highlight";
 import { useIntersectionObserver } from "@/lib/utils/animations";
-import { useTrackSection, useMixpanelTracking } from "@/hooks/useMixpanelTracking";
+import { useMixpanelTracking } from "@/hooks/useMixpanelTracking";
 import { Star, StarHalf, ChevronLeft, ChevronRight, TrendingUp, PoundSterling, ArrowRight, BarChart4 } from "lucide-react";
 
 const scrollToRegistration = () => {
@@ -67,8 +67,12 @@ const caseStudies = [
 ];
 
 export default function CaseStudies() {
-  useTrackSection('Case Studies');
-  const { track, trackFunnelStep } = useMixpanelTracking();
+  const { track, trackFunnelStep, trackSectionView } = useMixpanelTracking();
+  
+  // Track section view with new system
+  useEffect(() => {
+    trackSectionView('Case Studies');
+  }, [trackSectionView]);
   
   const [activeCaseStudy, setActiveCaseStudy] = useState(0);
   const trustpilotRef = useRef<HTMLDivElement>(null);
