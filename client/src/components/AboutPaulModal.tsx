@@ -21,7 +21,7 @@ export default function AboutPaulModal({ className }: AboutPaulModalProps) {
     name: "Paul Smith",
     title: "Commercial Property Expert",
     photo: "https://www.paulsmithtouchstoneeducation.com/wp-content/uploads/2020/10/Paul-Smith-Touchstone-Education.png", // Replace with actual photo
-    bio: "With over 40 years of experience, Paul has helped hundreds of investors build successful property portfolios. He has built a property empire valued at over £30 million with more than 100 properties, which include a diverse portfolio of commercial assets, residential investments, HMOs, and serviced accommodations. As Touchstone Education's lead expert, he specialises in identifying high-ROI opportunities in the UK commercial property market.",
+    bio: "Paul Smith is one of the UK’s most respected commercial property educators. With over 40 years of experience, Paul has helped hundreds of investors build successful property portfolios. He has built a property empire valued at over £30 million with more than 100 properties, which include a diverse portfolio of commercial assets, residential investments, HMOs, and serviced accommodations. As Touchstone Education's lead expert, he specialises in identifying high-ROI opportunities in the UK commercial property market.",
     achievements: [
       "Built a £30M+ commercial property portfolio",
       "Completed 35+ successful commercial conversions",

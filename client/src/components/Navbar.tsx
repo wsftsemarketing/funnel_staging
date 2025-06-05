@@ -72,7 +72,7 @@ export default function Navbar() {
                   variant="secondary"
                   className="conversion-btn w-full uppercase text-white font-bold"
                 >
-                  WATCH NOW{" "}
+                  Watch Free Training Now{" "}
                   <ArrowRight className="ml-2 inline-block" size={18} />
                 </Button>
               </SheetContent>

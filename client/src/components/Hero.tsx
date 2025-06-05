@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Highlight } from "@/components/ui/highlight";
 import { useIntersectionObserver } from "@/lib/utils/animations";
-import { ArrowRight, Clock, CheckCircle } from "lucide-react";
+import { ArrowRight, Clock, CheckCircle, Award } from "lucide-react";
 import { useTrackSection, useAnalytics } from "@/hooks/useAnalytics";
 
 export default function Hero() {
@@ -42,7 +42,7 @@ export default function Hero() {
             <span className="font-extrabold text-primary">
               <Highlight type="marker">10–15% returns </Highlight>
             </span>{" "}
-            and securing long-term incomes with commercial property.
+            and securing long-term leases with commercial property.
           </p>
 
           <div className="mb-4 max-w-xl mx-auto">
@@ -50,7 +50,7 @@ export default function Hero() {
               onClick={scrollToRegistration}
               className="conversion-btn w-full text-center py-4 mb-4 uppercase"
             >
-              Watch now <ArrowRight className="ml-2 inline-block" size={18} />
+              Watch Free Training Now <ArrowRight className="ml-2 inline-block" size={18} />
             </button>
 
             <div className="flex justify-center gap-4 items-center mb-10">
@@ -62,6 +62,12 @@ export default function Hero() {
                 <CheckCircle className="h-4 w-4 text-primary mr-1" />
                 <span className="text-sm text-foreground/70">
                   Replay Access
+                </span>
+              </div>
+              <div className="flex items-center">
+                <Award className="h-4 w-4 text-primary mr-1" />
+                <span className="text-sm text-foreground/70">
+                  CPD Accredited
                 </span>
               </div>
             </div>
@@ -85,16 +91,14 @@ export default function Hero() {
               <div className="absolute bottom-0 left-0 right-0 py-6 px-4 bg-gradient-to-t from-ring/80 via-ring/40 to-transparent z-20 text-white">
                 <div className="flex flex-col md:flex-row md:justify-between">
                   <div className="mb-0 flex-grow">
-                    <div className="inline-block px-2 py-1 bg-[#fff]/20 text-white rounded-full text-xs font-bold mb-2">
+                    {/* <div className="inline-block px-2 py-1 bg-[#fff]/20 text-white rounded-full text-xs font-bold mb-2">
                       FREE WEBINAR
-                    </div>
+                    </div> */}
                     <h2 className="text-lg md:text-2xl font-black text-white leading-tight">
-                      The £100K Deal Blueprint
+                      The Commercial Property Edge
                     </h2>
-                    <p className="text-sm md:text-lg text-white/90 mb-2 max-w-md font-medium">
-                      How to Find, Fund and Profit from Commercial Properties
-                      without any Past Knowledge or Experience.
-                    </p>
+                    <p className="text-sm md:text-lg text-white/90 mb-2 max-w-md font-medium">Discover the strategy powering modern property investment portfolios.
+                    </p>  
                   </div>
 
                   <div className="flex items-center md:justify-end">
@@ -134,7 +138,7 @@ export default function Hero() {
                 onClick={scrollToRegistration}
                 className="conversion-btn inline-block uppercase"
               >
-                Watch now <ArrowRight className="ml-2 inline-block" size={18} />
+                Watch Free Training Now <ArrowRight className="ml-2 inline-block" size={18} />
               </button>
               {/* <p className="mt-4 text-sm text-muted-foreground">
                 Limited spots available – Register now before it's full

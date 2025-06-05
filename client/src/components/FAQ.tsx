@@ -16,10 +16,6 @@ const scrollToRegistration = () => {
 
 const faqs = [
   {
-    question: "Is this webinar suitable for beginners?",
-    answer: "Absolutely! Our webinar is designed to provide value to investors at all experience levels. Beginners will gain a solid foundation of commercial property investment principles, while more experienced investors will benefit from our advanced strategies and current market insights."
-  },
-  {
     question: "Will the webinar be recorded?",
     answer: "Yes, and you will have instant access to a replay of the webinar after registration. This ensures you can review the content at your own pace and refer back to it whenever you need."
   },
@@ -89,7 +85,7 @@ export default function FAQ() {
             onClick={scrollToRegistration}
             className="conversion-btn inline-block uppercase"
           >
-            Watch now{" "}
+            Watch Free Training Now{" "}
             <ArrowRight className="ml-2 inline-block" size={18} />
           </button>
           {/* <p className="mt-4 text-sm text-muted-foreground mb--4">Limited spots available – Register now before it's full</p> */}
