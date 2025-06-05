@@ -17,10 +17,10 @@ const caseStudies = [
     name: "Ben Roberts",
     property: "The Old Fire Station, Worcester",
     image: "https://i.ibb.co/XfXc4WDx/Screenshot-2025-06-05-at-12-04-36-pm.png",
-    roi: "",
-    investment: "",
-    monthlyIncome: "",
-    quote: "Touchstone's strategies helped me take my development projects to the next level. The Old Fire Station wouldn't have been possible without their guidance.",
+    roi: null,
+    investment: null,
+    monthlyIncome: null,
+    quote: "I already felt quite successful. However, I soon realised that there was a vast amount of knowledge I still lacked! Wealth Academy taught me numerous important concepts. The academy provides comprehensive understanding of various aspects of property. Even those who consider themselves seasoned property professionals would greatly benefit from joining.Touchstone Education is a property investment company that exists to inspire people to financial freedom through knowledge.",
     story: "Ben Roberts transitioned from a 25-year career with the British Army to become a full-time professional property developer in 2014. Since then, he has gained extensive experience in the field. Despite being a seasoned property developer, he joined Wealth Academy at a critical point in his career. Ben's flagship project, the Old Fire Station in Worcester, is a landmark building that has been meticulously restored. With commercial space on the ground floor and 28 apartments spread across the upper three floors, the completed development is valued at £10 million."
   },
   {

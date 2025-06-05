@@ -189,11 +189,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-6 border-b border-neutral-700">
           <div>
             <div className="mb-6">
-              <Logo variant="white" size="md" />
+              <Logo variant="white" size="md"/>
             </div>
             <p className="text-neutral-400 mb-6">
-              Empowering property investors with education, strategies, and
-              community since 2005.
+              Empowering people to financial freedom with property education, strategies, and community since 2014.
             </p>
             <SocialIcons />
           </div>
