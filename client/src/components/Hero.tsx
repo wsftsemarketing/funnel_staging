@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Highlight } from "@/components/ui/highlight";
 import { useIntersectionObserver } from "@/lib/utils/animations";
-import { ArrowRight, Clock, CheckCircle } from "lucide-react";
+import { ArrowRight, Clock, CheckCircle, Award } from "lucide-react";
 import { useTrackSection, useAnalytics } from "@/hooks/useAnalytics";
 
 export default function Hero() {
@@ -38,7 +38,7 @@ export default function Hero() {
           </h1>
 
           <p className="text-lg md:text-2xl text-foreground/90 mb-6 max-w-2xl mx-auto font-medium">
-            Watch our free webinar to discover how investors are locking in{" "}
+            Watch our free webinar to discover how people are locking in{" "}
             <span className="font-extrabold text-primary">
               <Highlight type="marker">10–15% returns </Highlight>
             </span>{" "}
@@ -64,6 +64,12 @@ export default function Hero() {
                   Replay Access
                 </span>
               </div>
+              <div className="flex items-center">
+                <Award className="h-4 w-4 text-primary mr-1" />
+                <span className="text-sm text-foreground/70">
+                  CPD Accredited
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -85,15 +91,14 @@ export default function Hero() {
               <div className="absolute bottom-0 left-0 right-0 py-6 px-4 bg-gradient-to-t from-ring/80 via-ring/40 to-transparent z-20 text-white">
                 <div className="flex flex-col md:flex-row md:justify-between">
                   <div className="mb-0 flex-grow">
-                    <div className="inline-block px-2 py-1 bg-[#fff]/20 text-white rounded-full text-xs font-bold mb-2">
+                    {/* <div className="inline-block px-2 py-1 bg-[#fff]/20 text-white rounded-full text-xs font-bold mb-2">
                       FREE WEBINAR
-                    </div>
+                    </div> */}
                     <h2 className="text-lg md:text-2xl font-black text-white leading-tight">
-                      The £100K Deal Blueprint
+                      My £100K Deal Blueprint
                     </h2>
                     <p className="text-sm md:text-lg text-white/90 mb-2 max-w-md font-medium">
-                      How to Find, Fund and Profit from Commercial Properties
-                      without any Past Knowledge or Experience.
+                      How to find, fund and profit from commercial properties, even without knowledge or experience.
                     </p>
                   </div>
 

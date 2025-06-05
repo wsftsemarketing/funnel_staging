@@ -36,13 +36,13 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <Navbar />
       <Hero />
-      <CaseStudies />
       <WebinarOutcomes />
+      <CaseStudies />
       <RegistrationForm />
       <FAQ />
       <TrustPilotReviews />
       <SocialProofNotifications />
-      <CookieConsentModal />
+      {/* <CookieConsentModal /> */}
       <Footer /> 
       
       {/* Note: The following conversion components have been temporarily disabled

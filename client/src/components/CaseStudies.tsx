@@ -18,7 +18,7 @@ const caseStudies = [
     property: "Industrial Estate, Scotland",
     image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d950da17a1645a3afcf5c_Screenshot%202025-05-21%20at%209.55.37%E2%80%AFam.png",
     roi: "95% post-debt income",
-    investment: "£1.275m",
+    investment: "£1.2m",
     monthlyIncome: "£13,917",
     story: "Greg had no prior experience in commercial property before joining Touchstone. Within 12 months, he secured three commercial sites including a 12 unit industrial estate. The strategy, backed by Touchstone's training, helped him grow to £167,000 in annual rental income and build over £200,000 in equity."
   },
@@ -27,7 +27,7 @@ const caseStudies = [
     property: "Commercial Conversion, Staffordshire",
     image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d961242afc6a852002709_Screenshot%202025-05-21%20at%209.59.52%E2%80%AFam.png",
     roi: "Estimated 30%+ net",
-    investment: "Approx. £800k",
+    investment: "~£800k",
     monthlyIncome: "£11,666",
     story: "After attending a Touchstone event in London, Iurie pivoted from flipping to commercial property. His biggest success is a school converted into an ApartHotel, generating high income with minimal overhead using a PLO strategy."
   },
@@ -106,10 +106,10 @@ export default function CaseStudies() {
           <div className="inline-block px-3 py-1 mb-6 text-sm font-bold text-primary uppercase tracking-wide">
             Success Stories
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">Hear from our {" "}<Highlight type="primary"> community</Highlight> 
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">Hear from our {" "}<Highlight type="primary"> graduates</Highlight> 
           </h2>
           <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto">
-            Thousands of investors have transformed their property portfolios after attending our webinars. Here's some of their success stories.
+            Thousands of people have transformed their property portfolios after attending our commercial webinar. Here's some of their projects.
           </p>
         </div>
         
