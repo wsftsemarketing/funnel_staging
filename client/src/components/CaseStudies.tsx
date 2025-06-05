@@ -85,8 +85,8 @@ export default function CaseStudies() {
   };
 
   const currentCaseStudy = caseStudies[activeCaseStudy];
-  const showStats = currentCaseStudy.roi || currentCaseStudy.investment || currentCaseStudy.monthlyIncome;
-  const showQuote = currentCaseStudy.quote;
+  const showStats = !!(currentCaseStudy.roi || currentCaseStudy.investment || currentCaseStudy.monthlyIncome);
+  const showQuote = !!currentCaseStudy.quote;
 
   return (
     <section id="case-studies" className="py-12 bg-neutral-50">
@@ -145,7 +145,7 @@ export default function CaseStudies() {
               style={{ transform: `translateX(-${activeCaseStudy * 100}%)` }}
             >
               {caseStudies.map((study, index) => (
-                <div key={index} className="w-full flex-shrink-0 min-h-[600px]">
+                <div key={`case-study-${index}-${activeCaseStudy}`} className="w-full flex-shrink-0 min-h-[600px]">
                   <div className="bg-white overflow-hidden h-full min-h-[600px]">
                     <div className="p-8 flex flex-col h-full min-h-[600px]">
                       <div className="text-primary text-sm font-bold inline-block mb-3">
