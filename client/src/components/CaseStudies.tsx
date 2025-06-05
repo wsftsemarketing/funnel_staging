@@ -1,7 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Highlight } from "@/components/ui/highlight";
 import { useIntersectionObserver } from "@/lib/utils/animations";
+import { useMixpanelTracking } from "@/hooks/useMixpanelTracking";
 import { Star, StarHalf, ChevronLeft, ChevronRight, TrendingUp, PoundSterling, ArrowRight, BarChart4 } from "lucide-react";
 
 const scrollToRegistration = () => {
@@ -66,6 +67,13 @@ const caseStudies = [
 ];
 
 export default function CaseStudies() {
+  const { track, trackFunnelStep, trackSectionView } = useMixpanelTracking();
+  
+  // Track section view with new system
+  useEffect(() => {
+    trackSectionView('Case Studies');
+  }, [trackSectionView]);
+  
   const [activeCaseStudy, setActiveCaseStudy] = useState(0);
   const trustpilotRef = useRef<HTMLDivElement>(null);
 
@@ -77,11 +85,29 @@ export default function CaseStudies() {
   const trustpilotInView = useIntersectionObserver(trustpilotRef, { threshold: 0.1 });
 
   const nextCaseStudy = () => {
-    setActiveCaseStudy((prev) => (prev + 1) % caseStudies.length);
+    const newIndex = (activeCaseStudy + 1) % caseStudies.length;
+    setActiveCaseStudy(newIndex);
+    
+    track('Case Study Navigation', {
+      action: 'next',
+      from_case_study: caseStudies[activeCaseStudy].name,
+      to_case_study: caseStudies[newIndex].name,
+      case_study_index: newIndex,
+      navigation_method: 'next_button'
+    });
   };
 
   const prevCaseStudy = () => {
-    setActiveCaseStudy((prev) => (prev - 1 + caseStudies.length) % caseStudies.length);
+    const newIndex = (activeCaseStudy - 1 + caseStudies.length) % caseStudies.length;
+    setActiveCaseStudy(newIndex);
+    
+    track('Case Study Navigation', {
+      action: 'previous', 
+      from_case_study: caseStudies[activeCaseStudy].name,
+      to_case_study: caseStudies[newIndex].name,
+      case_study_index: newIndex,
+      navigation_method: 'previous_button'
+    });
   };
 
   const currentCaseStudy = caseStudies[activeCaseStudy];
@@ -89,7 +115,7 @@ export default function CaseStudies() {
   const showQuote = !!currentCaseStudy.quote;
 
   return (
-    <section id="case-studies" className="py-12 bg-neutral-50">
+    <section id="case-studies" data-section="case-studies" className="py-12 bg-neutral-50">
       <div className="container mx-auto px-4">
         {/* TrustPilot Style Rating Box with 4.5 stars */}
         <div 
@@ -287,7 +313,18 @@ export default function CaseStudies() {
               {caseStudies.map((_, index) => (
                 <button 
                   key={index}
-                  onClick={() => setActiveCaseStudy(index)}
+                  onClick={() => {
+                    if (index !== activeCaseStudy) {
+                      track('Case Study Navigation', {
+                        action: 'direct_select',
+                        from_case_study: caseStudies[activeCaseStudy].name,
+                        to_case_study: caseStudies[index].name,
+                        case_study_index: index,
+                        navigation_method: 'dot_navigation'
+                      });
+                      setActiveCaseStudy(index);
+                    }
+                  }}
                   className={`w-2.5 h-2.5 rounded-full transition-colors ${index === activeCaseStudy ? 'bg-primary' : 'bg-neutral-300'}`}
                   aria-label={`Go to case study ${index + 1}`}
                 ></button>
@@ -297,7 +334,17 @@ export default function CaseStudies() {
         </div>
         <div className="mt-6 text-center">
           <button
-            onClick={scrollToRegistration}
+            onClick={() => {
+              track('CTA Clicked', {
+                cta_type: 'primary',
+                button_location: 'case_studies_section',
+                button_text: 'Watch Free Training Now',
+                current_case_study: currentCaseStudy.name,
+                case_study_index: activeCaseStudy
+              });
+              trackFunnelStep('Case Studies CTA Clicked', 4);
+              scrollToRegistration();
+            }}
             className="conversion-btn inline-block uppercase"
           >
             Watch Free Training Now{" "}

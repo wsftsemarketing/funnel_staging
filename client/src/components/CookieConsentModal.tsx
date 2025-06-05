@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { X, Cookie } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAnalytics } from "@/hooks/useAnalytics";
+import { useMixpanelTracking } from "@/hooks/useMixpanelTracking";
 
 interface CookieConsentModalProps {
   onAccept?: () => void;
@@ -10,7 +9,7 @@ interface CookieConsentModalProps {
 }
 
 export default function CookieConsentModal({ onAccept, onDecline }: CookieConsentModalProps) {
-  const { track } = useAnalytics();
+  const { track } = useMixpanelTracking();
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -30,7 +29,7 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
     }
   }, []);
 
-  
+
 
   const handleAccept = () => {
     localStorage.setItem('cookieConsent', 'accepted');
@@ -72,11 +71,11 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           transition: opacity 0.3s ease-out;
           pointer-events: auto;
         }
-        
+
         .cookie-modal-backdrop.animate-in {
           opacity: 1;
         }
-        
+
         .cookie-modal-container {
           position: fixed;
           bottom: 0;
@@ -89,12 +88,12 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           opacity: 0;
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
         .cookie-modal-container.animate-in {
           transform: translateY(0) scale(1);
           opacity: 1;
         }
-        
+
         @media (min-width: 768px) {
           .cookie-modal-container {
             bottom: 1rem;
@@ -103,11 +102,11 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
             max-width: 28rem;
           }
         }
-        
+
         .cookie-modal-shake {
           animation: shake 0.8s ease-out 0.2s;
         }
-        
+
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           10% { transform: translateX(-10px); }
@@ -120,19 +119,19 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
           80% { transform: translateX(2px); }
           90% { transform: translateX(0); }
         }
-        
+
         .cookie-details-expand {
           opacity: 0;
           max-height: 0;
           overflow: hidden;
           transition: all 0.3s ease-out;
         }
-        
+
         .cookie-details-expand.show {
           opacity: 1;
           max-height: 1000px;
         }
-        
+
         /* Force override any conflicting styles */
         .cookie-modal-backdrop,
         .cookie-modal-container {
@@ -310,5 +309,3 @@ export default function CookieConsentModal({ onAccept, onDecline }: CookieConsen
     </>
   );
 }
-
-

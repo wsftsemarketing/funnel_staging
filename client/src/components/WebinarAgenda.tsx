@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Highlight } from "@/components/ui/highlight";
+import { useMixpanelTracking } from "@/hooks/useMixpanelTracking";
 import { 
   Calendar, 
   Clock, 
@@ -14,6 +15,8 @@ import {
 } from "lucide-react";
 
 export default function WebinarAgenda() {
+  useMixpanelTracking('Webinar Agenda');
+
   return (
     <section id="agenda" className="py-12 md:py-20 bg-white">
       <div className="container px-4 mx-auto">
@@ -24,7 +27,7 @@ export default function WebinarAgenda() {
           <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto mb-6">
             Discover how to build a sustainable property business with our comprehensive commercial property masterclass
           </p>
-          
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
             <div className="flex items-center bg-primary/5 px-4 py-2 rounded-full">
               <Calendar className="h-5 w-5 text-primary mr-2" />
@@ -40,7 +43,7 @@ export default function WebinarAgenda() {
             </div>
           </div>
         </div>
-        
+
         {/* Main Content Area */}
         <div className="grid md:grid-cols-12 gap-8 max-w-5xl mx-auto">
           {/* Left Column - Main Headline */}
@@ -53,17 +56,17 @@ export default function WebinarAgenda() {
                 <p className="text-white/90 text-sm mb-4 italic">
                   …Without Needing Money To Invest or Having To Be "Bob The Builder"
                 </p>
-                
+
                 <div className="mt-6 flex justify-center">
                   <LineChart className="h-24 w-24 text-white/80" />
                 </div>
               </div>
-              
+
               <CardContent className="p-6">
                 <p className="text-gray-700 mb-6">
                   Our commercial property training has helped hundreds of everyday people build sustainable passive income streams. Register for the free webinar to get the exact steps.
                 </p>
-                
+
                 <Button 
                   className="w-full md:hidden sm:block"
                   onClick={() => window.location.href = '#registration'}
@@ -73,7 +76,7 @@ export default function WebinarAgenda() {
               </CardContent>
             </Card>
           </div>
-          
+
           {/* Right Column - Agenda Details */}
           <div className="md:col-span-7">
             <div className="space-y-5">
@@ -88,7 +91,7 @@ export default function WebinarAgenda() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Users className="h-5 w-5 text-primary" />
@@ -100,7 +103,7 @@ export default function WebinarAgenda() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Building className="h-5 w-5 text-primary" />
@@ -113,7 +116,7 @@ export default function WebinarAgenda() {
                 </div>
               </div>
             </div>
-            
+
             {/* Bottom CTA with Stats */}
             <div className="mt-8 bg-gray-50 p-5 rounded-xl border border-gray-100">
               <div className="grid grid-cols-3 gap-4 mb-5">
@@ -130,7 +133,7 @@ export default function WebinarAgenda() {
                   <p className="text-xs text-gray-500">Property Needed</p>
                 </div>
               </div>
-              
+
               <div className="text-center">
                 <Button
                   variant="secondary"

@@ -2,12 +2,13 @@ import { useRef } from "react";
 import { Highlight } from "@/components/ui/highlight";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { ArrowRight, Clock, CheckCircle, Award } from "lucide-react";
-import { useTrackSection, useAnalytics } from "@/hooks/useAnalytics";
+import { useTrackSection, useMixpanelTracking } from "@/hooks/useMixpanelTracking";
 
 export default function Hero() {
+  useTrackSection('Hero Section');
+  const { trackButtonClick, trackFunnelStep } = useMixpanelTracking();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useIntersectionObserver(ref, { threshold: 0.1 });
-  const { trackButtonClick } = useAnalytics();
 
   const webinarDate = new Date();
   webinarDate.setDate(webinarDate.getDate() + 7);
@@ -20,7 +21,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative pt-6 md:pt-6 pb-8 md:pb-24 overflow-hidden">
+    <section data-section="hero" className="relative pt-6 md:pt-6 pb-8 md:pb-24 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div
           ref={ref}
