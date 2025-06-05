@@ -14,13 +14,14 @@ const scrollToRegistration = () => {
 // Case studies with ROI metrics
 const caseStudies = [
   {
-    name: "Greg McKenzie",
-    property: "Industrial Estate, Scotland",
-    image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d950da17a1645a3afcf5c_Screenshot%202025-05-21%20at%209.55.37%E2%80%AFam.png",
-    roi: "95% post-debt income",
-    investment: "£1.2m",
-    monthlyIncome: "£13,917",
-    story: "Greg had no prior experience in commercial property before joining Touchstone. Within 12 months, he secured three commercial sites including a 12 unit industrial estate. The strategy, backed by Touchstone's training, helped him grow to £167,000 in annual rental income and build over £200,000 in equity."
+    name: "Ben Roberts",
+    property: "The Old Fire Station, Worcester",
+    image: "https://i.ibb.co/XfXc4WDx/Screenshot-2025-06-05-at-12-04-36-pm.png",
+    roi: null,
+    investment: null,
+    monthlyIncome: null,
+    quote: "I already felt quite successful. However, I soon realised that there was a vast amount of knowledge I still lacked! Wealth Academy taught me numerous important concepts. The academy provides comprehensive understanding of various aspects of property. Even those who consider themselves seasoned property professionals would greatly benefit from joining.Touchstone Education is a property investment company that exists to inspire people to financial freedom through knowledge.",
+    story: "Ben Roberts transitioned from a 25-year career with the British Army to become a full-time professional property developer in 2014. Since then, he has gained extensive experience in the field. Despite being a seasoned property developer, he joined Wealth Academy at a critical point in his career. Ben's flagship project, the Old Fire Station in Worcester, is a landmark building that has been meticulously restored. With commercial space on the ground floor and 28 apartments spread across the upper three floors, the completed development is valued at £10 million."
   },
   {
     name: "Iurie Dontu",
@@ -29,6 +30,7 @@ const caseStudies = [
     roi: "30%+ net",
     investment: "~£800k",
     monthlyIncome: "£11,666",
+    quote: null,
     story: "After attending a Touchstone event in London, Iurie pivoted from flipping to commercial property. His biggest success is a school converted into an ApartHotel, generating high income with minimal overhead using a PLO strategy."
   },
   {
@@ -38,6 +40,7 @@ const caseStudies = [
     roi: "83% valuation uplift",
     investment: "£400k",
     monthlyIncome: "£6,667",
+    quote: null,
     story: "Ian converted an 1880s hotel into a multi-income asset using delayed completion and exchange-for-£1 strategies learned via CPBO. The project now delivers 12 income streams and tripled in value."
   },
   {
@@ -47,17 +50,28 @@ const caseStudies = [
     roi: "13% yield",
     investment: "£175k",
     monthlyIncome: "£1,916",
+    quote: null,
     story: "Greg negotiated a discounted deal on a portfolio of shops and storage units, bought for £175k and fully let. This low-risk deal contributes to his total commercial income exceeding £13k per month."
-  }
+  },
+  {
+    name: "Greg McKenzie",
+    property: "Industrial Estate, Scotland",
+    image: "https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d950da17a1645a3afcf5c_Screenshot%202025-05-21%20at%209.55.37%E2%80%AFam.png",
+    roi: "95% post-debt income",
+    investment: "£1.2m",
+    monthlyIncome: "£13,917",
+    quote: null,
+    story: "Greg had no prior experience in commercial property before joining Touchstone. Within 12 months, he secured three commercial sites including a 12 unit industrial estate. The strategy, backed by Touchstone's training, helped him grow to £167,000 in annual rental income and build over £200,000 in equity."
+  },
 ];
 
 export default function CaseStudies() {
   const [activeCaseStudy, setActiveCaseStudy] = useState(0);
   const trustpilotRef = useRef<HTMLDivElement>(null);
-  
+
   const titleRef = useRef<HTMLDivElement>(null);
   const caseStudiesRef = useRef<HTMLDivElement>(null);
-  
+
   const titleInView = useIntersectionObserver(titleRef, { threshold: 0.1 });
   const caseStudiesInView = useIntersectionObserver(caseStudiesRef, { threshold: 0.1 });
   const trustpilotInView = useIntersectionObserver(trustpilotRef, { threshold: 0.1 });
@@ -65,10 +79,14 @@ export default function CaseStudies() {
   const nextCaseStudy = () => {
     setActiveCaseStudy((prev) => (prev + 1) % caseStudies.length);
   };
-  
+
   const prevCaseStudy = () => {
     setActiveCaseStudy((prev) => (prev - 1 + caseStudies.length) % caseStudies.length);
   };
+
+  const currentCaseStudy = caseStudies[activeCaseStudy];
+  const showStats = !!(currentCaseStudy.roi || currentCaseStudy.investment || currentCaseStudy.monthlyIncome);
+  const showQuote = !!currentCaseStudy.quote;
 
   return (
     <section id="case-studies" className="py-12 bg-neutral-50">
@@ -106,16 +124,16 @@ export default function CaseStudies() {
           <div className="inline-block px-3 py-1 mb-6 text-sm font-bold text-primary uppercase tracking-wide">
             Success Stories
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">Hear from Recent {" "}<Highlight type="primary"> graduates</Highlight> 
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">Hear from our {" "}<Highlight type="primary"> community</Highlight> 
           </h2>
           <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto">
-            Thousands of people have transformed their property portfolios after attending our commercial webinar. Here's some of their projects.
+            Thousands of investors have transformed their property portfolios after attending our commercial property edge webinar. Take a look at some of their projects.
           </p>
         </div>
-        
+
         {/* Success Case Studies - Carousel */}
         <div className="mb-6">
-          
+
           <div 
             ref={caseStudiesRef}
             className={`relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-700 min-h-[600px] ${
@@ -127,7 +145,7 @@ export default function CaseStudies() {
               style={{ transform: `translateX(-${activeCaseStudy * 100}%)` }}
             >
               {caseStudies.map((study, index) => (
-                <div key={index} className="w-full flex-shrink-0 min-h-[600px]">
+                <div key={`case-study-${index}-${activeCaseStudy}`} className="w-full flex-shrink-0 min-h-[600px]">
                   <div className="bg-white overflow-hidden h-full min-h-[600px]">
                     <div className="p-8 flex flex-col h-full min-h-[600px]">
                       <div className="text-primary text-sm font-bold inline-block mb-3">
@@ -135,75 +153,114 @@ export default function CaseStudies() {
                       </div>
                       <h4 className="text-2xl font-bold mb-2">{study.name}</h4>
                       <p className="text-neutral-600 mb-4">{study.property}</p>
-                      
+
                       <p className="text-neutral-700 mb-8">{study.story}</p>
-                      
+
                       {/* Bento Box Style Stats */}
-                      <div className="relative rounded-xl overflow-hidden grid grid-cols-2 auto-rows-fr gap-2 md:gap-3">
-                        <div className="relative bg-gradient-to-br from-primary/5 to-primary/10 p-6 rounded-xl">
-                          <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
-                            <TrendingUp className="w-4 h-4 text-primary" />
+                      {showStats ? (
+                        <div className="relative rounded-xl overflow-hidden grid grid-cols-2 auto-rows-fr gap-2 md:gap-3">
+                          <div className="relative bg-gradient-to-br from-primary/5 to-primary/10 p-6 rounded-xl">
+                            <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
+                              <TrendingUp className="w-4 h-4 text-primary" />
+                            </div>
+                            <div className="text-sm text-neutral-500 mb-2">Return on Investment</div>
+                            <div className="text-3xl font-bold text-primary">{study.roi}</div>
                           </div>
-                          <div className="text-sm text-neutral-500 mb-2">Return on Investment</div>
-                          <div className="text-3xl font-bold text-primary">{study.roi}</div>
-                        </div>
-                        
-                        <div className="relative bg-gradient-to-br from-secondary/5 to-secondary/10 p-6 rounded-xl">
-                          <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
-                            <PoundSterling className="w-4 h-4 text-secondary" />
+
+                          <div className="relative bg-gradient-to-br from-secondary/5 to-secondary/10 p-6 rounded-xl">
+                            <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
+                              <PoundSterling className="w-4 h-4 text-secondary" />
+                            </div>
+                            <div className="text-sm text-neutral-500 mb-2">Total Investment</div>
+                            <div className="text-3xl font-bold text-secondary">{study.investment}</div>
                           </div>
-                          <div className="text-sm text-neutral-500 mb-2">Total Investment</div>
-                          <div className="text-3xl font-bold text-secondary">{study.investment}</div>
-                        </div>
-                        
-                        <div className="relative bg-gradient-to-br from-green-600/10 to-green-600/5 p-6 rounded-xl">
-                          <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
-                            <BarChart4 className="w-4 h-4 text-neutral-700" />
+
+                          <div className="relative bg-gradient-to-br from-green-600/10 to-green-600/5 p-6 rounded-xl">
+                            <div className="absolute bottom-2 right-2 rounded-full bg-white/70 w-8 h-8 flex items-center justify-center">
+                              <BarChart4 className="w-4 h-4 text-neutral-700" />
+                            </div>
+                            <div className="text-sm text-neutral-500 mb-2">Monthly Cash Flow</div>
+                            <div className="text-3xl font-bold text-green-600">
+                              {study.monthlyIncome}
+                            </div>
                           </div>
-                          <div className="text-sm text-neutral-500 mb-2">Monthly Cash Flow</div>
-                          <div className="text-3xl font-bold text-green-600">
-                            {study.monthlyIncome}
-                          </div>
-                        </div>
-                        
-                        {/* Property Images */}
-                        <div className="relative bg-white p-0 rounded-xl overflow-hidden">
-                          {/* Blurred background image */}
-                          <div 
-                            className="absolute inset-0 bg-cover bg-center"
-                            style={{ 
-                              backgroundImage: `url(${study.image})`,
-                              filter: 'blur(8px)',
-                              transform: 'scale(1.1)'
-                            }}
-                          />
-                          {/* Dark overlay */}
-                          <div className="absolute inset-0 bg-black/30" />
-                          
-                          {/* Main image container */}
-                          <div className="relative h-full flex items-center justify-center p-0 md:p-0">
-                            <img 
-                              src={study.image}
-                              alt={`${study.property} - Exterior`}
-                              className="w-full h-full md:max-h-full md:max-w-full object-cover md:object-contain rounded-lg shadow-lg" 
+
+                          {/* Property Images */}
+                          <div className="relative bg-white p-0 rounded-xl overflow-hidden">
+                            {/* Blurred background image */}
+                            <div 
+                              className="absolute inset-0 bg-cover bg-center"
+                              style={{ 
+                                backgroundImage: `url(${study.image})`,
+                                filter: 'blur(8px)',
+                                transform: 'scale(1.1)'
+                              }}
                             />
-                          </div>
-                          
-                          {/* Property label with gradient backdrop */}
-                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4">
-                            <div className="text-sm font-bold text-white">📍 {study.property}</div>
+                            {/* Dark overlay */}
+                            <div className="absolute inset-0 bg-black/30" />
+
+                            {/* Main image container */}
+                            <div className="relative h-full flex items-center justify-center p-0 md:p-0">
+                              <img 
+                                src={study.image}
+                                alt={`${study.property} - Exterior`}
+                                className="w-full h-full md:max-h-full md:max-w-full object-cover md:object-contain rounded-lg shadow-lg" 
+                              />
+                            </div>
+
+                            {/* Property label with gradient backdrop */}
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4">
+                              <div className="text-sm font-bold text-white">📍 {study.property}</div>
+                            </div>
                           </div>
                         </div>
-                        
-                        {/* Property Images */}
-                        
-                      </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {/* Quote section */}
+                          {showQuote && (
+                            <div className="relative rounded-xl overflow-hidden p-6 bg-neutral-100">
+                              <div className="text-lg italic text-neutral-700">
+                                "{study.quote}"
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Property Image - Always shown when no stats */}
+                          <div className="relative bg-white p-0 rounded-xl overflow-hidden h-64">
+                            {/* Blurred background image */}
+                            <div 
+                              className="absolute inset-0 bg-cover bg-center"
+                              style={{ 
+                                backgroundImage: `url(${study.image})`,
+                                filter: 'blur(8px)',
+                                transform: 'scale(1.1)'
+                              }}
+                            />
+                            {/* Dark overlay */}
+                            <div className="absolute inset-0 bg-black/30" />
+
+                            {/* Main image container */}
+                            <div className="relative h-full flex items-center justify-center p-0 md:p-0">
+                              <img 
+                                src={study.image}
+                                alt={`${study.property} - Exterior`}
+                                className="w-full h-full md:max-h-full md:max-w-full object-cover md:object-contain rounded-lg shadow-lg" 
+                              />
+                            </div>
+
+                            {/* Property label with gradient backdrop */}
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4">
+                              <div className="text-sm font-bold text-white">📍 {study.property}</div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-            
+
             <Button 
               onClick={prevCaseStudy}
               variant="outline" 
@@ -213,7 +270,7 @@ export default function CaseStudies() {
               <ChevronLeft className="h-6 w-6" />
               <span className="sr-only">Previous case study</span>
             </Button>
-            
+
             <Button 
               onClick={nextCaseStudy}
               variant="outline" 
@@ -224,7 +281,7 @@ export default function CaseStudies() {
               <span className="sr-only">Next case study</span>
             </Button>
           </div>
-          
+
           <div className="flex justify-center mt-4">
             <div className="flex space-x-2">
               {caseStudies.map((_, index) => (
