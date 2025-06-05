@@ -213,17 +213,48 @@ export default function CaseStudies() {
                               <div className="text-sm font-bold text-white">📍 {study.property}</div>
                             </div>
                           </div>
-
-                          {/* Property Images */}
-
                         </div>
-                      ) : showQuote ? (
-                        <div className="relative rounded-xl overflow-hidden p-6 bg-neutral-100">
-                          <div className="text-lg italic text-neutral-700">
-                            "{study.quote}"
+                      ) : (
+                        <div className="space-y-4">
+                          {/* Quote section */}
+                          {showQuote && (
+                            <div className="relative rounded-xl overflow-hidden p-6 bg-neutral-100">
+                              <div className="text-lg italic text-neutral-700">
+                                "{study.quote}"
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Property Image - Always shown when no stats */}
+                          <div className="relative bg-white p-0 rounded-xl overflow-hidden h-64">
+                            {/* Blurred background image */}
+                            <div 
+                              className="absolute inset-0 bg-cover bg-center"
+                              style={{ 
+                                backgroundImage: `url(${study.image})`,
+                                filter: 'blur(8px)',
+                                transform: 'scale(1.1)'
+                              }}
+                            />
+                            {/* Dark overlay */}
+                            <div className="absolute inset-0 bg-black/30" />
+
+                            {/* Main image container */}
+                            <div className="relative h-full flex items-center justify-center p-0 md:p-0">
+                              <img 
+                                src={study.image}
+                                alt={`${study.property} - Exterior`}
+                                className="w-full h-full md:max-h-full md:max-w-full object-cover md:object-contain rounded-lg shadow-lg" 
+                              />
+                            </div>
+
+                            {/* Property label with gradient backdrop */}
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4">
+                              <div className="text-sm font-bold text-white">📍 {study.property}</div>
+                            </div>
                           </div>
                         </div>
-                      ) : null}
+                      )}
                     </div>
                   </div>
                 </div>
