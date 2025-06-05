@@ -28,9 +28,9 @@ export default function RegistrationForm() {
                 FREE WEBINAR
               </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">
-                The CPB Method (Commercial Portfolio Builder)
+                The Commercial Property Edge
               </h2>
-              <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto">Our webinar will show you exactly how to get started with commercial property, and how to secure 10-15 year leases without lifting a paintbrush.
+              <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto">Our webinar will show you exactly how to maximise your portfolios returns with commercial property, without lifting a paintbrush.
               </p>
             </div>
             <div 
@@ -59,7 +59,7 @@ export default function RegistrationForm() {
                   <Calendar className="text-primary h-4 w-4" />
                   <span className="text-neutral-700 text-sm">You'll receive your webinar link after registration.</span>
                 </div>
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-6 mb-4">
                     <LockIcon className="text-primary h-4 w-4" />
                     <span className="text-neutral-700 text-sm">Your information is secure and will not be shared.</span>
                   </div>

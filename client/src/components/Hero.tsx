@@ -38,7 +38,7 @@ export default function Hero() {
           </h1>
 
           <p className="text-lg md:text-2xl text-foreground/90 mb-6 max-w-2xl mx-auto font-medium">
-            Watch our free webinar to discover how people are locking in{" "}
+            Watch our free webinar to discover how investors are locking in{" "}
             <span className="font-extrabold text-primary">
               <Highlight type="marker">10–15% returns </Highlight>
             </span>{" "}
@@ -95,9 +95,9 @@ export default function Hero() {
                       FREE WEBINAR
                     </div> */}
                     <h2 className="text-lg md:text-2xl font-black text-white leading-tight">
-                      The CPB Method (Commercial Portfolio Builder)
+                      The Commercial Property Edge
                     </h2>
-                    <p className="text-sm md:text-lg text-white/90 mb-2 max-w-md font-medium">Discover the strategy powering modern property portfolios, with no knowledge or experience needed.
+                    <p className="text-sm md:text-lg text-white/90 mb-2 max-w-md font-medium">Discover the strategy powering modern property investment portfolios.
                     </p>  
                   </div>
 

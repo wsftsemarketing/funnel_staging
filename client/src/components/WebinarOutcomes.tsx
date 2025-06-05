@@ -24,9 +24,7 @@ export default function WebinarOutcomes() {
             About The <Highlight type="primary">Webinar</Highlight>
           </h2>
           <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto mb-6">
-            Looking to get into commercial property to maximise your returns,
-            without needing any prior experience? Join our commercial property
-            expert and host Paul Smith, to find out how.
+            Looking to get into commercial property to maximise the returns on your portfolio? Join property expert and host Paul Smith, to find out how.
           </p>
         </div>
 
