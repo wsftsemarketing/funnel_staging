@@ -112,7 +112,7 @@ export default function WebinarOutcomes() {
                   onClick={scrollToRegistration}
                   className="bg-[#e3bc31] hover:bg-[#d4a929] w-full inline-block uppercase font-bold"
                 >
-                  Watch now{" "}
+                  Watch Free Training Now {" "}
                   <ArrowRight className="ml-2 inline-block" size={18} />
                 </Button>
               </div>

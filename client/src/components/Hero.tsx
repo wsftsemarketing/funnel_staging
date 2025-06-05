@@ -42,7 +42,7 @@ export default function Hero() {
             <span className="font-extrabold text-primary">
               <Highlight type="marker">10–15% returns </Highlight>
             </span>{" "}
-            and securing long-term incomes with commercial property.
+            and securing long-term leases with commercial property.
           </p>
 
           <div className="mb-4 max-w-xl mx-auto">
@@ -50,7 +50,7 @@ export default function Hero() {
               onClick={scrollToRegistration}
               className="conversion-btn w-full text-center py-4 mb-4 uppercase"
             >
-              Watch now <ArrowRight className="ml-2 inline-block" size={18} />
+              Watch Free Training Now <ArrowRight className="ml-2 inline-block" size={18} />
             </button>
 
             <div className="flex justify-center gap-4 items-center mb-10">
@@ -95,11 +95,10 @@ export default function Hero() {
                       FREE WEBINAR
                     </div> */}
                     <h2 className="text-lg md:text-2xl font-black text-white leading-tight">
-                      My £100K Deal Blueprint
+                      The CPB Method (Commercial Portfolio Builder)
                     </h2>
-                    <p className="text-sm md:text-lg text-white/90 mb-2 max-w-md font-medium">
-                      How to find, fund and profit from commercial properties, even without knowledge or experience.
-                    </p>
+                    <p className="text-sm md:text-lg text-white/90 mb-2 max-w-md font-medium">Discover the strategy powering modern property portfolios, with no knowledge or experience needed.
+                    </p>  
                   </div>
 
                   <div className="flex items-center md:justify-end">
@@ -139,7 +138,7 @@ export default function Hero() {
                 onClick={scrollToRegistration}
                 className="conversion-btn inline-block uppercase"
               >
-                Watch now <ArrowRight className="ml-2 inline-block" size={18} />
+                Watch Free Training Now <ArrowRight className="ml-2 inline-block" size={18} />
               </button>
               {/* <p className="mt-4 text-sm text-muted-foreground">
                 Limited spots available – Register now before it's full

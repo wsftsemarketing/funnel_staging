@@ -167,7 +167,7 @@ export default function CaseStudies() {
                         </div>
                         
                         {/* Property Images */}
-                        <div className="relative bg-white p-0 md:p-6 rounded-xl overflow-hidden">
+                        <div className="relative bg-white p-0 rounded-xl overflow-hidden">
                           {/* Blurred background image */}
                           <div 
                             className="absolute inset-0 bg-cover bg-center"
@@ -181,7 +181,7 @@ export default function CaseStudies() {
                           <div className="absolute inset-0 bg-black/30" />
                           
                           {/* Main image container */}
-                          <div className="relative h-full flex items-center justify-center p-6 md:p-0">
+                          <div className="relative h-full flex items-center justify-center p-0 md:p-0">
                             <img 
                               src={study.image}
                               alt={`${study.property} - Exterior`}
@@ -243,7 +243,7 @@ export default function CaseStudies() {
             onClick={scrollToRegistration}
             className="conversion-btn inline-block uppercase"
           >
-            Watch now{" "}
+            Watch Free Training Now{" "}
             <ArrowRight className="ml-2 inline-block" size={18} />
           </button>
           {/* <p className="mt-4 text-sm text-muted-foreground">Limited spots available – Register now before it's full</p> */}

@@ -28,9 +28,9 @@ export default function RegistrationForm() {
                 FREE WEBINAR
               </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6 capitalize">
-                Your <Highlight type="primary">6-Figure</Highlight> Payday
+                The CPB Method (Commercial Portfolio Builder)
               </h2>
-              <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto">In this free webinar, we'll show you exactly how commercial property students are securing 10–15 year leases, and pulling in strong income, without lifting a paintbrush.
+              <p className="text-lg md:text-xl text-neutral-600 max-w-2xl mx-auto">Our webinar will show you exactly how to get started with commercial property, and how to secure 10-15 year leases without lifting a paintbrush.
               </p>
             </div>
             <div 
@@ -38,7 +38,7 @@ export default function RegistrationForm() {
               className="bg-white rounded-2xl shadow-xl p-8 transform transition-all duration-700 delay-300"
             >
               <h3 className="text-2xl font-bold mb-2">Watch Now</h3>
-              <p className="text-md md:text-sm text-neutral-600 max-w-2xl mx-auto">Register below to {" "} <span className="font-extrabold text-primary"> <Highlight type="marker">immediately access</Highlight> </span>{" "} the webinar, and get the exact steps to start your commercial property business.
+              <p className="text-md md:text-sm text-neutral-600 max-w-2xl mx-auto">Register below to {" "} <span className="font-extrabold text-primary"> <Highlight type="marker">immediately access</Highlight> </span>{" "} the webinar.
                 </p>
               <div id="registration-form">
                 <div 
@@ -47,7 +47,7 @@ export default function RegistrationForm() {
                   ref={(el) => {
                     if (el && !el.querySelector('script')) {
                       const script = document.createElement('script');
-                      script.src = 'https://event.webinarjam.com/register/y86q9a7p/embed-form?formButtonText=WATCH NOW&formAccentColor=%23e3bc31&formAccentOpacity=100&formBgColor=%23ffffff&formBgOpacity=1';
+                      script.src = 'https://event.webinarjam.com/register/y86q9a7p/embed-form?formButtonText=Watch%20Free%20Training%20Now&formAccentColor=%23E3BC31&formAccentOpacity=1&formBgColor=%23E3BC31&formBgOpacity=0.14';
                       el.appendChild(script);
                     }
                   }}

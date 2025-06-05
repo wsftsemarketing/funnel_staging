@@ -89,7 +89,7 @@ export default function FAQ() {
             onClick={scrollToRegistration}
             className="conversion-btn inline-block uppercase"
           >
-            Watch now{" "}
+            Watch Free Training Now{" "}
             <ArrowRight className="ml-2 inline-block" size={18} />
           </button>
           {/* <p className="mt-4 text-sm text-muted-foreground mb--4">Limited spots available – Register now before it's full</p> */}
