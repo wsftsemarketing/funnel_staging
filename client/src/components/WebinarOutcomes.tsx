@@ -7,6 +7,7 @@ import {
   BookOpenCheck,
   ArrowRight,
 } from "lucide-react";
+import { useTrackSection } from "@/hooks/useAnalytics";
 
 const scrollToRegistration = () => {
   const element = document.getElementById("register");

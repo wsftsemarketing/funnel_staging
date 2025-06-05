@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Highlight } from "@/components/ui/highlight";
+import { useTrackSection } from "@/hooks/useAnalytics";
 import { 
   Calendar, 
   Clock, 
@@ -14,6 +15,8 @@ import {
 } from "lucide-react";
 
 export default function WebinarAgenda() {
+  useTrackSection('Webinar Agenda');
+  
   return (
     <section id="agenda" className="py-12 md:py-20 bg-white">
       <div className="container px-4 mx-auto">
