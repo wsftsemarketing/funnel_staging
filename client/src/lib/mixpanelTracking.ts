@@ -30,8 +30,8 @@ if (shouldTrack) {
       scroll: true,
       submit: true,
       capture_text_content: true,
-      record_mask_text_selector: "", //unmask all text elements
-      record_block_selector: "", //unmask images and videos
+      record_mask_text_selector: ":password, [type='password'], [type='email']", // Mask password and email fields only
+      record_block_selector: "", // Unmask images and videos
       record_idle_timeout_ms: 600000, // 10 minutes of inactivity before stopping recording
     },
     record_sessions_percent: 25, // Session Replay enabled, recording 25% of all sessions
