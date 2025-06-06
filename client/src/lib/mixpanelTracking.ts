@@ -226,6 +226,12 @@ class MixpanelTracker {
   public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
     console.log('🔍 Generating cross-domain URL for:', baseUrl);
 
+    // Ensure userId is available
+    if (!this.userId) {
+      this.userId = localStorage.getItem("mixpanel_user_id") || `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem("mixpanel_user_id", this.userId);
+    }
+
     const crossDomainData = {
       mp_id: this.userId,
       mp_session: this.sessionId,
@@ -284,6 +290,119 @@ class MixpanelTracker {
 
 // Create global instance
 export const mixpanelTracker = new MixpanelTracker();
+
+// WebinarJam script for live page tracking
+export const generateWebinarJamScript = (): string => {
+  return `
+    <script>
+    (function() {
+      // Check if we're on a WebinarJam live page
+      if (window.location.hostname.includes('event.webinarjam.com') && 
+          window.location.pathname.includes('/live/')) {
+        
+        console.log('[WebinarJam Live] Initializing tracking...');
+        
+        // Get cross-domain data from URL params or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const storedData = localStorage.getItem('mp_cross_domain_data');
+        
+        let trackingData = {};
+        if (storedData) {
+          try {
+            trackingData = JSON.parse(storedData);
+          } catch (e) {
+            console.warn('[WebinarJam Live] Failed to parse stored tracking data');
+          }
+        }
+        
+        // Override with URL params if available
+        ['mp_id', 'mp_session', 'mp_source', 'mp_medium', 'mp_campaign'].forEach(param => {
+          const value = urlParams.get(param);
+          if (value) trackingData[param] = value;
+        });
+        
+        // Load Mixpanel
+        const script = document.createElement('script');
+        script.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+        script.onload = function() {
+          if (typeof mixpanel !== 'undefined') {
+            mixpanel.init('${MIXPANEL_TOKEN}', {
+              debug: false,
+              track_pageview: false,
+              persistence: 'localStorage'
+            });
+            
+            // Track webinar join
+            mixpanel.track('Webinar Joined', {
+              step_name: 'Webinar Joined',
+              step_order: 4,
+              funnel_type: 'webinar_registration',
+              webinar_url: window.location.href,
+              session_id: trackingData.mp_session || 'unknown',
+              user_id: trackingData.mp_id || 'unknown',
+              utm_source: trackingData.mp_source || 'direct',
+              utm_medium: trackingData.mp_medium || 'organic',
+              utm_campaign: trackingData.mp_campaign || 'webinar',
+              timestamp: new Date().toISOString()
+            });
+            
+            console.log('[WebinarJam Live] Webinar join tracked');
+            
+            // Track video progress if available
+            let lastProgressTracked = 0;
+            const trackProgress = () => {
+              // Try to get video element (WebinarJam uses various video players)
+              const video = document.querySelector('video') || 
+                           document.querySelector('.vjs-tech') ||
+                           document.querySelector('[data-testid="video"]');
+              
+              if (video && video.duration && video.currentTime) {
+                const progress = Math.round((video.currentTime / video.duration) * 100);
+                
+                // Track every 25% milestone
+                const milestones = [25, 50, 75, 90, 100];
+                milestones.forEach(milestone => {
+                  if (progress >= milestone && lastProgressTracked < milestone) {
+                    mixpanel.track('Video Progress', {
+                      progress_percent: milestone,
+                      watch_time_seconds: Math.round(video.currentTime),
+                      session_id: trackingData.mp_session || 'unknown',
+                      funnel_step: 5,
+                      event_type: 'video_progress',
+                      utm_source: trackingData.mp_source || 'direct',
+                      utm_medium: trackingData.mp_medium || 'organic',
+                      utm_campaign: trackingData.mp_campaign || 'webinar'
+                    });
+                    
+                    console.log('[WebinarJam Live] Video progress tracked:', milestone + '%');
+                    lastProgressTracked = milestone;
+                  }
+                });
+              }
+            };
+            
+            // Check for video progress every 30 seconds
+            setInterval(trackProgress, 30000);
+            
+            // Also track on page unload
+            window.addEventListener('beforeunload', () => {
+              trackProgress(); // Final progress check
+              mixpanel.track('Webinar Session End', {
+                session_id: trackingData.mp_session || 'unknown',
+                final_progress: lastProgressTracked,
+                utm_source: trackingData.mp_source || 'direct',
+                utm_medium: trackingData.mp_medium || 'organic',
+                utm_campaign: trackingData.mp_campaign || 'webinar'
+              });
+            });
+          }
+        };
+        document.head.appendChild(script);
+      }
+    })();
+    </script>
+  `;
+};
 
 // Export for use in components
 export default mixpanelTracker;
