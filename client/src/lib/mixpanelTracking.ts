@@ -493,6 +493,9 @@ class MixpanelTracker {
       source_domain: window.location.hostname
     }));
 
+    // Store individual session ID for easy access
+    localStorage.setItem('mp_current_session', sessionId);
+
     // Track the redirect to WebinarJam (only if tracking is enabled)
     if (shouldTrack) {
       this.track('Webinar Redirect', {
