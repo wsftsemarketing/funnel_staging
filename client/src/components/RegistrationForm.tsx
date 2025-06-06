@@ -62,22 +62,29 @@ export default function RegistrationForm() {
 
                       // Generate cross-domain tracking URL
                       const baseFormUrl = 'https://event.webinarjam.com/register/y86q9a7p/embed-form';
-                      const formParams = 'formButtonText=Watch%20Free%20Training%20Now&formAccentColor=%23E3BC31&formAccentOpacity=1&formBgColor=%23E3BC31&formBgOpacity=0.14';
+                      const formParams = {
+                        formButtonText: 'Watch Free Training Now',
+                        formAccentColor: '#E3BC31',
+                        formAccentOpacity: '1',
+                        formBgColor: '#E3BC31',
+                        formBgOpacity: '0.14'
+                      };
                       
                       let finalFormUrl;
                       try {
                         // Try to generate cross-domain URL with tracking data
                         if (mixpanelTracker && typeof mixpanelTracker.generateCrossDomainUrl === 'function') {
-                          const trackingUrl = mixpanelTracker.generateCrossDomainUrl(baseFormUrl);
-                          finalFormUrl = `${trackingUrl}&${formParams}`;
+                          finalFormUrl = mixpanelTracker.generateCrossDomainUrl(baseFormUrl, formParams);
                           console.log('✅ Using cross-domain tracking URL:', finalFormUrl);
                         } else {
-                          finalFormUrl = `${baseFormUrl}?${formParams}`;
+                          const urlParams = new URLSearchParams(formParams);
+                          finalFormUrl = `${baseFormUrl}?${urlParams.toString()}`;
                           console.warn('⚠️ mixpanelTracker.generateCrossDomainUrl not available, using standard URL');
                         }
                       } catch (error) {
                         console.error('❌ Error generating cross-domain URL:', error);
-                        finalFormUrl = `${baseFormUrl}?${formParams}`;
+                        const urlParams = new URLSearchParams(formParams);
+                        finalFormUrl = `${baseFormUrl}?${urlParams.toString()}`;
                       }
 
                       const script = document.createElement('script');
