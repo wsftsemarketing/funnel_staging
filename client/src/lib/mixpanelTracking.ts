@@ -519,6 +519,22 @@ class MixpanelTracker {
     localStorage.setItem('mp_source', utmData.utm_source || 'direct');
     localStorage.setItem('mp_medium', utmData.utm_medium || 'organic');
     localStorage.setItem('mp_campaign', utmData.utm_campaign || 'webinar');
+    
+    // CRITICAL: Clear any old/stale data that might conflict
+    // Remove any existing data with "unknown" values
+    const existingData = localStorage.getItem('mp_cross_domain_data');
+    if (existingData) {
+      try {
+        const parsed = JSON.parse(existingData);
+        if (parsed.mp_id === 'unknown' || parsed.mp_session === 'unknown') {
+          console.log('🧹 Clearing stale cross-domain data with unknown values');
+          localStorage.removeItem('mp_cross_domain_data');
+          localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
+        }
+      } catch (e) {
+        console.warn('Failed to parse existing cross-domain data:', e);
+      }
+    }
 
     // Also store session mapping for continuity
     localStorage.setItem('mp_session_continuity', JSON.stringify({
@@ -562,6 +578,31 @@ class MixpanelTracker {
     
     console.log('✅ Final cross-domain URL generated:', finalUrl);
     return finalUrl;
+  }
+
+  // Clear all tracking data (useful for testing)
+  public clearTrackingData(): void {
+    const keysToRemove = [
+      'mp_cross_domain_data',
+      'mp_id', 
+      'mp_session',
+      'mp_source',
+      'mp_medium', 
+      'mp_campaign',
+      'mp_session_continuity',
+      'mp_current_session',
+      'utm_params',
+      'utm_source',
+      'utm_medium', 
+      'utm_campaign',
+      'mixpanel_user_id'
+    ];
+    
+    keysToRemove.forEach(key => {
+      localStorage.removeItem(key);
+    });
+    
+    console.log('🧹 All tracking data cleared from localStorage');
   }
 
   // Get cross-domain tracking data
