@@ -466,20 +466,16 @@ class MixpanelTracker {
   public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
     console.log('🔍 generateCrossDomainUrl() called with baseUrl:', baseUrl);
     
-    // Ensure we have a user ID even on development domains
     let mixpanelId = localStorage.getItem('mixpanel_user_id');
     if (!mixpanelId || mixpanelId === 'unknown') {
       mixpanelId = `dev_user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       localStorage.setItem('mixpanel_user_id', mixpanelId);
-      console.log('🆔 Generated new user ID for dev environment:', mixpanelId);
     }
 
-    // Ensure we have a session ID - this is crucial for maintaining tracking continuity
     let sessionId = this.sessionId;
     if (!sessionId || sessionId === 'unknown') {
       sessionId = `dev_session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      this.sessionId = sessionId; // Update instance session ID
-      console.log('🆔 Generated new session ID for dev environment:', sessionId);
+      this.sessionId = sessionId;
     }
 
     const utmParams = localStorage.getItem('utm_params') || '{}';
@@ -491,63 +487,27 @@ class MixpanelTracker {
       utmData = {};
     }
 
-    console.log('📊 Retrieved tracking data:', { mixpanelId, sessionId, utmData });
-
-    // Store cross-domain tracking data in localStorage for WebinarJam to pick up
     const crossDomainData = {
       mp_id: mixpanelId,
-      mp_session: sessionId, // Session ID is critical for tracking continuity
+      mp_session: sessionId,
       mp_source: utmData.utm_source || 'direct',
-      mp_medium: utmData.utm_medium || 'organic',
+      mp_medium: utmData.utm_medium || 'organic', 
       mp_campaign: utmData.utm_campaign || 'webinar',
       mp_timestamp: Date.now(),
-      mp_domain: window.location.hostname,
-      mp_dev_mode: !shouldTrack,
-      mp_page_title: document.title,
-      mp_referrer: document.referrer,
       ...additionalParams
     };
 
     console.log('🔗 Generated cross-domain data:', crossDomainData);
 
-    // Store in localStorage (primary method) - ensure consistent storage
+    // Force store fresh data with current values
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
-    
-    // Store individual values for easier access by WebinarJam script
     localStorage.setItem('mp_id', mixpanelId);
     localStorage.setItem('mp_session', sessionId);
-    localStorage.setItem('mp_source', utmData.utm_source || 'direct');
-    localStorage.setItem('mp_medium', utmData.utm_medium || 'organic');
-    localStorage.setItem('mp_campaign', utmData.utm_campaign || 'webinar');
-    
-    // CRITICAL: Clear any old/stale data that might conflict
-    // Remove any existing data with "unknown" values
-    const existingData = localStorage.getItem('mp_cross_domain_data');
-    if (existingData) {
-      try {
-        const parsed = JSON.parse(existingData);
-        if (parsed.mp_id === 'unknown' || parsed.mp_session === 'unknown') {
-          console.log('🧹 Clearing stale cross-domain data with unknown values');
-          localStorage.removeItem('mp_cross_domain_data');
-          localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
-        }
-      } catch (e) {
-        console.warn('Failed to parse existing cross-domain data:', e);
-      }
-    }
+    localStorage.setItem('mp_source', crossDomainData.mp_source);
+    localStorage.setItem('mp_medium', crossDomainData.mp_medium);
+    localStorage.setItem('mp_campaign', crossDomainData.mp_campaign);
 
-    // Also store session mapping for continuity
-    localStorage.setItem('mp_session_continuity', JSON.stringify({
-      session_id: sessionId,
-      user_id: mixpanelId,
-      created_at: Date.now(),
-      source_domain: window.location.hostname
-    }));
-
-    // Store individual session ID for easy access
-    localStorage.setItem('mp_current_session', sessionId);
-
-    // Track the redirect to WebinarJam (only if tracking is enabled)
+    // Track the redirect to WebinarJam
     if (shouldTrack) {
       this.track('Webinar Redirect', {
         destination: 'webinarjam',
@@ -557,25 +517,14 @@ class MixpanelTracker {
         cross_domain_data: crossDomainData,
         redirect_source: 'registration_form'
       });
-    } else {
-      console.log('🔍 Would track Webinar Redirect (dev mode):', {
-        destination: 'webinarjam',
-        destination_url: baseUrl,
-        mp_id: mixpanelId,
-        session_id: sessionId,
-        cross_domain_data: crossDomainData,
-        redirect_source: 'registration_form'
-      });
     }
 
-    // Also add as URL params as fallback
     const trackingParams = new URLSearchParams();
     Object.entries(crossDomainData).forEach(([key, value]) => {
       trackingParams.append(key, String(value));
     });
     
     const finalUrl = `${baseUrl}?${trackingParams.toString()}`;
-    
     console.log('✅ Final cross-domain URL generated:', finalUrl);
     return finalUrl;
   }
