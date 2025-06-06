@@ -434,21 +434,28 @@ class MixpanelTracker {
     });
   }
 
-  // Cross-domain tracking helper
+  // Cross-domain tracking helper - stores data in localStorage for WebinarJam
   public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
     const mixpanelId = localStorage.getItem('mixpanel_user_id') || 'unknown';
     const utmParams = localStorage.getItem('utm_params') || '{}';
     const utmData = JSON.parse(utmParams);
 
-    const trackingParams = new URLSearchParams({
+    // Store cross-domain tracking data in localStorage for WebinarJam to pick up
+    const crossDomainData = {
       mp_id: mixpanelId,
       mp_session: this.sessionId,
       mp_source: utmData.utm_source || 'direct',
       mp_medium: utmData.utm_medium || 'organic',
       mp_campaign: utmData.utm_campaign || 'webinar',
+      mp_timestamp: Date.now(),
       ...additionalParams
-    });
+    };
 
+    // Store in localStorage (primary method)
+    localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
+    
+    // Also add as URL params as fallback
+    const trackingParams = new URLSearchParams(crossDomainData);
     return `${baseUrl}?${trackingParams.toString()}`;
   }
 

@@ -1,4 +1,3 @@
-
 // WebinarJam Tracking Snippets
 // Copy and paste these into your WebinarJam pages
 
@@ -9,20 +8,31 @@
 
 // <script>
 (function() {
-  // Get tracking parameters from URL
+  // Primary: Get tracking data from localStorage
+  let trackingData = {};
+  try {
+    const storedData = localStorage.getItem('mp_cross_domain_data');
+    if (storedData) {
+      trackingData = JSON.parse(storedData);
+    }
+  } catch (e) {
+    console.warn('Could not parse cross-domain tracking data');
+  }
+
+  // Fallback: Get tracking parameters from URL
   const urlParams = new URLSearchParams(window.location.search);
-  const mpId = urlParams.get('mp_id');
-  const mpSession = urlParams.get('mp_session');
-  const mpSource = urlParams.get('mp_source');
-  const mpMedium = urlParams.get('mp_medium');
-  const mpCampaign = urlParams.get('mp_campaign');
+  const mpId = trackingData.mp_id || urlParams.get('mp_id');
+  const mpSession = trackingData.mp_session || urlParams.get('mp_session');
+  const mpSource = trackingData.mp_source || urlParams.get('mp_source');
+  const mpMedium = trackingData.mp_medium || urlParams.get('mp_medium');
+  const mpCampaign = trackingData.mp_campaign || urlParams.get('mp_campaign');
   const email = urlParams.get('email');
-  
+
   if (!mpId || !mpSession) return;
-  
+
   // Initialize Mixpanel with same token
   !function(c,b,a,_){c[a]=c[a]||[];for(var d=0;d<c[a].length;d++){var e=c[a][d];if(e){var f=b.createElement("script");f.type="text/javascript";f.async=!0;f.src="https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";b.getElementsByTagName("head")[0].appendChild(f);break}}c[a].push(["init","79f20bfb126b3ffe57192638f36ee883"]);c[a].push(["identify",mpId])}(window,document,"mixpanel");
-  
+
   mixpanel.track('WebinarJam Registration Confirmed', {
     mp_id: mpId,
     session_id: mpSession,
@@ -45,25 +55,36 @@
 
 // <script>
 (function() {
-  // Get tracking parameters from URL
+  // Primary: Get tracking data from localStorage
+  let trackingData = {};
+  try {
+    const storedData = localStorage.getItem('mp_cross_domain_data');
+    if (storedData) {
+      trackingData = JSON.parse(storedData);
+    }
+  } catch (e) {
+    console.warn('Could not parse cross-domain tracking data');
+  }
+
+  // Fallback: Get tracking parameters from URL
   const urlParams = new URLSearchParams(window.location.search);
-  const mpId = urlParams.get('mp_id');
-  const mpSession = urlParams.get('mp_session');
-  const mpSource = urlParams.get('mp_source');
-  const mpMedium = urlParams.get('mp_medium');
-  const mpCampaign = urlParams.get('mp_campaign');
+  const mpId = trackingData.mp_id || urlParams.get('mp_id');
+  const mpSession = trackingData.mp_session || urlParams.get('mp_session');
+  const mpSource = trackingData.mp_source || urlParams.get('mp_source');
+  const mpMedium = trackingData.mp_medium || urlParams.get('mp_medium');
+  const mpCampaign = trackingData.mp_campaign || urlParams.get('mp_campaign');
   const email = urlParams.get('email');
-  
+
   if (!mpId || !mpSession) return;
-  
+
   // Initialize Mixpanel
   !function(c,b,a,_){c[a]=c[a]||[];for(var d=0;d<c[a].length;d++){var e=c[a][d];if(e){var f=b.createElement("script");f.type="text/javascript";f.async=!0;f.src="https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";b.getElementsByTagName("head")[0].appendChild(f);break}}c[a].push(["init","79f20bfb126b3ffe57192638f36ee883"]);c[a].push(["identify",mpId])}(window,document,"mixpanel");
-  
+
   let webinarStartTime = Date.now();
   let lastHeartbeat = Date.now();
   let totalWatchTime = 0;
   let isActive = true;
-  
+
   // Track webinar entry
   mixpanel.track('Webinar Room Entered', {
     mp_id: mpId,
@@ -77,13 +98,13 @@
     funnel_step: 4,
     timestamp: new Date().toISOString()
   });
-  
+
   // Track viewing engagement every 30 seconds
   const heartbeatInterval = setInterval(function() {
     if (isActive) {
       totalWatchTime += 30;
       const watchPercentage = Math.round((totalWatchTime / 5400) * 100); // 90 minutes = 5400 seconds
-      
+
       mixpanel.track('Webinar Heartbeat', {
         mp_id: mpId,
         session_id: mpSession,
@@ -92,7 +113,7 @@
         platform: 'webinarjam',
         timestamp: new Date().toISOString()
       });
-      
+
       // Track milestones
       if (watchPercentage >= 25 && !localStorage.getItem('webinar_25_tracked')) {
         localStorage.setItem('webinar_25_tracked', 'true');
@@ -103,7 +124,7 @@
           platform: 'webinarjam'
         });
       }
-      
+
       if (watchPercentage >= 50 && !localStorage.getItem('webinar_50_tracked')) {
         localStorage.setItem('webinar_50_tracked', 'true');
         mixpanel.track('Webinar Milestone - 50%', {
@@ -113,7 +134,7 @@
           platform: 'webinarjam'
         });
       }
-      
+
       if (watchPercentage >= 75 && !localStorage.getItem('webinar_75_tracked')) {
         localStorage.setItem('webinar_75_tracked', 'true');
         mixpanel.track('Webinar Milestone - 75%', {
@@ -123,7 +144,7 @@
           platform: 'webinarjam'
         });
       }
-      
+
       if (watchPercentage >= 90 && !localStorage.getItem('webinar_90_tracked')) {
         localStorage.setItem('webinar_90_tracked', 'true');
         mixpanel.track('Webinar Milestone - 90%', {
@@ -135,7 +156,7 @@
       }
     }
   }, 30000); // Every 30 seconds
-  
+
   // Track when user becomes inactive/active
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
@@ -156,7 +177,7 @@
       });
     }
   });
-  
+
   // Track when user leaves webinar
   window.addEventListener('beforeunload', function() {
     mixpanel.track('Webinar Room Exited', {
@@ -168,6 +189,6 @@
       timestamp: new Date().toISOString()
     });
   });
-  
+
 })();
 // </script>

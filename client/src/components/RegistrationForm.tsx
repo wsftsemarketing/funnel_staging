@@ -2,12 +2,11 @@ import { useRef, useState } from "react";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { Highlight } from "@/components/ui/highlight";
 import { LockIcon, Calendar } from "lucide-react";
-import { useTrackSection, useMixpanelTracking } from "@/hooks/useMixpanelTracking";
+import { useTrackSection } from "@/hooks/useMixpanelTracking";
 import { mixpanelTracker } from "@/lib/mixpanelTracking";
 
 export default function RegistrationForm() {
   useTrackSection('Registration Form');
-  const { trackFormInteraction, trackConversion } = useMixpanelTracking();
 
   const contentRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
@@ -48,7 +47,7 @@ export default function RegistrationForm() {
                   ref={(el) => {
                     if (el && !el.querySelector('script')) {
                       // Track registration form view
-                      trackFormInteraction('registration_form_viewed', {
+                      mixpanelTracker.trackFormInteraction('registration_form_viewed', {
                         form_type: 'webinarjam_embed',
                         webinar_hash: 'y86q9a7p'
                       });
