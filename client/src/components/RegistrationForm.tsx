@@ -47,10 +47,18 @@ export default function RegistrationForm() {
                   ref={(el) => {
                     if (el && !el.querySelector('script')) {
                       // Track registration form view
-                      mixpanelTracker.trackFormInteraction('registration_form_viewed', {
-                        form_type: 'webinarjam_embed',
-                        webinar_hash: 'y86q9a7p'
-                      });
+                      try {
+                        if (mixpanelTracker && typeof mixpanelTracker.trackFormInteraction === 'function') {
+                          mixpanelTracker.trackFormInteraction('registration_form_viewed', {
+                            form_type: 'webinarjam_embed',
+                            webinar_hash: 'y86q9a7p'
+                          });
+                        } else {
+                          console.warn('mixpanelTracker.trackFormInteraction is not available');
+                        }
+                      } catch (error) {
+                        console.error('Error tracking form interaction:', error);
+                      }
 
                       const script = document.createElement('script');
                       script.src = 'https://event.webinarjam.com/register/y86q9a7p/embed-form?formButtonText=Watch%20Free%20Training%20Now&formAccentColor=%23E3BC31&formAccentOpacity=1&formBgColor=%23E3BC31&formBgOpacity=0.14';
