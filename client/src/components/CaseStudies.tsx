@@ -21,7 +21,7 @@ const caseStudies = [
     roi: null,
     investment: null,
     monthlyIncome: null,
-    quote: "I already felt quite successful. However, I soon realised that there was a vast amount of knowledge I still lacked! Wealth Academy taught me numerous important concepts. The academy provides comprehensive understanding of various aspects of property. Even those who consider themselves seasoned property professionals would greatly benefit from joining.Touchstone Education is a property investment company that exists to inspire people to financial freedom through knowledge.",
+    quote: "I already felt quite successful. However, I soon realised that there was a vast amount of knowledge I still lacked! Wealth Academy taught me numerous important concepts. The academy provides comprehensive understanding of various aspects of property. Even those who consider themselves seasoned property professionals would greatly benefit from joining.",
     story: "Ben Roberts transitioned from a 25-year career with the British Army to become a full-time professional property developer in 2014. Since then, he has gained extensive experience in the field. Despite being a seasoned property developer, he joined Wealth Academy at a critical point in his career. Ben's flagship project, the Old Fire Station in Worcester, is a landmark building that has been meticulously restored. With commercial space on the ground floor and 28 apartments spread across the upper three floors, the completed development is valued at £10 million."
   },
   {
@@ -76,6 +76,11 @@ export default function CaseStudies() {
   
   const [activeCaseStudy, setActiveCaseStudy] = useState(0);
   const trustpilotRef = useRef<HTMLDivElement>(null);
+  
+  // Touch and mouse handling for swipe
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const titleRef = useRef<HTMLDivElement>(null);
   const caseStudiesRef = useRef<HTMLDivElement>(null);
@@ -108,6 +113,65 @@ export default function CaseStudies() {
       case_study_index: newIndex,
       navigation_method: 'previous_button'
     });
+  };
+
+  // Swipe handling
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      nextCaseStudy();
+    } else if (isRightSwipe) {
+      prevCaseStudy();
+    }
+  };
+
+  // Mouse drag handling for desktop
+  const onMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setTouchEnd(null);
+    setTouchStart(e.clientX);
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setTouchEnd(e.clientX);
+  };
+
+  const onMouseUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      nextCaseStudy();
+    } else if (isRightSwipe) {
+      prevCaseStudy();
+    }
+  };
+
+  const onMouseLeave = () => {
+    setIsDragging(false);
   };
 
   const currentCaseStudy = caseStudies[activeCaseStudy];
@@ -164,7 +228,14 @@ export default function CaseStudies() {
             ref={caseStudiesRef}
             className={`relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-700 min-h-[600px] ${
               caseStudiesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
+            } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseLeave}
           >
             <div 
               className="flex transition-transform duration-500 ease-in-out h-full" 
