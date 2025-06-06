@@ -35,6 +35,11 @@ export const useMixpanelTracking = () => {
     mixpanelTracker.trackConversion(conversionType, properties);
   }, []);
 
+  // Track form interactions
+  const trackFormInteraction = useCallback((interactionType: string, properties: TrackingData = {}) => {
+    mixpanelTracker.trackFormInteraction(interactionType, properties);
+  }, []);
+
   // General event tracking
   const track = useCallback((eventName: string, properties: TrackingData = {}) => {
     mixpanelTracker.track(eventName, properties);
@@ -46,7 +51,8 @@ export const useMixpanelTracking = () => {
     trackButtonClick,
     trackFormSubmission,
     trackFunnelStep,
-    trackConversion
+    trackConversion,
+    trackFormInteraction
   };
 };
 

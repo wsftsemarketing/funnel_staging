@@ -3,6 +3,7 @@ import { useIntersectionObserver } from "@/lib/utils/animations";
 import { Highlight } from "@/components/ui/highlight";
 import { LockIcon, Calendar } from "lucide-react";
 import { useTrackSection, useMixpanelTracking } from "@/hooks/useMixpanelTracking";
+import { mixpanelTracker } from "@/lib/mixpanelTracking";
 
 export default function RegistrationForm() {
   useTrackSection('Registration Form');
@@ -51,6 +52,9 @@ export default function RegistrationForm() {
                         form_type: 'webinarjam_embed',
                         webinar_hash: 'y86q9a7p'
                       });
+
+                      // TEMPORARY: Test cross-domain URL generation
+                      console.log('Test tracking URL:', mixpanelTracker.generateCrossDomainUrl('https://app.webinarjam.com/test-page'));
 
                       const script = document.createElement('script');
                       script.src = 'https://event.webinarjam.com/register/y86q9a7p/embed-form?formButtonText=Watch%20Free%20Training%20Now&formAccentColor=%23E3BC31&formAccentOpacity=1&formBgColor=%23E3BC31&formBgOpacity=0.14';
