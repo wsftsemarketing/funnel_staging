@@ -1,13 +1,10 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { Highlight } from "@/components/ui/highlight";
 import { LockIcon, Calendar } from "lucide-react";
-import { useTrackSection } from "@/hooks/useMixpanelTracking";
 import { mixpanelTracker } from "@/lib/mixpanelTracking";
 
 export default function RegistrationForm() {
-  useTrackSection('Registration Form');
-
   const contentRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -46,38 +43,7 @@ export default function RegistrationForm() {
                   data-webinar-hash="y86q9a7p"
                   ref={(el) => {
                     if (el && !el.querySelector('script')) {
-                      // Force correct UTM data storage before WebinarJam script loads
-                      const urlParams = new URLSearchParams(window.location.search);
-                      if (urlParams.get('utm_source') || urlParams.get('utm_medium') || urlParams.get('utm_campaign')) {
-                        const utmData = {
-                          utm_source: urlParams.get('utm_source') || 'direct',
-                          utm_medium: urlParams.get('utm_medium') || 'organic', 
-                          utm_campaign: urlParams.get('utm_campaign') || 'webinar'
-                        };
-                        
-                        localStorage.setItem('utm_params', JSON.stringify(utmData));
-                        localStorage.setItem('mp_source', utmData.utm_source);
-                        localStorage.setItem('mp_medium', utmData.utm_medium);
-                        localStorage.setItem('mp_campaign', utmData.utm_campaign);
-                        
-                        console.log('🎯 Forced UTM data storage for WebinarJam:', utmData);
-                      }
-
-                      // Track registration form view
-                      try {
-                        if (mixpanelTracker && typeof mixpanelTracker.trackFormInteraction === 'function') {
-                          mixpanelTracker.trackFormInteraction('registration_form_viewed', {
-                            form_type: 'webinarjam_embed',
-                            webinar_hash: 'y86q9a7p'
-                          });
-                        } else {
-                          console.warn('mixpanelTracker.trackFormInteraction is not available');
-                        }
-                      } catch (error) {
-                        console.error('Error tracking form interaction:', error);
-                      }
-
-                      // Generate cross-domain tracking URL
+                      // Generate cross-domain tracking URL with UTM data
                       const baseFormUrl = 'https://event.webinarjam.com/register/y86q9a7p/embed-form';
                       const formParams = {
                         formButtonText: 'Watch Free Training Now',
@@ -89,15 +55,23 @@ export default function RegistrationForm() {
                       
                       let finalFormUrl;
                       try {
-                        // Try to generate cross-domain URL with tracking data
-                        if (mixpanelTracker && typeof mixpanelTracker.generateCrossDomainUrl === 'function') {
-                          finalFormUrl = mixpanelTracker.generateCrossDomainUrl(baseFormUrl, formParams);
-                          console.log('✅ Using cross-domain tracking URL:', finalFormUrl);
-                        } else {
-                          const urlParams = new URLSearchParams(formParams);
-                          finalFormUrl = `${baseFormUrl}?${urlParams.toString()}`;
-                          console.warn('⚠️ mixpanelTracker.generateCrossDomainUrl not available, using standard URL');
-                        }
+                        // Generate cross-domain URL with tracking data
+                        finalFormUrl = mixpanelTracker.generateCrossDomainUrl(baseFormUrl, formParams);
+                        console.log('✅ Generated WebinarJam URL with tracking:', finalFormUrl);
+                        
+                        // Set up form submission listener
+                        setTimeout(() => {
+                          const formElement = el.querySelector('form');
+                          if (formElement) {
+                            formElement.addEventListener('submit', () => {
+                              mixpanelTracker.trackRegistrationSubmission({
+                                form_type: 'webinarjam_embed',
+                                webinar_hash: 'y86q9a7p'
+                              });
+                            });
+                          }
+                        }, 2000); // Wait for WebinarJam form to load
+                        
                       } catch (error) {
                         console.error('❌ Error generating cross-domain URL:', error);
                         const urlParams = new URLSearchParams(formParams);
@@ -107,13 +81,12 @@ export default function RegistrationForm() {
                       const script = document.createElement('script');
                       script.src = finalFormUrl;
                       
-                      // Add error handling for script loading
                       script.onload = () => {
-                        console.log('WebinarJam form script loaded successfully');
+                        console.log('✅ WebinarJam form script loaded successfully');
                       };
                       
                       script.onerror = () => {
-                        console.error('Failed to load WebinarJam form script');
+                        console.error('❌ Failed to load WebinarJam form script');
                       };
                       
                       el.appendChild(script);
