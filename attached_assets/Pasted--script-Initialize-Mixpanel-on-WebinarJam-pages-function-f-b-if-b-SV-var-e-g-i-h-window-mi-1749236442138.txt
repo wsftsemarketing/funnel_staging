@@ -1,0 +1,212 @@
+<script>
+// Initialize Mixpanel on WebinarJam pages
+(function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");for(h=0;h<i.length;h++)g(a,i[h]);var j="set set_once union unset remove delete".split(" ");a.get_group=function(){function b(c){d[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));a.push([e,call2])}}for(var d={},e=["get_group"].concat(Array.prototype.slice.call(arguments,0)),c=0;c<j.length;c++)b(j[c]);return d};b._i.push([e,f,c])};b.__SV=1.7}})(document,window.mixpanel||[]);
+
+// Initialize with your token
+mixpanel.init("79f20bfb126b3ffe57192638f36ee883");
+
+// Enhanced cross-domain data retrieval
+function getCrossDomainData() {
+  const urlParams = new URLSearchParams(window.location.search);
+  
+  // Try to get from localStorage first (more reliable)
+  let crossDomainData = null;
+  try {
+    const storedData = localStorage.getItem('mp_cross_domain_data');
+    if (storedData) {
+      crossDomainData = JSON.parse(storedData);
+      console.log('Retrieved cross-domain data from localStorage:', crossDomainData);
+    }
+  } catch (e) {
+    console.warn('Failed to parse cross-domain data from localStorage:', e);
+  }
+  
+  // Fallback to URL parameters if localStorage is empty
+  if (!crossDomainData || crossDomainData.mp_id === 'unknown') {
+    crossDomainData = {
+      mp_id: urlParams.get('mp_id') || 'unknown',
+      mp_session: urlParams.get('mp_session') || 'unknown', 
+      mp_source: urlParams.get('mp_source') || 'direct',
+      mp_medium: urlParams.get('mp_medium') || 'organic',
+      mp_campaign: urlParams.get('mp_campaign') || 'webinar'
+    };
+    console.log('Retrieved cross-domain data from URL params:', crossDomainData);
+  }
+  
+  // Try to get original UTM data from localStorage as well
+  try {
+    const utmData = localStorage.getItem('utm_params');
+    if (utmData) {
+      const parsedUtm = JSON.parse(utmData);
+      console.log('Retrieved original UTM data:', parsedUtm);
+      
+      // Override with original UTM data if available
+      crossDomainData.mp_source = parsedUtm.utm_source || crossDomainData.mp_source;
+      crossDomainData.mp_medium = parsedUtm.utm_medium || crossDomainData.mp_medium;
+      crossDomainData.mp_campaign = parsedUtm.utm_campaign || crossDomainData.mp_campaign;
+      crossDomainData.utm_term = parsedUtm.utm_term;
+      crossDomainData.utm_content = parsedUtm.utm_content;
+      crossDomainData.gclid = parsedUtm.gclid;
+      crossDomainData.fbclid = parsedUtm.fbclid;
+    }
+  } catch (e) {
+    console.warn('Failed to parse UTM data from localStorage:', e);
+  }
+  
+  console.log('WebinarJam Mixpanel tracking initialized with cross-domain data:', crossDomainData);
+  return crossDomainData;
+}
+
+// Get cross-domain tracking data
+const crossDomainData = getCrossDomainData();
+
+// Identify user with original Mixpanel ID if available
+if (crossDomainData.mp_id !== 'unknown') {
+  mixpanel.identify(crossDomainData.mp_id);
+  console.log('Identified user with ID:', crossDomainData.mp_id);
+} else {
+  // Generate a new ID for WebinarJam if none exists
+  const webinarUserId = `wj_user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  mixpanel.identify(webinarUserId);
+  console.log('Generated new WebinarJam user ID:', webinarUserId);
+}
+
+// Register persistent properties
+mixpanel.register({
+  platform: 'webinarjam',
+  webinar_hash: 'y86q9a7p',
+  original_session: crossDomainData.mp_session,
+  utm_source: crossDomainData.mp_source,
+  utm_medium: crossDomainData.mp_medium,
+  utm_campaign: crossDomainData.mp_campaign
+});
+
+// Track WebinarJam page view
+mixpanel.track('Webinar Registration Page Viewed', {
+  page_url: window.location.href,
+  referrer: document.referrer,
+  timestamp: new Date().toISOString(),
+  cross_domain_tracking: {
+    source_domain: 'touchstoneeducation.com',
+    destination_domain: 'webinarjam.com',
+    tracking_method: crossDomainData.mp_id !== 'unknown' ? 'cross_domain_success' : 'new_session'
+  }
+});
+
+// Enhanced form tracking
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('WebinarJam DOM loaded, setting up form tracking...');
+  
+  // Track form submission
+  const forms = document.querySelectorAll('form');
+  console.log('Found forms:', forms.length);
+  
+  forms.forEach((form, index) => {
+    form.addEventListener('submit', function(e) {
+      console.log('Form submitted:', index);
+      
+      // Get form data
+      const formData = new FormData(form);
+      const formFields = {};
+      formData.forEach((value, key) => {
+        formFields[key] = value;
+      });
+      
+      mixpanel.track('Webinar Registration Submitted', {
+        form_index: index,
+        form_fields: formFields,
+        submission_time: new Date().toISOString()
+      });
+      
+      // Track user properties
+      mixpanel.people.set({
+        $name: formFields.name || formFields.first_name || '',
+        $email: formFields.email || '',
+        webinar_registered: true,
+        registration_date: new Date().toISOString(),
+        registration_source: crossDomainData.mp_source
+      });
+    });
+  });
+});
+
+// Track thank you page (add to confirmation page)
+if (window.location.href.includes('thank') || 
+    window.location.href.includes('success') || 
+    window.location.href.includes('confirm')) {
+  mixpanel.track('Webinar Registration Confirmed', {
+    confirmation_page: window.location.href,
+    timestamp: new Date().toISOString()
+  });
+}
+
+// Track webinar room entry (add to live webinar page)
+if (window.location.href.includes('room') || 
+    window.location.href.includes('live') || 
+    window.location.href.includes('webinar')) {
+  
+  mixpanel.track('Webinar Room Entered', {
+    webinar_url: window.location.href,
+    entry_time: new Date().toISOString()
+  });
+  
+  // Track webinar viewing milestones
+  let viewingStartTime = Date.now();
+  let lastMilestone = 0;
+  
+  // Check viewing progress every 30 seconds
+  setInterval(function() {
+    const viewingTimeMinutes = Math.floor((Date.now() - viewingStartTime) / (1000 * 60));
+    const milestones = [5, 10, 15, 30, 45, 60]; // minutes
+    
+    milestones.forEach(milestone => {
+      if (viewingTimeMinutes >= milestone && lastMilestone < milestone) {
+        lastMilestone = milestone;
+        mixpanel.track('Webinar Viewing Milestone', {
+          milestone_minutes: milestone,
+          total_viewing_time: viewingTimeMinutes,
+          timestamp: new Date().toISOString()
+        });
+      }
+    });
+  }, 30000); // Check every 30 seconds
+  
+  // Track when user leaves webinar
+  window.addEventListener('beforeunload', function() {
+    const totalViewingTime = Math.floor((Date.now() - viewingStartTime) / (1000 * 60));
+    mixpanel.track('Webinar Session Ended', {
+      total_viewing_time_minutes: totalViewingTime,
+      exit_time: new Date().toISOString()
+    });
+  });
+}
+
+// Track CTA clicks in webinar
+document.addEventListener('click', function(e) {
+  const element = e.target;
+  
+  // Track button clicks
+  if (element.tagName === 'BUTTON' || element.tagName === 'A' || element.classList.contains('cta')) {
+    const buttonText = element.textContent || element.value || 'Unknown Button';
+    
+    mixpanel.track('Webinar CTA Clicked', {
+      button_text: buttonText,
+      button_location: getElementLocation(element),
+      page_url: window.location.href,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Helper function to determine button location
+function getElementLocation(element) {
+  if (element.closest('.header')) return 'header';
+  if (element.closest('.footer')) return 'footer';
+  if (element.closest('.sidebar')) return 'sidebar';
+  if (element.closest('.chat')) return 'chat';
+  if (element.closest('.offer')) return 'offer';
+  return 'content';
+}
+
+console.log('WebinarJam Mixpanel tracking script loaded successfully');
+</script>

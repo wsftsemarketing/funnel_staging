@@ -436,9 +436,13 @@ class MixpanelTracker {
 
   // Cross-domain tracking helper - stores data in localStorage for WebinarJam
   public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
+    console.log('🔍 generateCrossDomainUrl() called with baseUrl:', baseUrl);
+    
     const mixpanelId = localStorage.getItem('mixpanel_user_id') || 'unknown';
     const utmParams = localStorage.getItem('utm_params') || '{}';
     const utmData = JSON.parse(utmParams);
+
+    console.log('📊 Retrieved tracking data:', { mixpanelId, utmData });
 
     // Store cross-domain tracking data in localStorage for WebinarJam to pick up
     const crossDomainData = {
@@ -450,6 +454,8 @@ class MixpanelTracker {
       mp_timestamp: Date.now(),
       ...additionalParams
     };
+
+    console.log('🔗 Generated cross-domain data:', crossDomainData);
 
     // Store in localStorage (primary method)
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
@@ -465,7 +471,10 @@ class MixpanelTracker {
 
     // Also add as URL params as fallback
     const trackingParams = new URLSearchParams(crossDomainData);
-    return `${baseUrl}?${trackingParams.toString()}`;
+    const finalUrl = `${baseUrl}?${trackingParams.toString()}`;
+    
+    console.log('✅ Final cross-domain URL generated:', finalUrl);
+    return finalUrl;
   }
 
   // Get cross-domain tracking data
