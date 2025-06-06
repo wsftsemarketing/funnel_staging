@@ -478,6 +478,8 @@ class MixpanelTracker {
   public trackFormInteraction(interactionType: string, properties: TrackingData = {}): void {
     this.track('Form Interaction', {
       interaction_type: interactionType,
+      time_on_page: this.getTimeOnPage(),
+      session_id: this.sessionId,
       ...properties
     });
   }
