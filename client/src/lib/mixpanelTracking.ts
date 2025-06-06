@@ -438,5 +438,42 @@ class MixpanelTracker {
 // Create global instance
 export const mixpanelTracker = new MixpanelTracker();
 
+// Cross-domain tracking helper
+  public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
+    const mixpanelId = localStorage.getItem('mixpanel_user_id') || 'unknown';
+    const utmParams = localStorage.getItem('utm_params') || '{}';
+    const utmData = JSON.parse(utmParams);
+    
+    const trackingParams = new URLSearchParams({
+      mp_id: mixpanelId,
+      mp_session: this.sessionId,
+      mp_source: utmData.utm_source || 'direct',
+      mp_medium: utmData.utm_medium || 'organic',
+      mp_campaign: utmData.utm_campaign || 'webinar',
+      ...additionalParams
+    });
+    
+    return `${baseUrl}?${trackingParams.toString()}`;
+  }
+
+  // Get cross-domain tracking data
+  public getCrossDomainData(): Record<string, string> {
+    const mixpanelId = localStorage.getItem('mixpanel_user_id') || 'unknown';
+    const utmParams = localStorage.getItem('utm_params') || '{}';
+    const utmData = JSON.parse(utmParams);
+    
+    return {
+      mp_id: mixpanelId,
+      mp_session: this.sessionId,
+      mp_source: utmData.utm_source || 'direct',
+      mp_medium: utmData.utm_medium || 'organic',
+      mp_campaign: utmData.utm_campaign || 'webinar'
+    };
+  }
+}
+
+// Create global instance
+export const mixpanelTracker = new MixpanelTracker();
+
 // Export for use in components
 export default mixpanelTracker;
