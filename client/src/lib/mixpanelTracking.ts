@@ -291,6 +291,71 @@ class MixpanelTracker {
 // Create global instance
 export const mixpanelTracker = new MixpanelTracker();
 
+// Generate confirmation page tracking snippet
+export const generateConfirmationPageScript = (): string => {
+  return `
+    <script>
+    (function() {
+      console.log('[WebinarJam Confirmation] Initializing tracking...');
+      
+      // Get cross-domain data from localStorage or URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      const storedData = localStorage.getItem('mp_cross_domain_data');
+      
+      let trackingData = {};
+      if (storedData) {
+        try {
+          trackingData = JSON.parse(storedData);
+        } catch (e) {
+          console.warn('[WebinarJam Confirmation] Failed to parse stored tracking data');
+        }
+      }
+      
+      // Override with URL params if available
+      ['mp_id', 'mp_session', 'mp_source', 'mp_medium', 'mp_campaign'].forEach(param => {
+        const value = urlParams.get(param);
+        if (value) trackingData[param] = value;
+      });
+      
+      // Load Mixpanel first, then track
+      const script = document.createElement('script');
+      script.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
+      script.onload = function() {
+        // Initialize Mixpanel
+        if (typeof mixpanel !== 'undefined') {
+          mixpanel.init('${MIXPANEL_TOKEN}', {
+            debug: false,
+            track_pageview: false,
+            persistence: 'localStorage'
+          });
+          
+          // Track confirmation page view
+          mixpanel.track('Confirmation Page Viewed', {
+            step_name: 'Confirmation Page Viewed',
+            step_order: 3,
+            funnel_type: 'webinar_registration',
+            page_type: 'confirmation',
+            page_url: window.location.href,
+            session_id: trackingData.mp_session || 'unknown',
+            user_id: trackingData.mp_id || 'unknown',
+            utm_source: trackingData.mp_source || 'direct',
+            utm_medium: trackingData.mp_medium || 'organic',
+            utm_campaign: trackingData.mp_campaign || 'webinar',
+            timestamp: new Date().toISOString()
+          });
+          
+          console.log('[WebinarJam Confirmation] Confirmation page view tracked');
+        }
+      };
+      script.onerror = function() {
+        console.error('[WebinarJam Confirmation] Failed to load Mixpanel script');
+      };
+      document.head.appendChild(script);
+    })();
+    </script>
+  `;
+};
+
 // WebinarJam script for live page tracking
 export const generateWebinarJamScript = (): string => {
   return `
