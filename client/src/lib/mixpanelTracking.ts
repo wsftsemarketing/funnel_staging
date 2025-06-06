@@ -24,15 +24,17 @@ if (shouldTrack) {
     secure_cookie: true,
     ip: true,
     autocapture: {
-      pageview: "current_url_path", // assuming this is just for commercial 
+      pageview: "current_url_path", // assuming this is just for commercial
       click: true, // click tracking enabled
       input: true,
       scroll: true,
       submit: true,
-      capture_text_content: false,
+      capture_text_content: true,
+      record_mask_text_selector: "", //unmask all text elements
+      record_block_selector: "", //unmask images and videos
     },
     record_sessions_percent: 25, // Session Replay enabled, recording 25% of all sessions
-    record_heatmap_data: true   // Enable Heatmap data collection
+    record_heatmap_data: true, // Enable Heatmap data collection
   });
 } else {
   console.log(
