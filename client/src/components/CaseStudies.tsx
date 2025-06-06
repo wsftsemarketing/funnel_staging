@@ -77,9 +77,10 @@ export default function CaseStudies() {
   const [activeCaseStudy, setActiveCaseStudy] = useState(0);
   const trustpilotRef = useRef<HTMLDivElement>(null);
   
-  // Touch handling for swipe
+  // Touch and mouse handling for swipe
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const titleRef = useRef<HTMLDivElement>(null);
   const caseStudiesRef = useRef<HTMLDivElement>(null);
@@ -140,6 +141,39 @@ export default function CaseStudies() {
     }
   };
 
+  // Mouse drag handling for desktop
+  const onMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setTouchEnd(null);
+    setTouchStart(e.clientX);
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setTouchEnd(e.clientX);
+  };
+
+  const onMouseUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      nextCaseStudy();
+    } else if (isRightSwipe) {
+      prevCaseStudy();
+    }
+  };
+
+  const onMouseLeave = () => {
+    setIsDragging(false);
+  };
+
   const currentCaseStudy = caseStudies[activeCaseStudy];
   const showStats = !!(currentCaseStudy.roi || currentCaseStudy.investment || currentCaseStudy.monthlyIncome);
   const showQuote = !!currentCaseStudy.quote;
@@ -194,10 +228,14 @@ export default function CaseStudies() {
             ref={caseStudiesRef}
             className={`relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-700 min-h-[600px] ${
               caseStudiesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
+            } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseLeave}
           >
             <div 
               className="flex transition-transform duration-500 ease-in-out h-full" 
