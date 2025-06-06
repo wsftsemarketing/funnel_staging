@@ -22,7 +22,17 @@ if (shouldTrack) {
     save_referrer: true,
     cross_subdomain_cookie: false,
     secure_cookie: true,
-    ip: false,
+    ip: true,
+    autocapture: {
+      pageview: "current_url_path", // assuming this is just for commercial 
+      click: true, // click tracking enabled
+      input: true,
+      scroll: true,
+      submit: true,
+      capture_text_content: false,
+    },
+    record_sessions_percent: 25, // Session Replay enabled, recording 25% of all sessions
+    record_heatmap_data: true   // Enable Heatmap data collection
   });
 } else {
   console.log(
