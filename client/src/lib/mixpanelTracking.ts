@@ -454,6 +454,15 @@ class MixpanelTracker {
     // Store in localStorage (primary method)
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
 
+    // Track the redirect to WebinarJam
+    this.track('Webinar Redirect', {
+      destination: 'webinarjam',
+      destination_url: baseUrl,
+      mp_id: mixpanelId,
+      cross_domain_data: crossDomainData,
+      redirect_source: 'registration_form'
+    });
+
     // Also add as URL params as fallback
     const trackingParams = new URLSearchParams(crossDomainData);
     return `${baseUrl}?${trackingParams.toString()}`;
