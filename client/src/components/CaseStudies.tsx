@@ -76,6 +76,10 @@ export default function CaseStudies() {
   
   const [activeCaseStudy, setActiveCaseStudy] = useState(0);
   const trustpilotRef = useRef<HTMLDivElement>(null);
+  
+  // Touch handling for swipe
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const titleRef = useRef<HTMLDivElement>(null);
   const caseStudiesRef = useRef<HTMLDivElement>(null);
@@ -108,6 +112,32 @@ export default function CaseStudies() {
       case_study_index: newIndex,
       navigation_method: 'previous_button'
     });
+  };
+
+  // Swipe handling
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      nextCaseStudy();
+    } else if (isRightSwipe) {
+      prevCaseStudy();
+    }
   };
 
   const currentCaseStudy = caseStudies[activeCaseStudy];
@@ -165,6 +195,9 @@ export default function CaseStudies() {
             className={`relative overflow-hidden rounded-xl shadow-lg transform transition-all duration-700 min-h-[600px] ${
               caseStudiesInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
           >
             <div 
               className="flex transition-transform duration-500 ease-in-out h-full" 
