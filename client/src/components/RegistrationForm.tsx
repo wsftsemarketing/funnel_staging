@@ -46,6 +46,23 @@ export default function RegistrationForm() {
                   data-webinar-hash="y86q9a7p"
                   ref={(el) => {
                     if (el && !el.querySelector('script')) {
+                      // Force correct UTM data storage before WebinarJam script loads
+                      const urlParams = new URLSearchParams(window.location.search);
+                      if (urlParams.get('utm_source') || urlParams.get('utm_medium') || urlParams.get('utm_campaign')) {
+                        const utmData = {
+                          utm_source: urlParams.get('utm_source') || 'direct',
+                          utm_medium: urlParams.get('utm_medium') || 'organic', 
+                          utm_campaign: urlParams.get('utm_campaign') || 'webinar'
+                        };
+                        
+                        localStorage.setItem('utm_params', JSON.stringify(utmData));
+                        localStorage.setItem('mp_source', utmData.utm_source);
+                        localStorage.setItem('mp_medium', utmData.utm_medium);
+                        localStorage.setItem('mp_campaign', utmData.utm_campaign);
+                        
+                        console.log('🎯 Forced UTM data storage for WebinarJam:', utmData);
+                      }
+
                       // Track registration form view
                       try {
                         if (mixpanelTracker && typeof mixpanelTracker.trackFormInteraction === 'function') {
