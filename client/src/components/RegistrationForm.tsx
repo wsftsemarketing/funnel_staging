@@ -52,9 +52,6 @@ export default function RegistrationForm() {
                         webinar_hash: 'y86q9a7p'
                       });
 
-                      // TEMPORARY: Test cross-domain URL generation
-                      console.log('Test tracking URL:', mixpanelTracker.generateCrossDomainUrl('https://app.webinarjam.com/test-page'));
-
                       const script = document.createElement('script');
                       script.src = 'https://event.webinarjam.com/register/y86q9a7p/embed-form?formButtonText=Watch%20Free%20Training%20Now&formAccentColor=%23E3BC31&formAccentOpacity=1&formBgColor=%23E3BC31&formBgOpacity=0.14';
                       
