@@ -226,6 +226,12 @@ class MixpanelTracker {
   public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
     console.log('🔍 Generating cross-domain URL for:', baseUrl);
 
+    // Ensure userId is available
+    if (!this.userId) {
+      this.userId = localStorage.getItem("mixpanel_user_id") || `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem("mixpanel_user_id", this.userId);
+    }
+
     const crossDomainData = {
       mp_id: this.userId,
       mp_session: this.sessionId,
