@@ -232,15 +232,50 @@ class MixpanelTracker {
       localStorage.setItem("mixpanel_user_id", this.userId);
     }
 
+    // Re-check for fresh UTM parameters from current URL
+    const currentUrlParams = new URLSearchParams(window.location.search);
+    const freshUtmData: UTMData = {};
+    
+    const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id", "gclid", "fbclid", "tag", "hyros_tag"];
+    utmKeys.forEach((key) => {
+      const value = currentUrlParams.get(key);
+      if (value) {
+        freshUtmData[key] = value;
+        this.utmData[key] = value; // Update instance data
+      }
+    });
+
+    // Update localStorage with fresh UTM data if found
+    if (Object.keys(freshUtmData).length > 0) {
+      const updatedUtmData = { ...this.utmData, ...freshUtmData };
+      localStorage.setItem("utm_params", JSON.stringify(updatedUtmData));
+      this.utmData = updatedUtmData;
+      console.log('🔄 Updated UTM data with fresh parameters:', updatedUtmData);
+    }
+
     const crossDomainData = {
       mp_id: this.userId,
       mp_session: this.sessionId,
       mp_source: this.utmData.utm_source || 'direct',
-      mp_medium: this.utmData.utm_medium || 'organic',
+      mp_medium: this.utmData.utm_medium || 'organic', 
       mp_campaign: this.utmData.utm_campaign || 'webinar',
+      mp_term: this.utmData.utm_term,
+      mp_content: this.utmData.utm_content,
+      mp_utm_id: this.utmData.utm_id,
+      mp_gclid: this.utmData.gclid,
+      mp_fbclid: this.utmData.fbclid,
+      mp_tag: this.utmData.tag,
+      mp_hyros_tag: this.utmData.hyros_tag,
       mp_timestamp: Date.now(),
       ...additionalParams
     };
+
+    // Clean undefined values
+    Object.keys(crossDomainData).forEach(key => {
+      if (crossDomainData[key] === undefined) {
+        delete crossDomainData[key];
+      }
+    });
 
     console.log('🔗 Cross-domain data:', crossDomainData);
 
@@ -257,7 +292,9 @@ class MixpanelTracker {
     // Generate URL with tracking parameters
     const trackingParams = new URLSearchParams();
     Object.entries(crossDomainData).forEach(([key, value]) => {
-      trackingParams.append(key, String(value));
+      if (value !== undefined && value !== null) {
+        trackingParams.append(key, String(value));
+      }
     });
 
     const finalUrl = `${baseUrl}?${trackingParams.toString()}`;
@@ -312,7 +349,7 @@ export const generateConfirmationPageScript = (): string => {
       }
       
       // Override with URL params if available
-      ['mp_id', 'mp_session', 'mp_source', 'mp_medium', 'mp_campaign'].forEach(param => {
+      ['mp_id', 'mp_session', 'mp_source', 'mp_medium', 'mp_campaign', 'mp_term', 'mp_content', 'mp_utm_id', 'mp_gclid', 'mp_fbclid', 'mp_tag', 'mp_hyros_tag'].forEach(param => {
         const value = urlParams.get(param);
         if (value) trackingData[param] = value;
       });
@@ -341,6 +378,13 @@ export const generateConfirmationPageScript = (): string => {
             utm_source: trackingData.mp_source || 'direct',
             utm_medium: trackingData.mp_medium || 'organic',
             utm_campaign: trackingData.mp_campaign || 'webinar',
+            utm_term: trackingData.mp_term,
+            utm_content: trackingData.mp_content,
+            utm_id: trackingData.mp_utm_id,
+            gclid: trackingData.mp_gclid,
+            fbclid: trackingData.mp_fbclid,
+            tag: trackingData.mp_tag,
+            hyros_tag: trackingData.mp_hyros_tag,
             timestamp: new Date().toISOString()
           });
           
@@ -381,7 +425,7 @@ export const generateWebinarJamScript = (): string => {
         }
         
         // Override with URL params if available
-        ['mp_id', 'mp_session', 'mp_source', 'mp_medium', 'mp_campaign'].forEach(param => {
+        ['mp_id', 'mp_session', 'mp_source', 'mp_medium', 'mp_campaign', 'mp_term', 'mp_content', 'mp_utm_id', 'mp_gclid', 'mp_fbclid', 'mp_tag', 'mp_hyros_tag'].forEach(param => {
           const value = urlParams.get(param);
           if (value) trackingData[param] = value;
         });
@@ -408,6 +452,13 @@ export const generateWebinarJamScript = (): string => {
               utm_source: trackingData.mp_source || 'direct',
               utm_medium: trackingData.mp_medium || 'organic',
               utm_campaign: trackingData.mp_campaign || 'webinar',
+              utm_term: trackingData.mp_term,
+              utm_content: trackingData.mp_content,
+              utm_id: trackingData.mp_utm_id,
+              gclid: trackingData.mp_gclid,
+              fbclid: trackingData.mp_fbclid,
+              tag: trackingData.mp_tag,
+              hyros_tag: trackingData.mp_hyros_tag,
               timestamp: new Date().toISOString()
             });
             
