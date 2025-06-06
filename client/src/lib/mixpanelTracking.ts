@@ -235,7 +235,7 @@ class MixpanelTracker {
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         this.track("Tab Hidden", {
-          time_on_page: this.GetTimeOnPage(),
+          time_on_page: this.getTimeOnPage(),
           max_scroll_depth: this.maxScrollDepth,
           session_id: this.sessionId,
         });

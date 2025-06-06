@@ -158,7 +158,7 @@
   }, 30000); // Every 30 seconds
 
   // Track when user becomes inactive/active
-  if (document) {
+  if (typeof document !== 'undefined' && document) {
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         isActive = false;
@@ -181,7 +181,7 @@
   }
 
   // Track when user leaves webinar
-  if (window) {
+  if (typeof window !== 'undefined' && window) {
     window.addEventListener('beforeunload', function() {
       mixpanel.track('Webinar Room Exited', {
         mp_id: mpId,
