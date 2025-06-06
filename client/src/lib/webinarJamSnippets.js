@@ -158,37 +158,41 @@
   }, 30000); // Every 30 seconds
 
   // Track when user becomes inactive/active
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-      isActive = false;
-      mixpanel.track('Webinar Tab Hidden', {
-        mp_id: mpId,
-        session_id: mpSession,
-        watch_time_seconds: totalWatchTime,
-        platform: 'webinarjam'
-      });
-    } else {
-      isActive = true;
-      mixpanel.track('Webinar Tab Visible', {
-        mp_id: mpId,
-        session_id: mpSession,
-        watch_time_seconds: totalWatchTime,
-        platform: 'webinarjam'
-      });
-    }
-  });
+  if (document) {
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        isActive = false;
+        mixpanel.track('Webinar Tab Hidden', {
+          mp_id: mpId,
+          session_id: mpSession,
+          watch_time_seconds: totalWatchTime,
+          platform: 'webinarjam'
+        });
+      } else {
+        isActive = true;
+        mixpanel.track('Webinar Tab Visible', {
+          mp_id: mpId,
+          session_id: mpSession,
+          watch_time_seconds: totalWatchTime,
+          platform: 'webinarjam'
+        });
+      }
+    });
+  }
 
   // Track when user leaves webinar
-  window.addEventListener('beforeunload', function() {
-    mixpanel.track('Webinar Room Exited', {
-      mp_id: mpId,
-      session_id: mpSession,
-      total_watch_time: totalWatchTime,
-      watch_percentage: Math.round((totalWatchTime / 5400) * 100),
-      platform: 'webinarjam',
-      timestamp: new Date().toISOString()
+  if (window) {
+    window.addEventListener('beforeunload', function() {
+      mixpanel.track('Webinar Room Exited', {
+        mp_id: mpId,
+        session_id: mpSession,
+        total_watch_time: totalWatchTime,
+        watch_percentage: Math.round((totalWatchTime / 5400) * 100),
+        platform: 'webinarjam',
+        timestamp: new Date().toISOString()
+      });
     });
-  });
+  }
 
 })();
 // </script>

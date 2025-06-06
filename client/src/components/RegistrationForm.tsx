@@ -57,6 +57,16 @@ export default function RegistrationForm() {
 
                       const script = document.createElement('script');
                       script.src = 'https://event.webinarjam.com/register/y86q9a7p/embed-form?formButtonText=Watch%20Free%20Training%20Now&formAccentColor=%23E3BC31&formAccentOpacity=1&formBgColor=%23E3BC31&formBgOpacity=0.14';
+                      
+                      // Add error handling for script loading
+                      script.onload = () => {
+                        console.log('WebinarJam form script loaded successfully');
+                      };
+                      
+                      script.onerror = () => {
+                        console.error('Failed to load WebinarJam form script');
+                      };
+                      
                       el.appendChild(script);
                     }
                   }}

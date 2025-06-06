@@ -235,7 +235,7 @@ class MixpanelTracker {
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         this.track("Tab Hidden", {
-          time_on_page: this.getTimeOnPage(),
+          time_on_page: this.GetTimeOnPage(),
           max_scroll_depth: this.maxScrollDepth,
           session_id: this.sessionId,
         });
@@ -453,7 +453,7 @@ class MixpanelTracker {
 
     // Store in localStorage (primary method)
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
-    
+
     // Also add as URL params as fallback
     const trackingParams = new URLSearchParams(crossDomainData);
     return `${baseUrl}?${trackingParams.toString()}`;
