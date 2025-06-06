@@ -112,9 +112,37 @@ class MixpanelTracker {
       }
     });
 
+    console.log('🔍 UTM parameters captured from URL:', utmData);
+
     if (Object.keys(utmData).length > 0) {
       localStorage.setItem("utm_params", JSON.stringify(utmData));
-      mixpanel.register(utmData);
+      
+      // Store individual UTM params for easier access
+      if (utmData.utm_source) localStorage.setItem('utm_source', utmData.utm_source);
+      if (utmData.utm_medium) localStorage.setItem('utm_medium', utmData.utm_medium);
+      if (utmData.utm_campaign) localStorage.setItem('utm_campaign', utmData.utm_campaign);
+      
+      if (shouldTrack) {
+        mixpanel.register(utmData);
+      }
+      
+      console.log('✅ UTM parameters stored in localStorage');
+    } else {
+      // Check if we have existing UTM data from previous visits
+      const existingUTM = localStorage.getItem('utm_params');
+      if (existingUTM) {
+        try {
+          const parsedUTM = JSON.parse(existingUTM);
+          console.log('📦 Using existing UTM parameters:', parsedUTM);
+          if (shouldTrack) {
+            mixpanel.register(parsedUTM);
+          }
+        } catch (e) {
+          console.warn('Failed to parse existing UTM params:', e);
+        }
+      } else {
+        console.log('ℹ️ No UTM parameters found in URL or localStorage');
+      }
     }
   }
 
@@ -482,8 +510,15 @@ class MixpanelTracker {
 
     console.log('🔗 Generated cross-domain data:', crossDomainData);
 
-    // Store in localStorage (primary method)
+    // Store in localStorage (primary method) - ensure consistent storage
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
+    
+    // Store individual values for easier access by WebinarJam script
+    localStorage.setItem('mp_id', mixpanelId);
+    localStorage.setItem('mp_session', sessionId);
+    localStorage.setItem('mp_source', utmData.utm_source || 'direct');
+    localStorage.setItem('mp_medium', utmData.utm_medium || 'organic');
+    localStorage.setItem('mp_campaign', utmData.utm_campaign || 'webinar');
 
     // Also store session mapping for continuity
     localStorage.setItem('mp_session_continuity', JSON.stringify({
@@ -492,6 +527,9 @@ class MixpanelTracker {
       created_at: Date.now(),
       source_domain: window.location.hostname
     }));
+
+    // Store individual session ID for easy access
+    localStorage.setItem('mp_current_session', sessionId);
 
     // Track the redirect to WebinarJam (only if tracking is enabled)
     if (shouldTrack) {
@@ -543,6 +581,10 @@ class MixpanelTracker {
       console.warn('Failed to parse UTM params:', e);
       utmData = {};
     }
+
+    console.log('🔍 getCrossDomainData() - Current UTM data:', utmData);
+    console.log('🔍 getCrossDomainData() - User ID:', mixpanelId);
+    console.log('🔍 getCrossDomainData() - Session ID:', this.sessionId);
 
     return {
       mp_id: mixpanelId,
