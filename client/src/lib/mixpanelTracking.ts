@@ -433,17 +433,13 @@ class MixpanelTracker {
       ...properties,
     });
   }
-}
 
-// Create global instance
-export const mixpanelTracker = new MixpanelTracker();
-
-// Cross-domain tracking helper
+  // Cross-domain tracking helper
   public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
     const mixpanelId = localStorage.getItem('mixpanel_user_id') || 'unknown';
     const utmParams = localStorage.getItem('utm_params') || '{}';
     const utmData = JSON.parse(utmParams);
-    
+
     const trackingParams = new URLSearchParams({
       mp_id: mixpanelId,
       mp_session: this.sessionId,
@@ -452,7 +448,7 @@ export const mixpanelTracker = new MixpanelTracker();
       mp_campaign: utmData.utm_campaign || 'webinar',
       ...additionalParams
     });
-    
+
     return `${baseUrl}?${trackingParams.toString()}`;
   }
 
@@ -461,7 +457,7 @@ export const mixpanelTracker = new MixpanelTracker();
     const mixpanelId = localStorage.getItem('mixpanel_user_id') || 'unknown';
     const utmParams = localStorage.getItem('utm_params') || '{}';
     const utmData = JSON.parse(utmParams);
-    
+
     return {
       mp_id: mixpanelId,
       mp_session: this.sessionId,
@@ -469,6 +465,14 @@ export const mixpanelTracker = new MixpanelTracker();
       mp_medium: utmData.utm_medium || 'organic',
       mp_campaign: utmData.utm_campaign || 'webinar'
     };
+  }
+
+  // Track form interactions
+  public trackFormInteraction(interactionType: string, properties: TrackingData = {}): void {
+    this.track('Form Interaction', {
+      interaction_type: interactionType,
+      ...properties
+    });
   }
 }
 

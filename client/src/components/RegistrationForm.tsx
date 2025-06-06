@@ -46,6 +46,12 @@ export default function RegistrationForm() {
                   data-webinar-hash="y86q9a7p"
                   ref={(el) => {
                     if (el && !el.querySelector('script')) {
+                      // Track registration form view
+                      trackFormInteraction('registration_form_viewed', {
+                        form_type: 'webinarjam_embed',
+                        webinar_hash: 'y86q9a7p'
+                      });
+
                       const script = document.createElement('script');
                       script.src = 'https://event.webinarjam.com/register/y86q9a7p/embed-form?formButtonText=Watch%20Free%20Training%20Now&formAccentColor=%23E3BC31&formAccentOpacity=1&formBgColor=%23E3BC31&formBgOpacity=0.14';
                       el.appendChild(script);
