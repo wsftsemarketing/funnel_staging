@@ -30,7 +30,7 @@ if (shouldTrack) {
       scroll: true,
       submit: true,
       capture_text_content: true,
-      record_mask_text_selector: ":password, [type='password'], [type='email']", // Mask password and email fields only
+      record_mask_text_selector: ":password, [type='password'], [type='email'], [name*='phone'], [name*='mobile'], [name*='firstname'], [name*='lastname'], [name*='name'], [name*='company']", // Mask sensitive form fields
       record_block_selector: "", // Unmask images and videos
       record_idle_timeout_ms: 600000, // 10 minutes of inactivity before stopping recording
     },
