@@ -1,0 +1,40 @@
+[WebinarJam Tracker] Initializing...
+VM38:1 Uncaught TypeError: Cannot read properties of undefined (reading 'events')
+    at <anonymous>:1:20
+    at gtm.js?id=GTM-NVW2ZG9:887:429
+    at cO (gtm.js?id=GTM-NVW2ZG9:889:31)
+    at id.bO (gtm.js?id=GTM-NVW2ZG9:886:174)
+    at id.<anonymous> (gtm.js?id=GTM-NVW2ZG9:341:187)
+    at ba.invoke (gtm.js?id=GTM-NVW2ZG9:244:367)
+    at Ma (gtm.js?id=GTM-NVW2ZG9:210:927)
+    at La (gtm.js?id=GTM-NVW2ZG9:210:683)
+    at id.<anonymous> (gtm.js?id=GTM-NVW2ZG9:268:466)
+    at ba.invoke (gtm.js?id=GTM-NVW2ZG9:244:367)Understand this error
+VM53:1 Uncaught TypeError: Cannot read properties of null (reading 'addEventListener')
+    at <anonymous>:1:51
+    at gtm.js?id=GTM-NVW2ZG9:887:429
+    at cO (gtm.js?id=GTM-NVW2ZG9:889:31)
+    at id.bO (gtm.js?id=GTM-NVW2ZG9:886:174)
+    at id.<anonymous> (gtm.js?id=GTM-NVW2ZG9:341:187)
+    at ba.invoke (gtm.js?id=GTM-NVW2ZG9:244:367)
+    at Ma (gtm.js?id=GTM-NVW2ZG9:210:927)
+    at La (gtm.js?id=GTM-NVW2ZG9:210:683)
+    at id.<anonymous> (gtm.js?id=GTM-NVW2ZG9:268:466)
+    at ba.invoke (gtm.js?id=GTM-NVW2ZG9:244:367)Understand this error
+prvo3bm9t1947a3k54hz70z:538 [WebinarJam Tracker] Starting initialization...
+prvo3bm9t1947a3k54hz70z:538 [WebinarJam Tracker] Loading Mixpanel library...
+mixpanel-2-latest.min.js:30 Mixpanel error: "mixpanel" object not initialized. Ensure you are using the latest version of the Mixpanel JS Library along with the snippet we provide.
+s @ mixpanel-2-latest.min.js:30Understand this error
+prvo3bm9t1947a3k54hz70z:538 [WebinarJam Tracker] Mixpanel script loaded
+fbevents.js:142 [Meta Pixel] - Duplicate Pixel ID: 797192064450206.
+t @ fbevents.js:142Understand this warning
+fbevents.js:142 [Meta Pixel] - You are sending a non-standard event 'CPB - Reg Webinar'. The preferred way to send these events is using trackCustom. See 'https://developers.facebook.com/docs/ads-for-websites/pixel-events/#events' for more information.
+t @ fbevents.js:142Understand this warning
+fbevents.js:142 [Meta Pixel] - You are sending a non-standard event 'COM - Reg Webinar'. The preferred way to send these events is using trackCustom. See 'https://developers.facebook.com/docs/ads-for-websites/pixel-events/#events' for more information.
+t @ fbevents.js:142Understand this warning
+proof.js?acc=hb7cIYJ582MCENDlbg3clVOowNh2:1 Proof v3.1.13
+prvo3bm9t1947a3k54hz70z:536 [WebinarJam Tracker] Failed to initialize Mixpanel: Error: Mixpanel object not available after script load
+    at prvo3bm9t1947a3k54hz70z:756:21
+prvo3bm9t1947a3k54hz70z:536 [WebinarJam Tracker] Failed to load Mixpanel: Error: Mixpanel object not available after script load
+    at prvo3bm9t1947a3k54hz70z:756:21
+prvo3bm9t1947a3k54hz70z:538 [WebinarJam Tracker] Mixpanel not available, tracking disabled

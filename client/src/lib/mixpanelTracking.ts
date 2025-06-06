@@ -446,10 +446,11 @@ class MixpanelTracker {
       console.log('🆔 Generated new user ID for dev environment:', mixpanelId);
     }
 
-    // Ensure we have a session ID
+    // Ensure we have a session ID - this is crucial for maintaining tracking continuity
     let sessionId = this.sessionId;
     if (!sessionId || sessionId === 'unknown') {
       sessionId = `dev_session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      this.sessionId = sessionId; // Update instance session ID
       console.log('🆔 Generated new session ID for dev environment:', sessionId);
     }
 
@@ -467,13 +468,15 @@ class MixpanelTracker {
     // Store cross-domain tracking data in localStorage for WebinarJam to pick up
     const crossDomainData = {
       mp_id: mixpanelId,
-      mp_session: sessionId,
+      mp_session: sessionId, // Session ID is critical for tracking continuity
       mp_source: utmData.utm_source || 'direct',
       mp_medium: utmData.utm_medium || 'organic',
       mp_campaign: utmData.utm_campaign || 'webinar',
       mp_timestamp: Date.now(),
       mp_domain: window.location.hostname,
       mp_dev_mode: !shouldTrack,
+      mp_page_title: document.title,
+      mp_referrer: document.referrer,
       ...additionalParams
     };
 
@@ -482,12 +485,21 @@ class MixpanelTracker {
     // Store in localStorage (primary method)
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
 
+    // Also store session mapping for continuity
+    localStorage.setItem('mp_session_continuity', JSON.stringify({
+      session_id: sessionId,
+      user_id: mixpanelId,
+      created_at: Date.now(),
+      source_domain: window.location.hostname
+    }));
+
     // Track the redirect to WebinarJam (only if tracking is enabled)
     if (shouldTrack) {
       this.track('Webinar Redirect', {
         destination: 'webinarjam',
         destination_url: baseUrl,
         mp_id: mixpanelId,
+        session_id: sessionId,
         cross_domain_data: crossDomainData,
         redirect_source: 'registration_form'
       });
@@ -496,6 +508,7 @@ class MixpanelTracker {
         destination: 'webinarjam',
         destination_url: baseUrl,
         mp_id: mixpanelId,
+        session_id: sessionId,
         cross_domain_data: crossDomainData,
         redirect_source: 'registration_form'
       });
