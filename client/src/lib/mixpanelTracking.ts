@@ -438,20 +438,42 @@ class MixpanelTracker {
   public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
     console.log('🔍 generateCrossDomainUrl() called with baseUrl:', baseUrl);
     
-    const mixpanelId = localStorage.getItem('mixpanel_user_id') || 'unknown';
-    const utmParams = localStorage.getItem('utm_params') || '{}';
-    const utmData = JSON.parse(utmParams);
+    // Ensure we have a user ID even on development domains
+    let mixpanelId = localStorage.getItem('mixpanel_user_id');
+    if (!mixpanelId || mixpanelId === 'unknown') {
+      mixpanelId = `dev_user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('mixpanel_user_id', mixpanelId);
+      console.log('🆔 Generated new user ID for dev environment:', mixpanelId);
+    }
 
-    console.log('📊 Retrieved tracking data:', { mixpanelId, utmData });
+    // Ensure we have a session ID
+    let sessionId = this.sessionId;
+    if (!sessionId || sessionId === 'unknown') {
+      sessionId = `dev_session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      console.log('🆔 Generated new session ID for dev environment:', sessionId);
+    }
+
+    const utmParams = localStorage.getItem('utm_params') || '{}';
+    let utmData = {};
+    try {
+      utmData = JSON.parse(utmParams);
+    } catch (e) {
+      console.warn('Failed to parse UTM params:', e);
+      utmData = {};
+    }
+
+    console.log('📊 Retrieved tracking data:', { mixpanelId, sessionId, utmData });
 
     // Store cross-domain tracking data in localStorage for WebinarJam to pick up
     const crossDomainData = {
       mp_id: mixpanelId,
-      mp_session: this.sessionId,
+      mp_session: sessionId,
       mp_source: utmData.utm_source || 'direct',
       mp_medium: utmData.utm_medium || 'organic',
       mp_campaign: utmData.utm_campaign || 'webinar',
       mp_timestamp: Date.now(),
+      mp_domain: window.location.hostname,
+      mp_dev_mode: !shouldTrack,
       ...additionalParams
     };
 
@@ -460,17 +482,31 @@ class MixpanelTracker {
     // Store in localStorage (primary method)
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
 
-    // Track the redirect to WebinarJam
-    this.track('Webinar Redirect', {
-      destination: 'webinarjam',
-      destination_url: baseUrl,
-      mp_id: mixpanelId,
-      cross_domain_data: crossDomainData,
-      redirect_source: 'registration_form'
-    });
+    // Track the redirect to WebinarJam (only if tracking is enabled)
+    if (shouldTrack) {
+      this.track('Webinar Redirect', {
+        destination: 'webinarjam',
+        destination_url: baseUrl,
+        mp_id: mixpanelId,
+        cross_domain_data: crossDomainData,
+        redirect_source: 'registration_form'
+      });
+    } else {
+      console.log('🔍 Would track Webinar Redirect (dev mode):', {
+        destination: 'webinarjam',
+        destination_url: baseUrl,
+        mp_id: mixpanelId,
+        cross_domain_data: crossDomainData,
+        redirect_source: 'registration_form'
+      });
+    }
 
     // Also add as URL params as fallback
-    const trackingParams = new URLSearchParams(crossDomainData);
+    const trackingParams = new URLSearchParams();
+    Object.entries(crossDomainData).forEach(([key, value]) => {
+      trackingParams.append(key, String(value));
+    });
+    
     const finalUrl = `${baseUrl}?${trackingParams.toString()}`;
     
     console.log('✅ Final cross-domain URL generated:', finalUrl);
@@ -479,16 +515,30 @@ class MixpanelTracker {
 
   // Get cross-domain tracking data
   public getCrossDomainData(): Record<string, string> {
-    const mixpanelId = localStorage.getItem('mixpanel_user_id') || 'unknown';
+    // Ensure we have a user ID even on development domains
+    let mixpanelId = localStorage.getItem('mixpanel_user_id');
+    if (!mixpanelId || mixpanelId === 'unknown') {
+      mixpanelId = `dev_user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('mixpanel_user_id', mixpanelId);
+    }
+
     const utmParams = localStorage.getItem('utm_params') || '{}';
-    const utmData = JSON.parse(utmParams);
+    let utmData = {};
+    try {
+      utmData = JSON.parse(utmParams);
+    } catch (e) {
+      console.warn('Failed to parse UTM params:', e);
+      utmData = {};
+    }
 
     return {
       mp_id: mixpanelId,
       mp_session: this.sessionId,
       mp_source: utmData.utm_source || 'direct',
       mp_medium: utmData.utm_medium || 'organic',
-      mp_campaign: utmData.utm_campaign || 'webinar'
+      mp_campaign: utmData.utm_campaign || 'webinar',
+      mp_domain: window.location.hostname,
+      mp_dev_mode: String(!shouldTrack)
     };
   }
 
