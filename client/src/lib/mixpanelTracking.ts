@@ -32,6 +32,7 @@ if (shouldTrack) {
       capture_text_content: true,
       record_mask_text_selector: "", //unmask all text elements
       record_block_selector: "", //unmask images and videos
+      record_idle_timeout_ms: 600000, // 10 minutes of inactivity before stopping recording
     },
     record_sessions_percent: 25, // Session Replay enabled, recording 25% of all sessions
     record_heatmap_data: true, // Enable Heatmap data collection
