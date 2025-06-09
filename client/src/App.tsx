@@ -15,6 +15,7 @@ const EmailTemplate2 = lazy(() => import("@/pages/EmailTemplate2"));
 const EmailTemplate3 = lazy(() => import("@/pages/EmailTemplate3"));
 const EmailTemplate4 = lazy(() => import("@/pages/EmailTemplate4"));
 const EmailTemplate5 = lazy(() => import("@/pages/EmailTemplate5"));
+const ThankYou = lazy(() => import("@/pages/ThankYou"));
 const Sections = lazy(() => import("@/pages/Sections"));
 const FullPageComponents = lazy(() => import("@/pages/full-page-components"));
 const EmailsAll = lazy(() => import("@/pages/Emails-all"));
@@ -71,6 +72,11 @@ function Router() {
       <Route path="/all-emails">
         <Suspense fallback={<PageLoading />}>
           <EmailsAll />
+        </Suspense>
+      </Route>
+      <Route path="/thank-you">
+        <Suspense fallback={<PageLoading />}>
+          <ThankYou />
         </Suspense>
       </Route>
 
