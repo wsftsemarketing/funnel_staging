@@ -22,7 +22,24 @@ if (shouldTrack) {
     cross_subdomain_cookie: false,
     secure_cookie: true,
     ip: true,
+    // Enable session replay and heatmaps
+    record_sessions_percent: 50, // Record 50% of sessions
+    record_block_class: '', // Don't block any elements
+    record_collect_fonts: true,
+    record_idle_timeout_ms: 900000, // 15 minutes (900,000 ms)
+    record_max_ms: 1800000, // 30 minutes max session length
+    // Heatmap configuration
+    track_links_timeout: 300,
+    autotrack: true, // Enable automatic click tracking for heatmaps
   });
+
+  // Enable session replay and heatmaps explicitly
+  mixpanel.register({
+    '$session_recording_enabled': true,
+    '$heatmaps_enabled': true
+  });
+
+  console.log(`[Mixpanel] Tracking enabled with session replay (50%) and heatmaps for: ${window.location.hostname}`);
 } else {
   console.log(`[Mixpanel] Tracking disabled for domain: ${window.location.hostname}`);
 }
@@ -300,6 +317,22 @@ class MixpanelTracker {
     const finalUrl = `${baseUrl}?${trackingParams.toString()}`;
     console.log('✅ Final tracking URL:', finalUrl);
     return finalUrl;
+  }
+
+  // Start session recording manually (if needed)
+  public startSessionRecording(): void {
+    if (!shouldTrack) return;
+    
+    mixpanel.start_session_recording();
+    console.log('🎥 Session recording started');
+  }
+
+  // Stop session recording
+  public stopSessionRecording(): void {
+    if (!shouldTrack) return;
+    
+    mixpanel.stop_session_recording();
+    console.log('⏹️ Session recording stopped');
   }
 
   // Get current tracking data
