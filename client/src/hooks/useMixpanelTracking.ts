@@ -45,6 +45,15 @@ export const useMixpanelTracking = () => {
     mixpanelTracker.track(eventName, properties);
   }, []);
 
+  // Session recording controls
+  const startSessionRecording = useCallback(() => {
+    mixpanelTracker.startSessionRecording();
+  }, []);
+
+  const stopSessionRecording = useCallback(() => {
+    mixpanelTracker.stopSessionRecording();
+  }, []);
+
   return {
     track,
     trackSectionView,
@@ -52,7 +61,9 @@ export const useMixpanelTracking = () => {
     trackFormSubmission,
     trackFunnelStep,
     trackConversion,
-    trackFormInteraction
+    trackFormInteraction,
+    startSessionRecording,
+    stopSessionRecording
   };
 };
 
