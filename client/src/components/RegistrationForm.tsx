@@ -55,18 +55,53 @@ export default function RegistrationForm() {
                       
                       let finalFormUrl;
                       try {
-                        // Generate cross-domain URL with tracking data
-                        finalFormUrl = mixpanelTracker.generateCrossDomainUrl(baseFormUrl, formParams);
+                        // Generate cross-domain URL with tracking data (without firing redirect event)
+                        const urlParams = new URLSearchParams();
+                        const trackingData = mixpanelTracker.getTrackingData();
+                        
+                        // Build tracking parameters
+                        const crossDomainData = {
+                          mp_id: trackingData.userId,
+                          mp_session: trackingData.sessionId,
+                          mp_source: trackingData.utmData.utm_source || 'direct',
+                          mp_medium: trackingData.utmData.utm_medium || 'organic',
+                          mp_campaign: trackingData.utmData.utm_campaign || 'webinar',
+                          mp_term: trackingData.utmData.utm_term,
+                          mp_content: trackingData.utmData.utm_content,
+                          mp_utm_id: trackingData.utmData.utm_id,
+                          mp_gclid: trackingData.utmData.gclid,
+                          mp_fbclid: trackingData.utmData.fbclid,
+                          mp_tag: trackingData.utmData.tag,
+                          mp_hyros_tag: trackingData.utmData.hyros_tag,
+                          ...formParams
+                        };
+                        
+                        // Clean undefined values and build URL
+                        Object.entries(crossDomainData).forEach(([key, value]) => {
+                          if (value !== undefined && value !== null) {
+                            urlParams.append(key, String(value));
+                          }
+                        });
+                        
+                        finalFormUrl = `${baseFormUrl}?${urlParams.toString()}`;
                         console.log('✅ Generated WebinarJam URL with tracking:', finalFormUrl);
                         
-                        // Set up form submission listener
+                        // Set up form submission listener - track redirect ONLY on actual submission
                         setTimeout(() => {
                           const formElement = el.querySelector('form');
                           if (formElement) {
                             formElement.addEventListener('submit', () => {
+                              // Track registration submission
                               mixpanelTracker.trackRegistrationSubmission({
                                 form_type: 'webinarjam_embed',
                                 webinar_hash: 'y86q9a7p'
+                              });
+                              
+                              // Track the actual redirect event now
+                              mixpanelTracker.track('Webinar Redirect', {
+                                destination: 'webinarjam',
+                                destination_url: baseFormUrl,
+                                form_type: 'webinarjam_embed'
                               });
                             });
                           }

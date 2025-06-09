@@ -239,9 +239,23 @@ class MixpanelTracker {
     console.log(`📈 Event tracked: ${eventName}`, eventProps);
   }
 
-  // Cross-domain URL generation for WebinarJam
+  // Cross-domain URL generation for WebinarJam (with redirect tracking)
   public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
-    console.log('🔍 Generating cross-domain URL for:', baseUrl);
+    const url = this.buildCrossDomainUrl(baseUrl, additionalParams);
+    
+    // Track the redirect
+    this.track('Webinar Redirect', {
+      destination: 'webinarjam',
+      destination_url: baseUrl,
+      cross_domain_data: JSON.parse(localStorage.getItem('mp_cross_domain_data') || '{}')
+    });
+    
+    return url;
+  }
+
+  // Build cross-domain URL without tracking redirect event
+  public buildCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
+    console.log('🔍 Building cross-domain URL for:', baseUrl);
 
     // Ensure userId is available
     if (!this.userId) {
@@ -298,13 +312,6 @@ class MixpanelTracker {
 
     // Store for WebinarJam to pick up
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
-
-    // Track the redirect
-    this.track('Webinar Redirect', {
-      destination: 'webinarjam',
-      destination_url: baseUrl,
-      cross_domain_data: crossDomainData
-    });
 
     // Generate URL with tracking parameters
     const trackingParams = new URLSearchParams();
