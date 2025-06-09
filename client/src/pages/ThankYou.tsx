@@ -104,23 +104,22 @@ See you there!`,
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-primary/5">
-      <header
-        className={`top-0 z-50 transition-all duration-300 backdrop-blur-sm bg-[#F7F8F9] py-4 border-b border-[#141b29]/10 shadow-xs shadow-[#141b29]/10`}
-      >
-        <div className="container mx-auto px-6 flex items-center justify-center">
-        <Logo variant="default" size="sm" className="md:px-4" />
-
-          {/* Right side with About Paul always visible and menu on mobile */}
-          
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-primary/5"> 
+      <header className="bg-white/80 justify-center align-center flex justify-center p-2 border-b-1 border-neutral/20">
+          <Logo variant="default" size="sm" />
+        </header>
       {/* Header */}
+
+      {/* Registration Confirmation */}
+      <div className="bg-green-100 p-4 mb-4 flex items-center justify-center">
+        <h2 className="text-xl font-semibold text-green-800">
+          Registration Confirmed! Webinar details sent to your email.
+        </h2>
+      </div>
+
       <div className="container mx-auto px-4 py-8">
+       
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4 ">
-            <CheckCircle className="w-8 h-8 text-green-600" />
-          </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
             You're All Set, {urlParams.first_name || urlParams.name || 'Future Property Investor'}! 🎉
           </h1>
@@ -129,31 +128,49 @@ See you there!`,
           </p>
         </div>
 
-        {/* Video Message Placeholder */}
-        <div className="max-w-2xl mx-auto mb-12">
+        {/* Video Message with Mini Title Overlay */}
+        <div className="max-w-4xl mx-auto mb-12">
           <Card className="overflow-hidden">
             <CardContent className="p-0">
               <div className="relative bg-gradient-to-r from-primary/70 to-primary/20 aspect-video">
-                <button className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-[#eaecf1] bg-opacity-90" onClick={(e) => {
+                <button className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-[#eaecf1] bg-opacity-80" onClick={(e) => {
                   const videoPlayer = e.currentTarget.nextElementSibling;
                   if (videoPlayer) {
                     videoPlayer.play();
+                    const miniTitleOverlay = document.createElement('div');
+                    miniTitleOverlay.style.position = 'absolute';
+                    miniTitleOverlay.style.left = '10px';
+                    miniTitleOverlay.style.top = '10px';
+                    miniTitleOverlay.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                    miniTitleOverlay.style.padding = '5px 10px';
+                    miniTitleOverlay.style.borderRadius = '5px';
+                    miniTitleOverlay.style.fontWeight = 'bold';
+                    miniTitleOverlay.style.fontSize = '12px';
+                    miniTitleOverlay.style.zIndex = '20';
+                    miniTitleOverlay.innerText = 'Personal Message from Paul';
+                    e.currentTarget.parentElement.appendChild(miniTitleOverlay);
                   }
                   e.currentTarget.style.display = 'none';
                 }}>
+                   
                   <div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-primary">
                     <Play className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-xl font-bold mb-2">Personal Message from Paul</h3>
                   <p className="text-neutral-600 px-4">A quick thank you and what to expect</p>
+                 
                 </button>
                 <video width="100%" height="100%" controls onPause={(e) => {
                   const overlay = e.currentTarget.previousElementSibling;
+                  const miniTitleOverlay = e.currentTarget.parentElement.querySelector('div[style*="miniTitleOverlay"]');
                   if (overlay) {
                     overlay.style.display = 'flex';
                   }
+                  if (miniTitleOverlay) {
+                    miniTitleOverlay.remove();
+                  }
                 }}>
-                  <source src="https://download-video-ak.vimeocdn.com/v3-1/playback/cddee5a8-fac7-4ec0-a8c6-1514ab23edc6/2c141bc9-90e4a244?__token__=st=1749478688~exp=1749482288~acl=%2Fv3-1%2Fplayback%2Fcddee5a8-fac7-4ec0-a8c6-1514ab23edc6%2F2c141bc9-90e4a244%2A~hmac=1e3e6a9ec51d7ad9a04d89a3b6d7916fc015e85c87cbf80fdcaebc80dece21bc&r=dXMtd2VzdDE%3D" type="video/mp4" />
+                  <source src="https://player.vimeo.com/progressive_redirect/playback/808653923/rendition/1080p/file.mp4?loc=external&signature=5cc9c7f71d97cebf1babae94a18fb654c6321d2349d01b999f1e945c9c9e38d7" type="video/mp4" />
                 </video>
               </div>
             </CardContent>
@@ -161,7 +178,7 @@ See you there!`,
         </div>
 
         {/* Webinar Details Card */}
-        <div className="max-w-4xl mx-auto mb-12">
+        <div className="max-w-2xl mx-auto mb-12">
           <Card className="border-2 border-primary/20">
             <CardContent className="p-6">
               <h2 className="text-2xl font-bold mb-6 text-center">
@@ -226,7 +243,7 @@ See you there!`,
 
         {/* Add to Calendar CTA */}
         <div className="max-w-2xl mx-auto mb-12">
-          <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
+          <Card className="border-primary/20">
             <CardContent className="p-6 text-center">
               <Calendar className="w-12 h-12 text-primary mx-auto mb-4" />
               <h3 className="text-xl font-bold mb-2">Don't Miss Out!</h3>
@@ -260,44 +277,123 @@ See you there!`,
         </div>
 
         {/* Host Information */}
-        <div className="max-w-4xl mx-auto mb-12">
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-2xl font-bold mb-6 text-center">
-                Meet Your <Highlight type="primary">Host</Highlight>
-              </h2>
-              <div className="grid md:grid-cols-3 gap-6 items-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-3xl font-bold text-primary">PS</span>
-                  </div>
-                </div>
-                <div className="md:col-span-2">
-                  <h3 className="text-xl font-bold mb-2">Paul Smith</h3>
-                  <p className="text-primary font-semibold mb-3">Commercial Property Expert & Educator</p>
-                  <p className="text-neutral-600 mb-4">
-                    With over 15 years in commercial property investing, Paul has helped thousands of investors 
-                    build substantial wealth through strategic property acquisitions. He's personally overseen 
-                    portfolio growth exceeding £50M in commercial assets.
-                  </p>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Star className="w-4 h-4 text-yellow-500" />
-                      <span>15+ Years Experience</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Award className="w-4 h-4 text-primary" />
-                      <span>£50M+ Portfolio Managed</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-green-600" />
-                      <span>5000+ Students Taught</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-blue-600" />
-                      <span>Certified Property Expert</span>
-                    </div>
-                  </div>
+        <div className="max-w-2xl mx-auto mb-12">
+                  <Card className="overflow-hidden">
+                    <CardContent className="p-0">
+                      <div className="grid md:grid-cols-2">
+                        {/* Photo and basic info section */}
+                        <div className="p-6 flex flex-col items-center md:items-start">
+                          <h2 className="text-2xl font-bold mb-6 text-center md:text-left w-full">
+                            Meet Your <Highlight type="primary">Host</Highlight>
+                          </h2>
+                          <div className="mb-4 w-24 h-24 rounded-full overflow-hidden border-4 border-secondary">
+                            <img 
+                              src="https://www.paulsmithtouchstoneeducation.com/wp-content/uploads/2020/10/Paul-Smith-Touchstone-Education.png" 
+                              alt="Paul Smith" 
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+
+                          <h3 className="text-xl font-bold">Paul Smith</h3>
+                          <p className="text-sm text-neutral-500 mb-4">Commercial Property Expert & Educator</p>
+
+                          <div className="flex items-center mb-6">
+                            {[1, 2, 3, 4, 5].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 text-secondary fill-secondary" />
+                            ))}
+                            <span className="ml-2 text-sm font-medium">Expert Trainer</span>
+                          </div>
+
+                          <p className="text-sm text-neutral-600 text-center md:text-left">
+                            Paul Smith is one of the UK's most respected commercial property educators. With over 40 years of experience, Paul has helped hundreds of investors build successful property portfolios. He has built a property empire valued at over £30 million with more than 100 properties, which include a diverse portfolio of commercial assets, residential investments, HMOs, and serviced accommodations. As Touchstone Education's lead expert, he specialises in identifying high-ROI opportunities in the UK commercial property market.
+                          </p>
+                        </div>
+
+                        {/* Achievements and stats section */}
+                        <div className="bg-neutral-50/70 p-6">
+                          <h4 className="font-bold mb-3 text-neutral-800">
+                            <Highlight type="primary">Key</Highlight> Achievements
+                          </h4>
+
+                          <ul className="mb-8 space-y-2">
+                            <li className="flex items-start text-sm">
+                              <span className="text-primary mr-2 font-bold">✓</span>
+                              <span>Built a £30M+ commercial property portfolio</span>
+                            </li>
+                            <li className="flex items-start text-sm">
+                              <span className="text-primary mr-2 font-bold">✓</span>
+                              <span>Completed 35+ successful commercial conversions</span>
+                            </li>
+                            <li className="flex items-start text-sm">
+                              <span className="text-primary mr-2 font-bold">✓</span>
+                              <span>Mentored 1,200+ property investors</span>
+                            </li>
+                          </ul>
+
+                          <h4 className="font-bold mb-3 text-neutral-800">
+                            <Highlight type="secondary">Property</Highlight> Success
+                          </h4>
+
+                          <div className="grid grid-cols-1 gap-3 mb-6">
+                            <div className="flex items-center bg-white p-3 rounded-lg shadow-sm">
+                              <div className="bg-primary/10 p-2 rounded-full mr-3">
+                                <Clock className="w-4 h-4 text-primary" />
+                              </div>
+                              <div>
+                                <p className="text-xs text-neutral-500">Average Client ROI</p>
+                                <p className="font-bold text-sm">12%</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center bg-white p-3 rounded-lg shadow-sm">
+                              <div className="bg-primary/10 p-2 rounded-full mr-3">
+                                <Award className="w-4 h-4 text-primary" />
+                              </div>
+                              <div>
+                                <p className="text-xs text-neutral-500">Properties Acquired</p>
+                                <p className="font-bold text-sm">120+</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center bg-white p-3 rounded-lg shadow-sm">
+                              <div className="bg-primary/10 p-2 rounded-full mr-3">
+                                <CheckCircle className="w-4 h-4 text-primary" />
+                              </div>
+                              <div>
+                                <p className="text-xs text-neutral-500">Industry Awards</p>
+                                <p className="font-bold text-sm">7</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-neutral-50/5 py-3 px-6 text-center">
+                        <h4 className="font-bold mb-3 text-neutral-800">Featured In</h4>
+                        <div className="flex justify-center items-center space-x-6 space-y-3 flex-wrap">
+                          <img 
+                            src="https://logos-world.net/wp-content/uploads/2023/04/The-Guardian-Logo.png" 
+                            alt="The Guardian" 
+                            className="h-6 object-contain"
+                          />
+                          <img 
+                            src="https://thefedonline.com/wp-content/uploads/the-sunday-times-logo.png" 
+                            alt="The Sunday Times" 
+                            className="h-6 object-contain"
+                          />
+                          <img 
+                            src="https://logos-download.com/wp-content/uploads/2021/01/The_Scotsman_Logo.png" 
+                            alt="The Scotsman" 
+                            className="h-6 object-contain"
+                          />
+                          <img 
+                            src="https://heraldandtimes.myshopify.com/cdn/shop/collections/HERALDmastheadnew.png" 
+                            alt="The Herald" 
+                            className="h-6 object-contain"
+                          />
+                          <img 
+                            src="https://wildaid.org/wp-content/uploads/2020/03/Independent-logo.png" 
+                            alt="Independent" 
+                            className="h-6 object-contain"
+                          />
                 </div>
               </div>
             </CardContent>
@@ -311,7 +407,7 @@ See you there!`,
               <Download className="w-12 h-12 text-yellow-600 mx-auto mb-4" />
               <h3 className="text-xl font-bold mb-2">Exclusive Bonus Guide</h3>
               <p className="text-neutral-600 mb-4">
-                <Highlight type="marker">FREE Download:</Highlight> "The Commercial Property Investor's Checklist" - 
+                <Highlight type="marker"><b>FREE Download:</b></Highlight> "The Commercial Property Investor's Checklist" - 
                 A comprehensive guide to evaluating commercial properties like a pro.
               </p>
               <Button 
@@ -327,8 +423,8 @@ See you there!`,
         </div>
 
         {/* Next Step CTA - Live Event */}
-        <div className="max-w-4xl mx-auto">
-          <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 border-2 border-primary/30">
+        <div className="max-w-2xl mx-auto">
+          <Card className="border-2 border-primary/30">
             <CardContent className="p-8 text-center">
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 Ready to Take It <Highlight type="primary">Further?</Highlight>
@@ -339,21 +435,21 @@ See you there!`,
               </p>
 
               <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <div className="text-center">
+                <div className="text-center bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg p-6">
                   <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Users className="w-8 h-8 text-primary" />
                   </div>
                   <h4 className="font-bold mb-2">Limited Attendees</h4>
                   <p className="text-sm text-neutral-600">Intimate setting for personalised guidance</p>
                 </div>
-                <div className="text-center">
+                <div className="text-center bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg p-6">
                   <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Award className="w-8 h-8 text-primary" />
                   </div>
                   <h4 className="font-bold mb-2">Deep Dive Training</h4>
                   <p className="text-sm text-neutral-600">Advanced strategies not covered online</p>
                 </div>
-                <div className="text-center">
+                <div className="text-center bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg p-6">
                   <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <CheckCircle className="w-8 h-8 text-primary" />
                   </div>
