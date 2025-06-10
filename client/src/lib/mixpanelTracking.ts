@@ -74,10 +74,7 @@ class MixpanelTracker {
     if (shouldTrack) {
       this.captureUTMParams();
       this.initializeUser();
-      // Only track landing page visit if this is actually the first page
-      if (window.location.pathname === '/' || window.location.pathname === '/home') {
         this.trackFunnelStep('Landing Page Visit', 1);
-      }
     }
   }
 
