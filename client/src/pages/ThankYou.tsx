@@ -112,6 +112,8 @@ See you there!`,
     window.open(calendarUrl, "_blank");
     setIsAddedToCalendar(true);
 
+    mixpanelTracker.trackCalendarAdd(type);
+    
     track("Calendar Event Added", {
       event_type: "webinar_reminder",
       calendar_type: type,

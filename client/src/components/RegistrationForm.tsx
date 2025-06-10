@@ -90,6 +90,17 @@ export default function RegistrationForm() {
                         setTimeout(() => {
                           const formElement = el.querySelector('form');
                           if (formElement) {
+                            // Track form interaction start
+                            const inputs = formElement.querySelectorAll('input');
+                            inputs.forEach(input => {
+                              input.addEventListener('focus', () => {
+                                if (!localStorage.getItem('form_interaction_tracked')) {
+                                  localStorage.setItem('form_interaction_tracked', 'true');
+                                  mixpanelTracker.trackFormInteractionStart();
+                                }
+                              }, { once: true });
+                            });
+
                             formElement.addEventListener('submit', () => {
                               // Track registration submission
                               mixpanelTracker.trackRegistrationSubmission({
