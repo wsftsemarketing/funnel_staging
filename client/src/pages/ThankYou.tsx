@@ -112,19 +112,24 @@ See you there!`,
 
       {/* Registration Confirmation */}
       <div className="bg-green-100 p-4 mb-4 flex items-center justify-center">
-        <h2 className="text-xl font-semibold text-green-800">
-          Registration Confirmed! Webinar details sent to your email.
-        </h2>
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-green-800">
+            Registration Confirmed! Webinar details sent to your email.
+          </h2>
+          <p className="text-md font-light text-green-700">
+            Including a bonus: FREE 4 part video series on commercial property investment.
+          </p>
+        </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
        
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            You're All Set, {urlParams.first_name || urlParams.name || 'Future Property Investor'}! 🎉
+            You're All Set, {urlParams.first_name || urlParams.name || 'Future Commercial Property Investor'}! 🎉
           </h1>
           <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-            Thanks for registering for our exclusive webinar. I can't wait to share these game-changing commercial property strategies with you!
+            Thanks for registering for our Commercial Property Edge webinar. I can't wait to share these game-changing strategies with you!
           </p>
         </div>
 
@@ -147,7 +152,7 @@ See you there!`,
                     miniTitleOverlay.style.fontWeight = 'bold';
                     miniTitleOverlay.style.fontSize = '12px';
                     miniTitleOverlay.style.zIndex = '20';
-                    miniTitleOverlay.innerText = 'Personal Message from Paul';
+                    miniTitleOverlay.innerText = 'Message from Paul';
                     e.currentTarget.parentElement.appendChild(miniTitleOverlay);
                   }
                   e.currentTarget.style.display = 'none';
@@ -219,7 +224,7 @@ See you there!`,
                     </div>
                   )}
                 </div>
-                <div className="bg-primary/5 rounded-lg p-4">
+                <div className="bg-neutral-50/70 rounded-lg p-4">
                   <h3 className="font-bold mb-2">What's Coming Your Way:</h3>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
@@ -366,7 +371,7 @@ See you there!`,
                         </div>
                       </div>
 
-                      <div className="bg-neutral-50/5 py-3 px-6 text-center">
+                      <div className="bg-neutral-50/5 py-3 px-6 text-center pb-6">
                         <h4 className="font-bold mb-3 text-neutral-800">Featured In</h4>
                         <div className="flex justify-center items-center space-x-6 space-y-3 flex-wrap">
                           <img 
@@ -435,21 +440,21 @@ See you there!`,
               </p>
 
               <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <div className="text-center bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg p-6">
+                <div className="text-center bg-neutral-50/70 rounded-lg p-6">
                   <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Users className="w-8 h-8 text-primary" />
                   </div>
                   <h4 className="font-bold mb-2">Limited Attendees</h4>
                   <p className="text-sm text-neutral-600">Intimate setting for personalised guidance</p>
                 </div>
-                <div className="text-center bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg p-6">
+                <div className="text-center bg-neutral-50/70 rounded-lg p-6">
                   <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Award className="w-8 h-8 text-primary" />
                   </div>
                   <h4 className="font-bold mb-2">Deep Dive Training</h4>
                   <p className="text-sm text-neutral-600">Advanced strategies not covered online</p>
                 </div>
-                <div className="text-center bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg p-6">
+                <div className="text-center bg-neutral-50/70 rounded-lg p-6">
                   <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <CheckCircle className="w-8 h-8 text-primary" />
                   </div>
