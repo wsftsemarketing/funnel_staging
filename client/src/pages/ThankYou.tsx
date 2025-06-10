@@ -31,6 +31,8 @@ export default function ThankYou() {
   const { track } = useMixpanelTracking();
   const [urlParams, setUrlParams] = useState<URLParams>({});
   const [isAddedToCalendar, setIsAddedToCalendar] = useState(false);
+  const currentYear = new Date().getFullYear();
+
 
   // Extract URL parameters
   useEffect(() => {
@@ -266,16 +268,15 @@ See you there!`,
                 </div>
                 <div className="flex items-center gap-3 mb-3">
                   <Link2Icon className="w-5 h-5 text-primary" />
-                  <div>
-                    <p className="font-semibold mb-3">Your Webinar Link</p>
+                  <div className="flex-1">
+                    <p className="font-semibold">Your Webinar Link</p>
                     <a
                       href={urlParams.wj_lead_unique_link_live_room}
-                      className="text-primary text-sm break-all p-4 rounded-lg bg-neutral-50/70"
+                      className="text-primary text-sm py-2 px-4 rounded-lg bg-neutral-50/70 w-full block"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {urlParams.wj_lead_unique_link_live_room ||
-                        "Provided via email."}
+                       {urlParams.wj_lead_unique_link_live_room || "Provided via email."}
                     </a>
                   </div>
                 </div>
@@ -293,43 +294,32 @@ See you there!`,
               <p className="text-neutral-600 mb-4">
                 Add this webinar to your calendar so you never forget.
               </p>
-              <div className="flex flex-col md:flex-row gap-3 mb-2">
-                <Button
-                  onClick={() => generateCalendarEvent("google")}
-                  className={`py-4 flex-1 ${isAddedToCalendar ? "bg-green-600 hover:bg-green-700" : ""}`}
-                  size="lg"
-                >
-                  {isAddedToCalendar ? (
-                    <>
-                      <CheckCircle className="w-5 h-5 mr-2" />
-                      Added to your calendar!
-                    </>
-                  ) : (
-                    <>
-                      <Plus className="w-5 h-5 mr-2" />
-                      Add to Google Calendar
-                    </>
-                  )}
-                </Button>
-                <Button
-                  onClick={() => generateCalendarEvent("outlook")}
-                  className={`py-4 flex-1 hover:bg-neutral-500 ${isAddedToCalendar ? "bg-green-600 hover:bg-green-700" : ""}`}
-                  size="lg"
-                  variant="outline"
-                >
-                  {isAddedToCalendar ? (
-                    <>
-                      <CheckCircle className="w-5 h-5 mr-2" />
-                      Added to your calendar!
-                    </>
-                  ) : (
-                    <>
-                      <Plus className="w-5 h-5 mr-2" />
-                      Add to Outlook Calendar
-                    </>
-                  )}
-                </Button>
-              </div>
+              {!isAddedToCalendar ? (
+                <div className="flex flex-col md:flex-row gap-3 mb-2">
+                  <Button
+                    onClick={() => generateCalendarEvent("google")}
+                    className="py-4 flex-1"
+                    size="lg"
+                  >
+                    <Plus className="w-5 h-5 mr-2" />
+                    Add to Google Calendar
+                  </Button>
+                  <Button
+                    onClick={() => generateCalendarEvent("outlook")}
+                    className="py-4 flex-1 hover:bg-neutral-500"
+                    size="lg"
+                    variant="outline"
+                  >
+                    <Plus className="w-5 h-5 mr-2" />
+                    Add to Outlook Calendar
+                  </Button>
+                </div>
+               ) : (
+                <div className="bg-green-600 text-white py-4 rounded-lg mb-2">
+                  <CheckCircle className="w-5 h-5 inline-block mr-2" />
+                  Added to your calendar!
+                </div>
+              )}
               {isAddedToCalendar && (
                 <p className="text-sm text-green-600 mt-2">
                   Perfect! You'll get a reminder before the webinar starts.
@@ -619,8 +609,23 @@ See you there!`,
             size="sm"
             className="mt-4 mx-auto opacity-50"
           />
+          <div className="flex justify-center space-x-4 mt-4 opacity-50">
+            <a href="https://touchstoneeducation.com/privacy-policy" className="text-neutral-500 text-sm hover:underline">
+              Privacy Policy
+            </a>
+            <a href="https://touchstoneeducation.com/competition-terms-and-conditions" className="text-neutral-500 text-sm hover:underline">
+              Terms of Service
+            </a>
+            <a href="https://touchstoneeducation.com/contact-us" className="text-neutral-500 text-sm hover:underline">
+              Contact Us
+            </a>
+          </div>
+          <p className="text-neutral-500 text-sm mt-2 opacity-50">
+            <span>Industrial Ring 3 9491, Ruggell, Liechtenstein</span>
+          </p>
+          
           <p className="text-sm text-neutral-500 mt-2">
-            © 2025 Touchstone Education. All rights reserved.
+            &copy; {currentYear} Touchstone Wealth Ltd, (Touchstone Education) a cell of Duneira Enterprises Ltd PPC. All rights reserved.
           </p>
         </div>
       </div>
