@@ -4,6 +4,7 @@ import {
   Clock,
   CheckCircle,
   Users,
+  Link2Icon,
   Award,
   Plus,
   ArrowRight,
@@ -244,21 +245,7 @@ See you there!`,
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <Award className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-semibold mb-3">Your Webinar Link</p>
-                      <a
-                        href={urlParams.wj_lead_unique_link_live_room}
-                        className="text-primary font-bold text-sm break-all p-4 rounded-lg bg-neutral-50/70"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {urlParams.wj_lead_unique_link_live_room ||
-                          "Provided via email."}
-                      </a>
-                    </div>
-                  </div>
+                  
                 </div>
                 <div className="bg-neutral-50/70 rounded-lg p-4">
                   <h3 className="font-bold mb-2">What's Coming Your Way:</h3>
@@ -277,6 +264,21 @@ See you there!`,
                     </li>
                   </ul>
                 </div>
+                <div className="flex items-center gap-3 mb-3">
+                  <Link2Icon className="w-5 h-5 text-primary" />
+                  <div>
+                    <p className="font-semibold mb-3">Your Webinar Link</p>
+                    <a
+                      href={urlParams.wj_lead_unique_link_live_room}
+                      className="text-primary text-sm break-all p-4 rounded-lg bg-neutral-50/70"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {urlParams.wj_lead_unique_link_live_room ||
+                        "Provided via email."}
+                    </a>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -294,7 +296,7 @@ See you there!`,
               <div className="flex flex-col md:flex-row gap-3 mb-2">
                 <Button
                   onClick={() => generateCalendarEvent("google")}
-                  className={`flex-1 ${isAddedToCalendar ? "bg-green-600 hover:bg-green-700" : ""}`}
+                  className={`py-4 flex-1 ${isAddedToCalendar ? "bg-green-600 hover:bg-green-700" : ""}`}
                   size="lg"
                 >
                   {isAddedToCalendar ? (
@@ -311,7 +313,7 @@ See you there!`,
                 </Button>
                 <Button
                   onClick={() => generateCalendarEvent("outlook")}
-                  className={`flex-1 hover:bg-neutral-500 ${isAddedToCalendar ? "bg-green-600 hover:bg-green-700" : ""}`}
+                  className={`py-4 flex-1 hover:bg-neutral-500 ${isAddedToCalendar ? "bg-green-600 hover:bg-green-700" : ""}`}
                   size="lg"
                   variant="outline"
                 >
