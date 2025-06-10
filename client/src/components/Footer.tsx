@@ -122,7 +122,7 @@ const ContactInfo = memo(() => (
       <li className="flex items-start">
         <MapPin className="text-primary h-5 w-5 mt-1 mr-3 flex-shrink-0" />
         <span className="text-neutral-400">
-          Industrial ring 3 9491 Ruggell Liechtenstein
+          Industrial Ring 3 9491, Ruggell, Liechtenstein
         </span>
       </li>
       <li className="flex items-center">
@@ -155,7 +155,7 @@ const CopyrightSection = memo(() => {
   return (
     <div className="pt-8 flex flex-col md:flex-row justify-between items-center">
       <p className="text-neutral-500 text-sm mb-4 md:mb-0">
-        &copy; {currentYear} Touchstone Education. All rights reserved.
+        &copy; {currentYear} Touchstone Wealth Ltd, (Touchstone Education) a cell of Duneira Enterprises Ltd PPC. All rights reserved.
       </p>
       <div className="flex space-x-6">
         <a
