@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Calendar, Clock, CheckCircle, Users, Award, Plus, Download, ArrowRight, Play, Star } from "lucide-react";
+import { Calendar, Clock, CheckCircle, Users, Award, Plus, ArrowRight, Play, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Highlight } from "@/components/ui/highlight";
@@ -89,35 +89,18 @@ See you there!`,
     });
   };
 
-  const handleEventInterest = () => {
-    track("Live Event Interest", {
-      event_type: 'live_event_cta_click',
-      email: urlParams.email || 'unknown'
-    });
-  };
-
-  const handleBonusDownload = () => {
-    track("Bonus Guide Download", {
-      resource_type: 'property_guide',
-      email: urlParams.email || 'unknown'
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-primary/5"> 
-      <header className="bg-white/80 justify-center align-center flex justify-center p-2 border-b-1 border-neutral/20">
-          <Logo variant="default" size="sm" />
-        </header>
       {/* Header */}
 
       {/* Registration Confirmation */}
       <div className="bg-green-100 p-4 mb-4 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-green-800">
-            Registration Confirmed! Webinar details sent to your email.
+            Registration Confirmed! Details sent to your email.
           </h2>
           <p className="text-md font-light text-green-700">
-            Including a bonus: FREE 4 part video series on commercial property investment.
+            Includes a free bonus: 4 part video series on commercial property investment.
           </p>
         </div>
       </div>
@@ -253,7 +236,7 @@ See you there!`,
               <Calendar className="w-12 h-12 text-primary mx-auto mb-4" />
               <h3 className="text-xl font-bold mb-2">Don't Miss Out!</h3>
               <p className="text-neutral-600 mb-4">
-                Add this webinar to your calendar so you never forget. Studies show people who add events to their calendar are 3x more likely to attend!
+                Add this webinar to your calendar so you never forget. <br /> Studies show people who add events to their calendar are 3x more likely to attend!
               </p>
               <Button 
                 onClick={generateCalendarEvent}
@@ -277,6 +260,99 @@ See you there!`,
                   Perfect! You'll get a reminder before the webinar starts.
                 </p>
               )}
+            </CardContent>
+          </Card>
+        </div>
+
+
+        {/* Early Bird Ticket Upsell */}
+        <div className="max-w-2xl mx-auto mb-12">
+          <Card className="border-2 border-secondary/30 bg-gradient-to-br from-secondary/5 via-white to-secondary/10 overflow-hidden">
+            <CardContent className="p-0">
+              {/* Header Badge */}
+              <div className="bg-gradient-to-r from-secondary to-secondary/80 px-6 py-3 text-center">
+                <div className="inline-flex items-center gap-2 text-white">
+                  <Clock className="w-4 h-4" />
+                  <span className="text-sm font-bold uppercase tracking-wide">Limited Time Offer</span>
+                </div>
+              </div>
+
+              <div className="p-8 text-center">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                  Get Your <Highlight type="secondary">Early Bird</Highlight> Advantage
+                </h2>
+
+                <p className="text-lg text-neutral-600 mb-6">
+                  Why wait for the webinar? If you're serious about building wealth through commercial property, secure your spot at our exclusive 2-day 
+                  <span className="font-semibold"> Wealth Through Property</span> live event now!
+                </p>
+
+                {/* Pricing Display */}
+                <div className="bg-white rounded-xl border-2 border-secondary/20 p-6 mb-6 max-w-md mx-auto">
+                  <div className="flex items-center justify-center gap-4 mb-3">
+                    <span className="text-2xl text-neutral-400 line-through">£495</span>
+                    <div className="bg-secondary text-white px-3 py-1 rounded-full text-sm font-bold">
+                      80% OFF
+                    </div>
+                  </div>
+                  <div className="text-4xl font-black text-secondary mb-2">£99</div>
+                  <p className="text-sm text-neutral-600">Early Bird Price - Today Only</p>
+                </div>
+
+
+                {/* Benefits Grid */}
+                <div className="grid md:grid-cols-2 gap-4 mb-8">
+                  <div className="flex items-center gap-3 text-left">
+                    <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
+                    <span className="text-sm">2 full days of intensive training</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-left">
+                    <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
+                    <span className="text-sm">Direct access to Paul Smith</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-left">
+                    <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
+                    <span className="text-sm">Exclusive deal analysis workshop</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-left">
+                    <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
+                    <span className="text-sm">Private networking opportunities</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-left">
+                    <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
+                    <span className="text-sm">Complete property toolkit</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-left">
+                    <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
+                    <span className="text-sm">90-day follow-up support</span>
+                  </div>
+                </div>
+
+                <Button 
+                  onClick={() => {
+                    track("Early Bird Ticket CTA", {
+                      offer_type: 'early_bird_discount',
+                      discount_percentage: 70,
+                      email: urlParams.email || 'unknown'
+                    });
+                    
+                    window.open('', '_blank');
+                  }}
+                  size="lg" 
+                  variant="secondary"
+                  className="w-full mb-4 py-6 font-bold text-white"
+                >
+                  Book Your Early Bird Ticket
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <p className="text-sm text-yellow-800">
+                    <span className="font-semibold">⚡ Limited Time:</span> This exclusive 80% discount is only available 
+                    to webinar registrants and expires in 48 hours. Normal attendees pay full price!
+                  </p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -405,86 +481,13 @@ See you there!`,
           </Card>
         </div>
 
-        {/* Bonus Download Section */}
-        <div className="max-w-2xl mx-auto mb-12">
-          <Card className="border-2 border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50">
-            <CardContent className="p-6 text-center">
-              <Download className="w-12 h-12 text-yellow-600 mx-auto mb-4" />
-              <h3 className="text-xl font-bold mb-2">Exclusive Bonus Guide</h3>
-              <p className="text-neutral-600 mb-4">
-                <Highlight type="marker"><b>FREE Download:</b></Highlight> "The Commercial Property Investor's Checklist" - 
-                A comprehensive guide to evaluating commercial properties like a pro.
-              </p>
-              <Button 
-                onClick={handleBonusDownload}
-                variant="outline" 
-                className="border-yellow-600 text-yellow-700 hover:bg-yellow-600 hover:text-white"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download Your Free Guide
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Next Step CTA - Live Event */}
-        <div className="max-w-2xl mx-auto">
-          <Card className="border-2 border-primary/30">
-            <CardContent className="p-8 text-center">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                Ready to Take It <Highlight type="primary">Further?</Highlight>
-              </h2>
-              <p className="text-lg text-neutral-600 mb-6 max-w-2xl mx-auto">
-                After the webinar, if you're serious about building wealth through commercial property, 
-                I'd love to meet you in person at our exclusive live event.
-              </p>
-
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <div className="text-center bg-neutral-50/70 rounded-lg p-6">
-                  <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Users className="w-8 h-8 text-primary" />
-                  </div>
-                  <h4 className="font-bold mb-2">Limited Attendees</h4>
-                  <p className="text-sm text-neutral-600">Intimate setting for personalised guidance</p>
-                </div>
-                <div className="text-center bg-neutral-50/70 rounded-lg p-6">
-                  <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Award className="w-8 h-8 text-primary" />
-                  </div>
-                  <h4 className="font-bold mb-2">Deep Dive Training</h4>
-                  <p className="text-sm text-neutral-600">Advanced strategies not covered online</p>
-                </div>
-                <div className="text-center bg-neutral-50/70 rounded-lg p-6">
-                  <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <CheckCircle className="w-8 h-8 text-primary" />
-                  </div>
-                  <h4 className="font-bold mb-2">Proven Results</h4>
-                  <p className="text-sm text-neutral-600">Real case studies and live deal analysis</p>
-                </div>
-              </div>
-
-              <Button 
-                onClick={handleEventInterest}
-                size="lg" 
-                className="mb-4"
-              >
-                Learn About Our Live Events
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-
-              <p className="text-sm text-neutral-500">
-                <span className="font-semibold">Note:</span> This will be mentioned during the webinar, 
-                but early interest gets priority booking!
-              </p>
-            </CardContent>
-          </Card>
-        </div>
 
         {/* Footer Note */}
         <div className="text-center mt-12 py-8 border-t border-neutral-200">
           <p className="text-neutral-600">
             Questions? Need help? Simply reply to any of our emails and we'll get back to you promptly.
           </p>
+          <Logo variant="grayscale" size="sm" className="mt-4 mx-auto" />
           <p className="text-sm text-neutral-500 mt-2">
             © 2025 Touchstone Education. All rights reserved.
           </p>
