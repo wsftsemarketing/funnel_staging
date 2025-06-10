@@ -57,50 +57,6 @@ export default function ThankYou() {
       page_type: "confirmation",
       confirmation_method: "url_params",
     });
-
-    // Revised function to ensure GTag script is loaded before sending conversion event
-    const loadGoogleAds = () => {
-      if (typeof window.gtag === 'function') {
-        // If already initialized, just send the conversion
-        window.gtag('event', 'conversion', {'send_to': 'AW-787679341/brqfCMqD2_wCEO2QzPcC'});
-        console.log("🎯 Google Ads conversion tracked");
-        return;
-      }
-
-      // If gtag is not initialized, load the script
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-787679341';
-
-      script.onload = () => {
-        if (typeof window.gtag !== 'function') {
-          // Define gtag function
-          window.dataLayer = window.dataLayer || [];
-          function gtag(...args: any[]) {
-            window.dataLayer.push(args);
-          }
-          window.gtag = gtag;
-
-          // Initialize gtag with current date
-          gtag('js', new Date());
-          gtag('config', 'AW-787679341');
-        }
-
-        // Track conversion now that gtag is guaranteed to be loaded
-        window.gtag('event', 'conversion', {'send_to': 'AW-787679341/brqfCMqD2_wCEO2QzPcC'});
-        console.log("🎯 Google Ads script loaded and conversion tracked");
-      };
-
-      script.onerror = () => {
-        console.warn("⚠️ Failed to load Google Ads script");
-      };
-
-      // Append the script to document head
-      document.head.appendChild(script);
-    };
-
-    loadGoogleAds();
-
     
     console.log("📋 URL Parameters extracted:", params);
   }, [track]);
