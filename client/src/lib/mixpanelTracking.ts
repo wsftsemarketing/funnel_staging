@@ -74,7 +74,7 @@ class MixpanelTracker {
     if (shouldTrack) {
       this.captureUTMParams();
       this.initializeUser();
-      this.trackFunnelStep('Landing Page Visit', 1);
+        this.trackFunnelStep('Landing Page Visit', 1);
     }
   }
 
@@ -134,11 +134,14 @@ class MixpanelTracker {
   }
 
   private initializeUser(): void {
-    // Get or create user ID
+    // Get or create user ID - but preserve existing one across sessions
     let userId = localStorage.getItem("mixpanel_user_id");
     if (!userId) {
       userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       localStorage.setItem("mixpanel_user_id", userId);
+      console.log('🆔 New user ID created:', userId);
+    } else {
+      console.log('🆔 Existing user ID found:', userId);
     }
     this.userId = userId;
 
@@ -215,6 +218,23 @@ class MixpanelTracker {
           watch_time_seconds: watchTime
         });
       }
+    });
+  }
+
+  // New tracking methods for missing funnel events
+  public trackFormInteractionStart(): void {
+    this.track("Form Interaction Started", {
+      form_type: 'webinar_registration',
+      session_id: this.sessionId,
+      event_type: 'form_start'
+    });
+  }
+
+  public trackCalendarAdd(calendarType: string): void {
+    this.track("Calendar Event Added", {
+      calendar_type: calendarType,
+      event_type: 'calendar_add',
+      session_id: this.sessionId
     });
   }
 
