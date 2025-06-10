@@ -47,7 +47,7 @@ export default function ThankYou() {
     mixpanelTracker.trackConfirmationPageView();
 
     // Send specific confirmation event
-    track("Webinar Registration: Sign up confirmed", {
+    track("CPBO: Registration Confirmed", {
       email: params.wj_lead_email || "unknown",
       name: params.wj_lead_first_name || "unknown",
       webinar_url: params.wj_lead_unique_link_live_room || "unknown",
@@ -89,11 +89,6 @@ export default function ThankYou() {
 
 Webinar Link: ${urlParams.wj_lead_unique_link_live_room || "Will be provided via email"}
 
-What you'll learn:
-• How to identify high-yield commercial opportunities
-• Financing strategies that maximise returns
-• Risk management in commercial property
-• Building a sustainable property portfolio
 
 See you there!`,
       location: "Online Webinar",
@@ -223,8 +218,8 @@ See you there!`,
                     <div>
                       <p className="font-semibold">Date & Time</p>
                       <p className="text-neutral-600">
-                        {urlParams.webinar_date || "Next Thursday"} at{" "}
-                        {urlParams.webinar_time || "7:00 PM GMT"}
+                        {urlParams.wj_next_event_date || "Next Thursday"} at{" "}
+                        {urlParams.wj_next_event_time || "7:00 PM GMT"}
                       </p>
                     </div>
                   </div>
@@ -233,7 +228,7 @@ See you there!`,
                     <div>
                       <p className="font-semibold">Registered Email</p>
                       <p className="text-neutral-600">
-                        ${urlParams.wj_lead_email || "Will be provided via email"}
+                        {urlParams.wj_lead_email || "Will be provided via email"}
                       </p>
                     </div>
                   </div>
