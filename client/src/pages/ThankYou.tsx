@@ -59,7 +59,7 @@ export default function ThankYou() {
   }, [track]);
 
   // Generate calendar event
-  const generateCalendarEvent = () => {
+  const generateCalendarEvent = (type: "google" | "outlook") => {
     // Parse the webinar date and time from WebinarJam parameters
     let webinarDate = new Date();
 
@@ -73,18 +73,8 @@ export default function ThankYou() {
       webinarDate.setHours(19, 0, 0, 0); // 7 PM
     }
 
-    const startTime =
-      webinarDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-    const endTime =
-      new Date(webinarDate.getTime() + 90 * 60000)
-        .toISOString()
-        .replace(/[-:]/g, "")
-        .split(".")[0] + "Z";
-
     const eventDetails = {
       title: "The Commercial Property Edge - Live Webinar",
-      start: startTime,
-      end: endTime,
       description: `Join Paul Smith for an exclusive masterclass on commercial property investing. 
 
 Webinar Link: ${urlParams.wj_lead_unique_link_live_room || "Will be provided via email"}
@@ -94,13 +84,34 @@ See you there!`,
       location: "Online Webinar",
     };
 
-    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventDetails.title)}&dates=${eventDetails.start}/${eventDetails.end}&details=${encodeURIComponent(eventDetails.description)}&location=${encodeURIComponent(eventDetails.location)}`;
+    let calendarUrl = "";
 
-    window.open(googleCalendarUrl, "_blank");
+    if (type === "google") {
+      const startTime =
+        webinarDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+      const endTime =
+        new Date(webinarDate.getTime() + 90 * 60000)
+          .toISOString()
+          .replace(/[-:]/g, "")
+          .split(".")[0] + "Z";
+
+      calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventDetails.title)}&dates=${startTime}/${endTime}&details=${encodeURIComponent(eventDetails.description)}&location=${encodeURIComponent(eventDetails.location)}`;
+    } else {
+      // Outlook format
+      const startTime = webinarDate.toISOString();
+      const endTime = new Date(
+        webinarDate.getTime() + 90 * 60000,
+      ).toISOString();
+
+      calendarUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(eventDetails.title)}&startdt=${startTime}&enddt=${endTime}&body=${encodeURIComponent(eventDetails.description)}&location=${encodeURIComponent(eventDetails.location)}`;
+    }
+
+    window.open(calendarUrl, "_blank");
     setIsAddedToCalendar(true);
 
     track("Calendar Event Added", {
       event_type: "webinar_reminder",
+      calendar_type: type,
       email: urlParams.wj_lead_email || "unknown",
     });
   };
@@ -228,7 +239,8 @@ See you there!`,
                     <div>
                       <p className="font-semibold">Registered Email</p>
                       <p className="text-neutral-600">
-                        {urlParams.wj_lead_email || "Will be provided via email"}
+                        {urlParams.wj_lead_email ||
+                          "Will be provided via email"}
                       </p>
                     </div>
                   </div>
