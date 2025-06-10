@@ -59,9 +59,13 @@ export default function ThankYou() {
     });
 
     // Google Ads conversion tracking
-    const script = document.createElement('script');
-    script.innerHTML = "gtag('event', 'conversion', {'send_to': 'AW-787679341/brqfCMqD2_wCEO2QzPcC'});";
-    document.head.appendChild(script);
+    if (typeof gtag === 'function') {
+      gtag('event', 'conversion', {'send_to': 'AW-787679341/brqfCMqD2_wCEO2QzPcC'});
+      console.log("🎯 Google Ads conversion tracked");
+    } else {
+      console.warn("⚠️ Google Ads gtag not available");
+    }
+
     
     console.log("📋 URL Parameters extracted:", params);
   }, [track]);
