@@ -58,6 +58,11 @@ export default function ThankYou() {
       confirmation_method: "url_params",
     });
 
+    // Google Ads conversion tracking
+    const script = document.createElement('script');
+    script.innerHTML = "gtag('event', 'conversion', {'send_to': 'AW-787679341/brqfCMqD2_wCEO2QzPcC'});";
+    document.head.appendChild(script);
+    
     console.log("📋 URL Parameters extracted:", params);
   }, [track]);
 
