@@ -88,10 +88,10 @@ export default function ThankYou() {
     // Restore UTM data using the tracker method with merged data
     if (Object.keys(mergedUtmData).length > 0) {
       // Convert merged data to the format expected by restoreUTMFromUrl
-      const mergedParams = { ...params };
+      const mergedParams: Record<string, string> = { ...params };
       Object.entries(mergedUtmData).forEach(([key, value]) => {
         if (value) {
-          mergedParams[key] = value;
+          mergedParams[key] = String(value);
         }
       });
       
