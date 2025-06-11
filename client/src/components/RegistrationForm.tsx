@@ -55,24 +55,56 @@ export default function RegistrationForm() {
                       
                       let finalFormUrl;
                       try {
+                        // Get fresh UTM data from current URL first
+                        const currentUrlParams = new URLSearchParams(window.location.search);
+                        const freshUtmData: Record<string, string> = {};
+                        
+                        // Capture UTMs from current URL
+                        const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id", "gclid", "fbclid", "tag", "hyros_tag"];
+                        utmKeys.forEach((key) => {
+                          const value = currentUrlParams.get(key);
+                          if (value) {
+                            freshUtmData[key] = value;
+                          }
+                        });
+
+                        // Also check localStorage for stored UTM data
+                        let storedUtmData = {};
+                        const storedUtm = localStorage.getItem('utm_params');
+                        if (storedUtm) {
+                          try {
+                            storedUtmData = JSON.parse(storedUtm);
+                          } catch (e) {
+                            console.warn('Could not parse stored UTM data:', e);
+                          }
+                        }
+
+                        // Merge stored and fresh UTM data (fresh takes precedence)
+                        const mergedUtmData = { ...storedUtmData, ...freshUtmData };
+                        
+                        console.log('🔍 UTM data for WebinarJam URL generation:');
+                        console.log('  - Fresh from URL:', freshUtmData);
+                        console.log('  - From localStorage:', storedUtmData);
+                        console.log('  - Merged UTM data:', mergedUtmData);
+
                         // Generate cross-domain URL with tracking data (without firing redirect event)
                         const urlParams = new URLSearchParams();
                         const trackingData = mixpanelTracker.getTrackingData();
                         
-                        // Build tracking parameters
+                        // Build tracking parameters using actual UTM data
                         const crossDomainData = {
                           mp_id: trackingData.userId,
                           mp_session: trackingData.sessionId,
-                          mp_source: trackingData.utmData.utm_source || 'direct',
-                          mp_medium: trackingData.utmData.utm_medium || 'organic',
-                          mp_campaign: trackingData.utmData.utm_campaign || 'webinar',
-                          mp_term: trackingData.utmData.utm_term,
-                          mp_content: trackingData.utmData.utm_content,
-                          mp_utm_id: trackingData.utmData.utm_id,
-                          mp_gclid: trackingData.utmData.gclid,
-                          mp_fbclid: trackingData.utmData.fbclid,
-                          mp_tag: trackingData.utmData.tag,
-                          mp_hyros_tag: trackingData.utmData.hyros_tag,
+                          mp_source: mergedUtmData.utm_source || 'direct',
+                          mp_medium: mergedUtmData.utm_medium || 'organic',
+                          mp_campaign: mergedUtmData.utm_campaign || 'webinar',
+                          mp_term: mergedUtmData.utm_term,
+                          mp_content: mergedUtmData.utm_content,
+                          mp_utm_id: mergedUtmData.utm_id,
+                          mp_gclid: mergedUtmData.gclid,
+                          mp_fbclid: mergedUtmData.fbclid,
+                          mp_tag: mergedUtmData.tag,
+                          mp_hyros_tag: mergedUtmData.hyros_tag,
                           ...formParams
                         };
                         
@@ -103,9 +135,8 @@ export default function RegistrationForm() {
 
                             // Enhanced UTM parameter injection - both hidden fields AND form action URL modification
                             formElement.addEventListener('submit', (e) => {
-                              // Get current UTM data
-                              const trackingData = mixpanelTracker.getTrackingData();
-                              const utmData = trackingData.utmData;
+                              // Use the same merged UTM data from form generation
+                              const utmData = mergedUtmData;
 
                               // UTM parameters to inject
                               const utmParams = [
