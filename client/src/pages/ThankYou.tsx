@@ -183,12 +183,6 @@ See you there!`,
     setIsAddedToCalendar(true);
 
     mixpanelTracker.trackCalendarAdd(type);
-    
-    track("Calendar Event Added", {
-      event_type: "webinar_reminder",
-      calendar_type: type,
-      webinar_name: "CPBO Experiment",
-    });
   };
 
   return (

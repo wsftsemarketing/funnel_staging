@@ -74,7 +74,6 @@ class MixpanelTracker {
     if (shouldTrack) {
       this.captureUTMParams();
       this.initializeUser();
-        this.trackFunnelStep('Landing Page Visit', 1);
     }
   }
 

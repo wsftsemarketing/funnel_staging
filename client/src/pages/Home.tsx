@@ -8,6 +8,7 @@ import FAQ from "@/components/FAQ";
 import TrustPilotReviews from "@/components/TrustPilotReviews";
 import Footer from "@/components/Footer";
 import CookieConsentModal from "@/components/CookieConsentModal";
+import { mixpanelTracker } from "@/lib/mixpanelTracking";
 
 // Note: The following components are kept in the codebase but not currently used on the homepage
 import SocialProofNotifications from "@/components/SocialProofNotifications";
@@ -18,19 +19,10 @@ import SocialProofNotifications from "@/components/SocialProofNotifications";
 // import EnhancedExitIntent from "@/components/EnhancedExitIntent";
 
 export default function Home() {
-  // // Handle WhatsApp chat opening from navbar button
-  // useEffect(() => {
-  //   const handleOpenWhatsAppChat = () => {
-  //     // This event will be captured by the WhatsAppChat component
-  //     window.dispatchEvent(new CustomEvent("toggleWhatsAppChat"));
-  //   };
-
-  //   window.addEventListener("openWhatsAppChat", handleOpenWhatsAppChat);
-
-  //   return () => {
-  //     window.removeEventListener("openWhatsAppChat", handleOpenWhatsAppChat);
-  //   };
-  // }, []);
+  // Track landing page visit once when component mounts
+  useEffect(() => {
+    mixpanelTracker.trackFunnelStep('Landing Page Visit', 1);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -44,10 +36,10 @@ export default function Home() {
       <SocialProofNotifications />
       {/* <CookieConsentModal /> */}
       <Footer /> 
-      
+
       {/* Note: The following conversion components have been temporarily disabled
           but remain in the component directory for future use:
-          
+
           - SocialProofNotifications (live registration alerts)
           - WebinarCountdownUpsell (countdown timer)
           - SpotReservationTimer (spot reservation popup)
