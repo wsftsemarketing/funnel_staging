@@ -1,0 +1,104 @@
+<!-- WebinarJam Live Page Tracking -->
+<script>
+(function() {
+  // Check if we're on a WebinarJam live page
+  if (window.location.hostname.includes('event.webinarjam.com') && 
+      window.location.pathname.includes('/live/')) {
+    
+    console.log('[WebinarJam Live] Initializing tracking...');
+    
+    // Get cross-domain data from URL params or localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const storedData = localStorage.getItem('mp_cross_domain_data');
+    
+    let trackingData = {};
+    if (storedData) {
+      try {
+        trackingData = JSON.parse(storedData);
+      } catch (e) {
+        console.warn('[WebinarJam Live] Failed to parse stored tracking data');
+      }
+    }
+    
+    // Override with URL params if available
+    ['mp_id', 'mp_session', 'mp_source', 'mp_medium', 'mp_campaign'].forEach(param => {
+      const value = urlParams.get(param);
+      if (value) trackingData[param] = value;
+    });
+    
+    // Load Mixpanel with the official snippet
+    (function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");for(h=0;h<i.length;h++)g(a,i[h]);var j="set set_once union unset remove delete".split(" ");a.get_group=function(){function b(c){d[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));a.push([e,call2])}}for(var d={},e=["get_group"].concat(Array.prototype.slice.call(arguments,0)),c=0;c<j.length;c++)b(j[c]);return d};b._i.push([e,f,c])};b.__SV=1.2;e=f.createElement("script");e.type="text/javascript";e.async=!0;e.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===f.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";g=f.getElementsByTagName("script")[0];g.parentNode.insertBefore(e,g)}})(document,window.mixpanel||[]);
+    
+    // Initialize Mixpanel
+    window.mixpanel.init('79f20bfb126b3ffe57192638f36ee883', {
+      debug: false,
+      track_pageview: false,
+      persistence: 'localStorage'
+    });
+    
+    // Track webinar join
+    window.mixpanel.track('Webinar Joined', {
+      step_name: 'Webinar Joined',
+      step_order: 4,
+      funnel_type: 'webinar_registration',
+      webinar_url: window.location.href,
+      session_id: trackingData.mp_session || 'unknown',
+      user_id: trackingData.mp_id || 'unknown',
+      utm_source: trackingData.mp_source || 'direct',
+      utm_medium: trackingData.mp_medium || 'organic',
+      utm_campaign: trackingData.mp_campaign || 'webinar',
+      timestamp: new Date().toISOString()
+    });
+    
+    console.log('[WebinarJam Live] Webinar join tracked');
+    
+    // Track video progress if available
+    let lastProgressTracked = 0;
+    const trackProgress = () => {
+      // Try to get video element (WebinarJam uses various video players)
+      const video = document.querySelector('video') || 
+                   document.querySelector('.vjs-tech') ||
+                   document.querySelector('[data-testid="video"]');
+      
+      if (video && video.duration && video.currentTime) {
+        const progress = Math.round((video.currentTime / video.duration) * 100);
+        
+        // Track every 25% milestone
+        const milestones = [25, 50, 75, 90, 100];
+        milestones.forEach(milestone => {
+          if (progress >= milestone && lastProgressTracked < milestone) {
+            window.mixpanel.track('Video Progress', {
+              progress_percent: milestone,
+              watch_time_seconds: Math.round(video.currentTime),
+              session_id: trackingData.mp_session || 'unknown',
+              funnel_step: 5,
+              event_type: 'video_progress',
+              utm_source: trackingData.mp_source || 'direct',
+              utm_medium: trackingData.mp_medium || 'organic',
+              utm_campaign: trackingData.mp_campaign || 'webinar'
+            });
+            
+            console.log('[WebinarJam Live] Video progress tracked:', milestone + '%');
+            lastProgressTracked = milestone;
+          }
+        });
+      }
+    };
+    
+    // Check for video progress every 30 seconds
+    setInterval(trackProgress, 30000);
+    
+    // Also track on page unload
+    window.addEventListener('beforeunload', () => {
+      trackProgress(); // Final progress check
+      window.mixpanel.track('Webinar Session End', {
+        session_id: trackingData.mp_session || 'unknown',
+        final_progress: lastProgressTracked,
+        utm_source: trackingData.mp_source || 'direct',
+        utm_medium: trackingData.mp_medium || 'organic',
+        utm_campaign: trackingData.mp_campaign || 'webinar'
+      });
+    });
+  }
+})();
+</script>
