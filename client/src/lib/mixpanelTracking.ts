@@ -282,6 +282,9 @@ class MixpanelTracker {
       localStorage.setItem("mixpanel_user_id", this.userId);
     }
 
+    // Force update session ID to ensure freshness
+    this.sessionId = this.generateSessionId();
+
     // Re-check for fresh UTM parameters from current URL
     const currentUrlParams = new URLSearchParams(window.location.search);
     const freshUtmData: UTMData = {};
@@ -329,8 +332,10 @@ class MixpanelTracker {
 
     console.log('🔗 Cross-domain data:', crossDomainData);
 
-    // Store for WebinarJam to pick up
+    // Store for WebinarJam to pick up (multiple storage methods for reliability)
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
+    localStorage.setItem('webinar_tracking_backup', JSON.stringify(crossDomainData));
+    sessionStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
 
     // Generate URL with tracking parameters
     const trackingParams = new URLSearchParams();
