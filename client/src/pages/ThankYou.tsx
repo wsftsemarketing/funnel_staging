@@ -270,15 +270,15 @@ See you there!`,
                 </div>
                 <div className="flex items-center gap-3 mb-3">
                   <Link2Icon className="w-5 h-5 text-primary" />
-                  <div className="flex-1">
+                  <div className="flex-1 max-w-full">
                     <p className="font-semibold">Your Webinar Link</p>
                     <a
                       href={urlParams.wj_lead_unique_link_live_room}
-                      className="text-primary text-sm py-2 px-4 rounded-lg bg-neutral-50/70 w-full block"
+                      className="text-primary text-sm py-2 px-4 rounded-lg bg-neutral-50/70 w-full block whitespace-pre-wrap break-all"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                       {urlParams.wj_lead_unique_link_live_room || "Provided via email."}
+                      {urlParams.wj_lead_unique_link_live_room || "Provided via email."}
                     </a>
                   </div>
                 </div>
