@@ -282,6 +282,9 @@ class MixpanelTracker {
       localStorage.setItem("mixpanel_user_id", this.userId);
     }
 
+    // Force update session ID to ensure freshness
+    this.sessionId = this.generateSessionId();
+
     // Re-check for fresh UTM parameters from current URL
     const currentUrlParams = new URLSearchParams(window.location.search);
     const freshUtmData: UTMData = {};
@@ -329,8 +332,10 @@ class MixpanelTracker {
 
     console.log('🔗 Cross-domain data:', crossDomainData);
 
-    // Store for WebinarJam to pick up
+    // Store for WebinarJam to pick up (multiple storage methods for reliability)
     localStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
+    localStorage.setItem('webinar_tracking_backup', JSON.stringify(crossDomainData));
+    sessionStorage.setItem('mp_cross_domain_data', JSON.stringify(crossDomainData));
 
     // Generate URL with tracking parameters
     const trackingParams = new URLSearchParams();
@@ -428,7 +433,7 @@ export const generateConfirmationPageScript = (): string => {
   return `
     <script>
     (function() {
-      console.log('[WebinarJam Confirmation] Initializing tracking...');
+      console.log('[CPBO Confirmation] Initializing tracking...');
       
       // Get cross-domain data from localStorage or URL params
       const urlParams = new URLSearchParams(window.location.search);
@@ -438,9 +443,9 @@ export const generateConfirmationPageScript = (): string => {
       if (storedData) {
         try {
           trackingData = JSON.parse(storedData);
-          console.log('[WebinarJam Confirmation] Found stored cross-domain data:', trackingData);
+          console.log('[CPBO Confirmation] Found stored cross-domain data:', trackingData);
         } catch (e) {
-          console.warn('[WebinarJam Confirmation] Failed to parse stored tracking data');
+          console.warn('[CPBO Confirmation] Failed to parse stored tracking data');
         }
       }
       
@@ -465,16 +470,34 @@ export const generateConfirmationPageScript = (): string => {
             persistence: 'localStorage'
           });
           
-          // Identify the same user to maintain identity chain
+          // CRITICAL: Identify the same user to maintain identity chain
           if (trackingData.mp_id) {
             mixpanel.identify(trackingData.mp_id);
-            console.log('[WebinarJam Confirmation] User identified:', trackingData.mp_id);
+            console.log('[CPBO Confirmation] User identified with existing ID:', trackingData.mp_id);
           }
           
-          // Track confirmation page view
-          mixpanel.track('Confirmation Page Viewed', {
-            step_name: 'Confirmation Page Viewed',
-            step_order: 3,
+          // Register UTM properties for all future events
+          const utmProperties = {};
+          if (trackingData.mp_source) utmProperties.utm_source = trackingData.mp_source;
+          if (trackingData.mp_medium) utmProperties.utm_medium = trackingData.mp_medium;
+          if (trackingData.mp_campaign) utmProperties.utm_campaign = trackingData.mp_campaign;
+          if (trackingData.mp_term) utmProperties.utm_term = trackingData.mp_term;
+          if (trackingData.mp_content) utmProperties.utm_content = trackingData.mp_content;
+          if (trackingData.mp_utm_id) utmProperties.utm_id = trackingData.mp_utm_id;
+          if (trackingData.mp_gclid) utmProperties.gclid = trackingData.mp_gclid;
+          if (trackingData.mp_fbclid) utmProperties.fbclid = trackingData.mp_fbclid;
+          if (trackingData.mp_tag) utmProperties.tag = trackingData.mp_tag;
+          if (trackingData.mp_hyros_tag) utmProperties.hyros_tag = trackingData.mp_hyros_tag;
+          
+          if (Object.keys(utmProperties).length > 0) {
+            mixpanel.register(utmProperties);
+            console.log('[CPBO Confirmation] UTM properties registered:', utmProperties);
+          }
+          
+          // Track CPBO Registration Confirmed event
+          mixpanel.track('CPBO Reg Confirmed', {
+            step_name: 'CPBO Registration Confirmed',
+            step_order: 2,
             funnel_type: 'webinar_registration',
             page_type: 'confirmation',
             page_url: window.location.href,
@@ -490,14 +513,38 @@ export const generateConfirmationPageScript = (): string => {
             fbclid: trackingData.mp_fbclid,
             tag: trackingData.mp_tag,
             hyros_tag: trackingData.mp_hyros_tag,
+            has_utms: Object.keys(utmProperties).length > 0,
             timestamp: new Date().toISOString()
           });
           
-          console.log('[WebinarJam Confirmation] Confirmation page view tracked with preserved user identity');
+          // Also track as Funnel Step for consistency
+          mixpanel.track('Funnel Step', {
+            step_name: 'CPBO Registration Confirmed',
+            step_order: 2,
+            funnel_type: 'webinar_registration',
+            page_type: 'confirmation',
+            page_url: window.location.href,
+            session_id: trackingData.mp_session || 'unknown',
+            user_id: trackingData.mp_id || 'unknown',
+            utm_source: trackingData.mp_source || 'direct',
+            utm_medium: trackingData.mp_medium || 'organic',
+            utm_campaign: trackingData.mp_campaign || 'webinar',
+            utm_term: trackingData.mp_term,
+            utm_content: trackingData.mp_content,
+            utm_id: trackingData.mp_utm_id,
+            gclid: trackingData.mp_gclid,
+            fbclid: trackingData.mp_fbclid,
+            tag: trackingData.mp_tag,
+            hyros_tag: trackingData.mp_hyros_tag,
+            has_utms: Object.keys(utmProperties).length > 0,
+            timestamp: new Date().toISOString()
+          });
+          
+          console.log('[CPBO Confirmation] Registration confirmation tracked with preserved user identity and UTM data');
         }
       };
       script.onerror = function() {
-        console.error('[WebinarJam Confirmation] Failed to load Mixpanel script');
+        console.error('[CPBO Confirmation] Failed to load Mixpanel script');
       };
       document.head.appendChild(script);
     })();
