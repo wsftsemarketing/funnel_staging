@@ -67,12 +67,7 @@ const caseStudies = [
 ];
 
 export default function CaseStudies() {
-  const { track, trackFunnelStep, trackSectionView } = useMixpanelTracking();
-  
-  // Track section view with new system
-  useEffect(() => {
-    trackSectionView('Case Studies');
-  }, [trackSectionView]);
+  const { track, trackFunnelStep } = useMixpanelTracking();
   
   const [activeCaseStudy, setActiveCaseStudy] = useState(0);
   const trustpilotRef = useRef<HTMLDivElement>(null);

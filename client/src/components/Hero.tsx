@@ -2,10 +2,9 @@ import { useRef } from "react";
 import { Highlight } from "@/components/ui/highlight";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { ArrowRight, Clock, CheckCircle, Award } from "lucide-react";
-import { useTrackSection, useMixpanelTracking } from "@/hooks/useMixpanelTracking";
+import { useMixpanelTracking } from "@/hooks/useMixpanelTracking";
 
 export default function Hero() {
-  useTrackSection('Hero Section');
   const { trackButtonClick, trackFunnelStep } = useMixpanelTracking();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useIntersectionObserver(ref, { threshold: 0.1 });
