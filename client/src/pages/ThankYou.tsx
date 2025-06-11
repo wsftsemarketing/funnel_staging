@@ -128,7 +128,7 @@ export default function ThankYou() {
     });
     
     console.log("📋 URL Parameters extracted:", params);
-    console.log("🎯 UTM Data extracted for attribution:", validUtmData);
+    console.log("🎯 UTM Data extracted for attribution:", validUrlUtmData);
   }, [track]);
 
   // Generate calendar event
