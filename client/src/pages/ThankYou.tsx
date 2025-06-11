@@ -46,8 +46,8 @@ export default function ThankYou() {
 
     setUrlParams(params);
 
-    // Extract UTM and tracking parameters for proper attribution
-    const utmData = {
+    // Extract UTM and tracking parameters from URL
+    const urlUtmData = {
       utm_source: params.utm_source,
       utm_medium: params.utm_medium,
       utm_campaign: params.utm_campaign,
@@ -60,15 +60,45 @@ export default function ThankYou() {
       hyros_tag: params.hyros_tag
     };
 
-    // Filter out undefined values
-    const validUtmData = Object.fromEntries(
-      Object.entries(utmData).filter(([_, value]) => value !== undefined)
+    // Filter out undefined values from URL
+    const validUrlUtmData = Object.fromEntries(
+      Object.entries(urlUtmData).filter(([_, value]) => value !== undefined)
     );
 
-    // Restore UTM data using the tracker method
-    if (Object.keys(validUtmData).length > 0) {
-      mixpanelTracker.restoreUTMFromUrl(params);
-      console.log("🔄 Updated UTM data from WebinarJam redirect:", validUtmData);
+    // Also check localStorage for any stored UTM data
+    const storedUtmData = localStorage.getItem('utm_params');
+    let storedUtm = {};
+    if (storedUtmData) {
+      try {
+        storedUtm = JSON.parse(storedUtmData);
+        console.log("📦 Found stored UTM data in localStorage:", storedUtm);
+      } catch (error) {
+        console.warn("⚠️ Could not parse stored UTM data:", error);
+      }
+    }
+
+    // Merge URL UTM data with stored UTM data (URL takes precedence)
+    const mergedUtmData = { ...storedUtm, ...validUrlUtmData };
+    
+    console.log("🔍 UTM data sources:");
+    console.log("  - From URL:", validUrlUtmData);
+    console.log("  - From localStorage:", storedUtm);
+    console.log("  - Merged final UTM data:", mergedUtmData);
+
+    // Restore UTM data using the tracker method with merged data
+    if (Object.keys(mergedUtmData).length > 0) {
+      // Convert merged data to the format expected by restoreUTMFromUrl
+      const mergedParams = { ...params };
+      Object.entries(mergedUtmData).forEach(([key, value]) => {
+        if (value) {
+          mergedParams[key] = value;
+        }
+      });
+      
+      mixpanelTracker.restoreUTMFromUrl(mergedParams);
+      console.log("🔄 Restored UTM data from multiple sources:", mergedUtmData);
+    } else {
+      console.log("⚠️ No UTM data found in URL or localStorage");
     }
 
     // Track confirmation page view with UTM data retention
@@ -81,13 +111,20 @@ export default function ThankYou() {
       webinar_name: "CPBO Experiment",
       page_type: "confirmation",
       confirmation_method: "url_params",
-      // Include UTM data for proper attribution
-      ...validUtmData,
+      // Include merged UTM data for proper attribution
+      ...mergedUtmData,
       // Include tracking IDs if available
       mp_user_id: params.mp_user_id,
       mp_session_id: params.mp_session_id,
-      has_utm_data: Object.keys(validUtmData).length > 0,
-      utm_source_count: Object.keys(validUtmData).length
+      // Enhanced UTM tracking info
+      has_utm_data: Object.keys(mergedUtmData).length > 0,
+      utm_source_count: Object.keys(mergedUtmData).length,
+      utm_from_url: Object.keys(validUrlUtmData).length > 0,
+      utm_from_localstorage: Object.keys(storedUtm).length > 0,
+      utm_sources_found: [
+        ...(Object.keys(validUrlUtmData).length > 0 ? ['url'] : []),
+        ...(Object.keys(storedUtm).length > 0 ? ['localStorage'] : [])
+      ]
     });
     
     console.log("📋 URL Parameters extracted:", params);

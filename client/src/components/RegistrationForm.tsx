@@ -101,7 +101,7 @@ export default function RegistrationForm() {
                               }, { once: true });
                             });
 
-                            // Inject UTM parameters as hidden fields before form submission
+                            // Enhanced UTM parameter injection - both hidden fields AND form action URL modification
                             formElement.addEventListener('submit', (e) => {
                               // Get current UTM data
                               const trackingData = mixpanelTracker.getTrackingData();
@@ -114,7 +114,7 @@ export default function RegistrationForm() {
                                 'gclid', 'fbclid', 'tag', 'hyros_tag'
                               ];
 
-                              // Add UTM parameters as hidden fields if they exist
+                              // Method 1: Add UTM parameters as hidden fields
                               utmParams.forEach(param => {
                                 const value = utmData[param];
                                 if (value && !formElement.querySelector(`input[name="${param}"]`)) {
@@ -123,9 +123,31 @@ export default function RegistrationForm() {
                                   hiddenInput.name = param;
                                   hiddenInput.value = value;
                                   formElement.appendChild(hiddenInput);
-                                  console.log(`✅ Injected ${param}=${value} into WebinarJam form`);
+                                  console.log(`✅ Injected hidden field ${param}=${value} into WebinarJam form`);
                                 }
                               });
+
+                              // Method 2: Modify form action URL to include UTM parameters
+                              const currentAction = formElement.action;
+                              if (currentAction && Object.keys(utmData).length > 0) {
+                                try {
+                                  const actionUrl = new URL(currentAction);
+                                  
+                                  // Add UTM parameters to the action URL
+                                  utmParams.forEach(param => {
+                                    const value = utmData[param];
+                                    if (value) {
+                                      actionUrl.searchParams.set(param, value);
+                                    }
+                                  });
+                                  
+                                  // Update the form action with UTM parameters
+                                  formElement.action = actionUrl.toString();
+                                  console.log(`🔗 Updated WebinarJam form action URL with UTM parameters:`, actionUrl.toString());
+                                } catch (error) {
+                                  console.warn('⚠️ Could not modify form action URL:', error);
+                                }
+                              }
 
                               // Also add our tracking identifiers
                               const trackingParams = {
@@ -141,11 +163,11 @@ export default function RegistrationForm() {
                                   hiddenInput.name = param;
                                   hiddenInput.value = value;
                                   formElement.appendChild(hiddenInput);
-                                  console.log(`✅ Injected ${param}=${value} into WebinarJam form`);
+                                  console.log(`✅ Injected tracking ID ${param}=${value} into WebinarJam form`);
                                 }
                               });
 
-                              console.log('🔗 UTM parameters and tracking data injected into form submission');
+                              console.log('🚀 UTM parameters injected via both hidden fields AND form action URL modification');
 
                               // Track registration submission
                               mixpanelTracker.trackRegistrationSubmission({
