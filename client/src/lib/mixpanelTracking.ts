@@ -22,15 +22,21 @@ if (shouldTrack) {
     cross_subdomain_cookie: false,
     secure_cookie: true,
     ip: true,
-    // Enable session replay and heatmaps
-    record_sessions_percent: 50, // Record 50% of sessions
+    // Enable session replay and heatmaps explicitly
+    record_sessions_percent: 100, // Record 100% of sessions
     record_block_class: '', // Don't block any elements
     record_collect_fonts: true,
     record_idle_timeout_ms: 900000, // 15 minutes (900,000 ms)
     record_max_ms: 1800000, // 30 minutes max session length
-    // Heatmap configuration
+    // Heatmap configuration - enable for all traffic
     track_links_timeout: 300,
     autotrack: true, // Enable automatic click tracking for heatmaps
+    heatmaps: true, // Explicitly enable heatmaps
+    heatmaps_record_all_selector: '*', // Record heatmaps for all elements
+    // Content recording settings - don't anonymize anything
+    record_mask_text_selector: '', // Don't mask any text
+    record_block_selector: '', // Don't block any selectors
+    record_mask_input_selector: '', // Don't mask any inputs
   });
 
   // Enable session replay and heatmaps explicitly
@@ -261,14 +267,14 @@ class MixpanelTracker {
   // Cross-domain URL generation for WebinarJam (with redirect tracking)
   public generateCrossDomainUrl(baseUrl: string, additionalParams: Record<string, string> = {}): string {
     const url = this.buildCrossDomainUrl(baseUrl, additionalParams);
-    
+
     // Track the redirect
     this.track('Webinar Redirect', {
       destination: 'webinarjam',
       destination_url: baseUrl,
       cross_domain_data: JSON.parse(localStorage.getItem('mp_cross_domain_data') || '{}')
     });
-    
+
     return url;
   }
 
@@ -288,7 +294,7 @@ class MixpanelTracker {
     // Re-check for fresh UTM parameters from current URL
     const currentUrlParams = new URLSearchParams(window.location.search);
     const freshUtmData: UTMData = {};
-    
+
     const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id", "gclid", "fbclid", "tag", "hyros_tag"];
     utmKeys.forEach((key) => {
       const value = currentUrlParams.get(key);
@@ -353,7 +359,7 @@ class MixpanelTracker {
   // Start session recording manually (if needed)
   public startSessionRecording(): void {
     if (!shouldTrack) return;
-    
+
     mixpanel.start_session_recording();
     console.log('🎥 Session recording started');
   }
@@ -361,7 +367,7 @@ class MixpanelTracker {
   // Stop session recording
   public stopSessionRecording(): void {
     if (!shouldTrack) return;
-    
+
     mixpanel.stop_session_recording();
     console.log('⏹️ Session recording stopped');
   }
@@ -398,15 +404,15 @@ class MixpanelTracker {
       // Merge with existing UTM data
       const existingUtm = this.utmData;
       this.utmData = { ...existingUtm, ...extractedUtm };
-      
+
       // Update localStorage
       localStorage.setItem("utm_params", JSON.stringify(this.utmData));
-      
+
       // Re-register with Mixpanel
       if (shouldTrack) {
         mixpanel.register(extractedUtm);
       }
-      
+
       console.log('🔄 UTM data restored from URL:', extractedUtm);
       console.log('✅ Complete UTM data:', this.utmData);
     }
@@ -434,11 +440,11 @@ export const generateConfirmationPageScript = (): string => {
     <script>
     (function() {
       console.log('[CPBO Confirmation] Initializing tracking...');
-      
+
       // Get cross-domain data from localStorage or URL params
       const urlParams = new URLSearchParams(window.location.search);
       const storedData = localStorage.getItem('mp_cross_domain_data');
-      
+
       let trackingData = {};
       if (storedData) {
         try {
@@ -448,16 +454,16 @@ export const generateConfirmationPageScript = (): string => {
           console.warn('[CPBO Confirmation] Failed to parse stored tracking data');
         }
       }
-      
+
       // Override with URL params if available
       ['mp_id', 'mp_session', 'mp_source', 'mp_medium', 'mp_campaign', 'mp_term', 'mp_content', 'mp_utm_id', 'mp_gclid', 'mp_fbclid', 'mp_tag', 'mp_hyros_tag'].forEach(param => {
         const value = urlParams.get(param);
         if (value) trackingData[param] = value;
       });
-      
+
       // Store the tracking data for WebinarJam live page to pick up
       localStorage.setItem('wj_tracking_data', JSON.stringify(trackingData));
-      
+
       // Load Mixpanel first, then track
       const script = document.createElement('script');
       script.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
@@ -469,13 +475,13 @@ export const generateConfirmationPageScript = (): string => {
             track_pageview: false,
             persistence: 'localStorage'
           });
-          
+
           // CRITICAL: Identify the same user to maintain identity chain
           if (trackingData.mp_id) {
             mixpanel.identify(trackingData.mp_id);
             console.log('[CPBO Confirmation] User identified with existing ID:', trackingData.mp_id);
           }
-          
+
           // Register UTM properties for all future events
           const utmProperties = {};
           if (trackingData.mp_source) utmProperties.utm_source = trackingData.mp_source;
@@ -488,12 +494,12 @@ export const generateConfirmationPageScript = (): string => {
           if (trackingData.mp_fbclid) utmProperties.fbclid = trackingData.mp_fbclid;
           if (trackingData.mp_tag) utmProperties.tag = trackingData.mp_tag;
           if (trackingData.mp_hyros_tag) utmProperties.hyros_tag = trackingData.mp_hyros_tag;
-          
+
           if (Object.keys(utmProperties).length > 0) {
             mixpanel.register(utmProperties);
             console.log('[CPBO Confirmation] UTM properties registered:', utmProperties);
           }
-          
+
           // Track CPBO Registration Confirmed event
           mixpanel.track('CPBO Reg Confirmed', {
             step_name: 'CPBO Registration Confirmed',
@@ -516,7 +522,7 @@ export const generateConfirmationPageScript = (): string => {
             has_utms: Object.keys(utmProperties).length > 0,
             timestamp: new Date().toISOString()
           });
-          
+
           // Also track as Funnel Step for consistency
           mixpanel.track('Funnel Step', {
             step_name: 'CPBO Registration Confirmed',
@@ -539,7 +545,7 @@ export const generateConfirmationPageScript = (): string => {
             has_utms: Object.keys(utmProperties).length > 0,
             timestamp: new Date().toISOString()
           });
-          
+
           console.log('[CPBO Confirmation] Registration confirmation tracked with preserved user identity and UTM data');
         }
       };
@@ -560,16 +566,16 @@ export const generateWebinarJamScript = (): string => {
       // Check if we're on a WebinarJam live page
       if (window.location.hostname.includes('event.webinarjam.com') && 
           window.location.pathname.includes('/live/')) {
-        
+
         console.log('[WebinarJam Live] Initializing tracking...');
-        
+
         // Get cross-domain data from URL params or localStorage (multiple sources)
         const urlParams = new URLSearchParams(window.location.search);
         const storedData = localStorage.getItem('mp_cross_domain_data');
         const wjTrackingData = localStorage.getItem('wj_tracking_data');
-        
+
         let trackingData = {};
-        
+
         // Try multiple data sources in priority order
         if (wjTrackingData) {
           try {
@@ -586,15 +592,15 @@ export const generateWebinarJamScript = (): string => {
             console.warn('[WebinarJam Live] Failed to parse stored tracking data');
           }
         }
-        
+
         // Override with URL params if available
         ['mp_id', 'mp_session', 'mp_source', 'mp_medium', 'mp_campaign', 'mp_term', 'mp_content', 'mp_utm_id', 'mp_gclid', 'mp_fbclid', 'mp_tag', 'mp_hyros_tag'].forEach(param => {
           const value = urlParams.get(param);
           if (value) trackingData[param] = value;
         });
-        
+
         console.log('[WebinarJam Live] Final tracking data:', trackingData);
-        
+
         // Load Mixpanel
         const script = document.createElement('script');
         script.src = 'https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js';
@@ -605,13 +611,13 @@ export const generateWebinarJamScript = (): string => {
               track_pageview: false,
               persistence: 'localStorage'
             });
-            
+
             // CRITICAL: Identify the same user to maintain identity chain
             if (trackingData.mp_id) {
               mixpanel.identify(trackingData.mp_id);
               console.log('[WebinarJam Live] User identified with existing ID:', trackingData.mp_id);
             }
-            
+
             // Register UTM properties for all future events
             const utmProperties = {};
             ['mp_source', 'mp_medium', 'mp_campaign', 'mp_term', 'mp_content', 'mp_utm_id', 'mp_gclid', 'mp_fbclid', 'mp_tag', 'mp_hyros_tag'].forEach(key => {
@@ -620,12 +626,12 @@ export const generateWebinarJamScript = (): string => {
                 utmProperties[cleanKey === 'source' ? 'utm_source' : cleanKey === 'medium' ? 'utm_medium' : cleanKey === 'campaign' ? 'utm_campaign' : cleanKey === 'term' ? 'utm_term' : cleanKey === 'content' ? 'utm_content' : cleanKey === 'utm_id' ? 'utm_id' : cleanKey === 'gclid' ? 'gclid' : cleanKey === 'fbclid' ? 'fbclid' : cleanKey === 'tag' ? 'tag' : 'hyros_tag'] = trackingData[key];
               }
             });
-            
+
             if (Object.keys(utmProperties).length > 0) {
               mixpanel.register(utmProperties);
               console.log('[WebinarJam Live] UTM properties registered:', utmProperties);
             }
-            
+
             // Track webinar join with preserved user identity and UTM data
             mixpanel.track('Webinar Joined', {
               step_name: 'Webinar Joined',
@@ -647,9 +653,9 @@ export const generateWebinarJamScript = (): string => {
               has_utms: Object.keys(utmProperties).length > 0,
               timestamp: new Date().toISOString()
             });
-            
+
             console.log('[WebinarJam Live] Webinar join tracked with preserved user identity and UTM data');
-            
+
             // Track video progress if available
             let lastProgressTracked = 0;
             const trackProgress = () => {
@@ -657,10 +663,10 @@ export const generateWebinarJamScript = (): string => {
               const video = document.querySelector('video') || 
                            document.querySelector('.vjs-tech') ||
                            document.querySelector('[data-testid="video"]');
-              
+
               if (video && video.duration && video.currentTime) {
                 const progress = Math.round((video.currentTime / video.duration) * 100);
-                
+
                 // Track every 25% milestone
                 const milestones = [25, 50, 75, 90, 100];
                 milestones.forEach(milestone => {
@@ -683,17 +689,17 @@ export const generateWebinarJamScript = (): string => {
                       tag: trackingData.mp_tag,
                       hyros_tag: trackingData.mp_hyros_tag
                     });
-                    
+
                     console.log('[WebinarJam Live] Video progress tracked:', milestone + '%');
                     lastProgressTracked = milestone;
                   }
                 });
               }
             };
-            
+
             // Check for video progress every 30 seconds
             setInterval(trackProgress, 30000);
-            
+
             // Also track on page unload
             window.addEventListener('beforeunload', () => {
               trackProgress(); // Final progress check
