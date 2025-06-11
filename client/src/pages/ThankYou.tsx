@@ -46,19 +46,52 @@ export default function ThankYou() {
 
     setUrlParams(params);
 
+    // Extract UTM and tracking parameters for proper attribution
+    const utmData = {
+      utm_source: params.utm_source,
+      utm_medium: params.utm_medium,
+      utm_campaign: params.utm_campaign,
+      utm_term: params.utm_term,
+      utm_content: params.utm_content,
+      utm_id: params.utm_id,
+      gclid: params.gclid,
+      fbclid: params.fbclid,
+      tag: params.tag,
+      hyros_tag: params.hyros_tag
+    };
+
+    // Filter out undefined values
+    const validUtmData = Object.fromEntries(
+      Object.entries(utmData).filter(([_, value]) => value !== undefined)
+    );
+
+    // Restore UTM data using the tracker method
+    if (Object.keys(validUtmData).length > 0) {
+      mixpanelTracker.restoreUTMFromUrl(params);
+      console.log("🔄 Updated UTM data from WebinarJam redirect:", validUtmData);
+    }
+
     // Track confirmation page view with UTM data retention
     mixpanelTracker.trackConfirmationPageView();
 
-    // Send specific confirmation event
+    // Send specific confirmation event with proper attribution
     track("CPBO: Registration Confirmed", {
       email: params.wj_lead_email || "unknown",
       name: params.wj_lead_first_name || "unknown",
       webinar_name: "CPBO Experiment",
       page_type: "confirmation",
       confirmation_method: "url_params",
+      // Include UTM data for proper attribution
+      ...validUtmData,
+      // Include tracking IDs if available
+      mp_user_id: params.mp_user_id,
+      mp_session_id: params.mp_session_id,
+      has_utm_data: Object.keys(validUtmData).length > 0,
+      utm_source_count: Object.keys(validUtmData).length
     });
     
     console.log("📋 URL Parameters extracted:", params);
+    console.log("🎯 UTM Data extracted for attribution:", validUtmData);
   }, [track]);
 
   // Generate calendar event

@@ -372,6 +372,42 @@ class MixpanelTracker {
     };
   }
 
+  // Restore UTM data from URL parameters (useful for confirmation pages)
+  public restoreUTMFromUrl(urlParams: Record<string, string>): void {
+    const utmKeys = [
+      "utm_source", "utm_medium", "utm_campaign", "utm_term", 
+      "utm_content", "utm_id", "gclid", "fbclid", "tag", "hyros_tag"
+    ];
+
+    const extractedUtm: UTMData = {};
+    let hasNewData = false;
+
+    utmKeys.forEach((key) => {
+      const value = urlParams[key];
+      if (value) {
+        extractedUtm[key] = value;
+        hasNewData = true;
+      }
+    });
+
+    if (hasNewData) {
+      // Merge with existing UTM data
+      const existingUtm = this.utmData;
+      this.utmData = { ...existingUtm, ...extractedUtm };
+      
+      // Update localStorage
+      localStorage.setItem("utm_params", JSON.stringify(this.utmData));
+      
+      // Re-register with Mixpanel
+      if (shouldTrack) {
+        mixpanel.register(extractedUtm);
+      }
+      
+      console.log('🔄 UTM data restored from URL:', extractedUtm);
+      console.log('✅ Complete UTM data:', this.utmData);
+    }
+  }
+
   // Clear tracking data (for testing)
   public clearTrackingData(): void {
     const keysToRemove = [

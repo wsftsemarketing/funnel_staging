@@ -86,7 +86,7 @@ export default function RegistrationForm() {
                         finalFormUrl = `${baseFormUrl}?${urlParams.toString()}`;
                         console.log('✅ Generated WebinarJam URL with tracking:', finalFormUrl);
                         
-                        // Set up form submission listener - track redirect ONLY on actual submission
+                        // Set up form submission listener and UTM injection
                         setTimeout(() => {
                           const formElement = el.querySelector('form');
                           if (formElement) {
@@ -101,18 +101,66 @@ export default function RegistrationForm() {
                               }, { once: true });
                             });
 
-                            formElement.addEventListener('submit', () => {
+                            // Inject UTM parameters as hidden fields before form submission
+                            formElement.addEventListener('submit', (e) => {
+                              // Get current UTM data
+                              const trackingData = mixpanelTracker.getTrackingData();
+                              const utmData = trackingData.utmData;
+
+                              // UTM parameters to inject
+                              const utmParams = [
+                                'utm_source', 'utm_medium', 'utm_campaign', 
+                                'utm_term', 'utm_content', 'utm_id',
+                                'gclid', 'fbclid', 'tag', 'hyros_tag'
+                              ];
+
+                              // Add UTM parameters as hidden fields if they exist
+                              utmParams.forEach(param => {
+                                const value = utmData[param];
+                                if (value && !formElement.querySelector(`input[name="${param}"]`)) {
+                                  const hiddenInput = document.createElement('input');
+                                  hiddenInput.type = 'hidden';
+                                  hiddenInput.name = param;
+                                  hiddenInput.value = value;
+                                  formElement.appendChild(hiddenInput);
+                                  console.log(`✅ Injected ${param}=${value} into WebinarJam form`);
+                                }
+                              });
+
+                              // Also add our tracking identifiers
+                              const trackingParams = {
+                                'mp_user_id': trackingData.userId,
+                                'mp_session_id': trackingData.sessionId,
+                                'mp_timestamp': Date.now().toString()
+                              };
+
+                              Object.entries(trackingParams).forEach(([param, value]) => {
+                                if (value && !formElement.querySelector(`input[name="${param}"]`)) {
+                                  const hiddenInput = document.createElement('input');
+                                  hiddenInput.type = 'hidden';
+                                  hiddenInput.name = param;
+                                  hiddenInput.value = value;
+                                  formElement.appendChild(hiddenInput);
+                                  console.log(`✅ Injected ${param}=${value} into WebinarJam form`);
+                                }
+                              });
+
+                              console.log('🔗 UTM parameters and tracking data injected into form submission');
+
                               // Track registration submission
                               mixpanelTracker.trackRegistrationSubmission({
                                 form_type: 'webinarjam_embed',
-                                webinar_hash: 'y86q9a7p'
+                                webinar_hash: 'y86q9a7p',
+                                utm_data_injected: Object.keys(utmData).length > 0,
+                                injected_params: Object.keys(utmData)
                               });
                               
                               // Track the actual redirect event now
                               mixpanelTracker.track('Webinar Redirect', {
                                 destination: 'webinarjam',
                                 destination_url: baseFormUrl,
-                                form_type: 'webinarjam_embed'
+                                form_type: 'webinarjam_embed',
+                                utm_params_included: true
                               });
                             });
                           }
