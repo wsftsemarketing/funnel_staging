@@ -10,6 +10,7 @@ import {
   ArrowRight,
   Play,
   Star,
+  Ticket,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,7 +33,6 @@ export default function ThankYou() {
   const [urlParams, setUrlParams] = useState<URLParams>({});
   const [isAddedToCalendar, setIsAddedToCalendar] = useState(false);
   const currentYear = new Date().getFullYear();
-
 
   // Extract URL parameters
   useEffect(() => {
@@ -57,16 +57,16 @@ export default function ThankYou() {
       gclid: params.gclid,
       fbclid: params.fbclid,
       tag: params.tag,
-      hyros_tag: params.hyros_tag
+      hyros_tag: params.hyros_tag,
     };
 
     // Filter out undefined values from URL
     const validUrlUtmData = Object.fromEntries(
-      Object.entries(urlUtmData).filter(([_, value]) => value !== undefined)
+      Object.entries(urlUtmData).filter(([_, value]) => value !== undefined),
     );
 
     // Also check localStorage for any stored UTM data
-    const storedUtmData = localStorage.getItem('utm_params');
+    const storedUtmData = localStorage.getItem("utm_params");
     let storedUtm = {};
     if (storedUtmData) {
       try {
@@ -79,7 +79,7 @@ export default function ThankYou() {
 
     // Merge URL UTM data with stored UTM data (URL takes precedence)
     const mergedUtmData = { ...storedUtm, ...validUrlUtmData };
-    
+
     console.log("🔍 UTM data sources:");
     console.log("  - From URL:", validUrlUtmData);
     console.log("  - From localStorage:", storedUtm);
@@ -94,7 +94,7 @@ export default function ThankYou() {
           mergedParams[key] = String(value);
         }
       });
-      
+
       mixpanelTracker.restoreUTMFromUrl(mergedParams);
       console.log("🔄 Restored UTM data from multiple sources:", mergedUtmData);
     } else {
@@ -122,11 +122,11 @@ export default function ThankYou() {
       utm_from_url: Object.keys(validUrlUtmData).length > 0,
       utm_from_localstorage: Object.keys(storedUtm).length > 0,
       utm_sources_found: [
-        ...(Object.keys(validUrlUtmData).length > 0 ? ['url'] : []),
-        ...(Object.keys(storedUtm).length > 0 ? ['localStorage'] : [])
-      ]
+        ...(Object.keys(validUrlUtmData).length > 0 ? ["url"] : []),
+        ...(Object.keys(storedUtm).length > 0 ? ["localStorage"] : []),
+      ],
     });
-    
+
     console.log("📋 URL Parameters extracted:", params);
     console.log("🎯 UTM Data extracted for attribution:", validUrlUtmData);
   }, [track]);
@@ -312,8 +312,6 @@ See you there!`,
                       </p>
                     </div>
                   </div>
-
-                  
                 </div>
                 <div className="bg-neutral-50/70 rounded-lg p-4">
                   <h3 className="font-bold mb-2">What's Coming Your Way:</h3>
@@ -342,7 +340,8 @@ See you there!`,
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {urlParams.wj_lead_unique_link_live_room || "Provided via email."}
+                      {urlParams.wj_lead_unique_link_live_room ||
+                        "Provided via email."}
                     </a>
                   </div>
                 </div>
@@ -380,7 +379,7 @@ See you there!`,
                     Add to Outlook Calendar
                   </Button>
                 </div>
-               ) : (
+              ) : (
                 <div className="bg-green-600 text-white py-4 rounded-lg mb-2">
                   <CheckCircle className="w-5 h-5 inline-block mr-2" />
                   Added to your calendar!
@@ -406,9 +405,9 @@ See you there!`,
               {/* Header Badge */}
               <div className="bg-gradient-to-r from-secondary to-secondary/80 px-6 py-3 text-center">
                 <div className="inline-flex items-center gap-2 text-white">
-                  <Clock className="w-4 h-4" />
+                  <Ticket className="w-4 h-4" />
                   <span className="text-sm font-bold uppercase tracking-wide">
-                    Limited Time Offer
+                    Exclusive Offer
                   </span>
                 </div>
               </div>
@@ -440,12 +439,7 @@ See you there!`,
                       80% OFF
                     </div>
                   </div>
-                  <div className="text-4xl font-black text-secondary mb-2">
-                    £99
-                  </div>
-                  <p className="text-sm text-neutral-600">
-                    Early Bird Price - Today Only
-                  </p>
+                  <div className="text-4xl font-black text-secondary">£99</div>
                 </div>
 
                 {/* Benefits Grid */}
@@ -458,7 +452,9 @@ See you there!`,
                   </div>
                   <div className="flex items-center gap-3 text-left">
                     <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
-                    <span className="text-sm">Direct access to property experts</span>
+                    <span className="text-sm">
+                      Direct access to property experts
+                    </span>
                   </div>
                   <div className="flex items-center gap-3 text-left">
                     <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
@@ -468,9 +464,7 @@ See you there!`,
                   </div>
                   <div className="flex items-center gap-3 text-left">
                     <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
-                    <span className="text-sm">
-                      Personalised wealth plan
-                    </span>
+                    <span className="text-sm">Personalised wealth plan</span>
                   </div>
                   <div className="flex items-center gap-3 text-left">
                     <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
@@ -505,10 +499,9 @@ See you there!`,
 
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                   <p className="text-sm text-yellow-800">
-                    <span className="font-semibold">⚡ Limited Time:</span> This
-                    exclusive 80% discount is only available to webinar
-                    registrants and expires in 48 hours. Normal attendees pay
-                    full price!
+                    <span className="font-semibold">⚡ Exclusive Offer:</span>{" "}
+                    This 80% discount is only available to webinar registrants.
+                    Normal attendees pay full price!
                   </p>
                 </div>
               </div>
@@ -676,22 +669,32 @@ See you there!`,
             className="mt-4 mx-auto opacity-50"
           />
           <div className="flex justify-center space-x-4 mt-4 opacity-50">
-            <a href="https://touchstoneeducation.com/privacy-policy" className="text-neutral-500 text-sm hover:underline">
+            <a
+              href="https://touchstoneeducation.com/privacy-policy"
+              className="text-neutral-500 text-sm hover:underline"
+            >
               Privacy Policy
             </a>
-            <a href="https://touchstoneeducation.com/competition-terms-and-conditions" className="text-neutral-500 text-sm hover:underline">
+            <a
+              href="https://touchstoneeducation.com/competition-terms-and-conditions"
+              className="text-neutral-500 text-sm hover:underline"
+            >
               Terms of Service
             </a>
-            <a href="https://touchstoneeducation.com/contact-us" className="text-neutral-500 text-sm hover:underline">
+            <a
+              href="https://touchstoneeducation.com/contact-us"
+              className="text-neutral-500 text-sm hover:underline"
+            >
               Contact Us
             </a>
           </div>
           <p className="text-neutral-500 text-sm mt-2 opacity-50">
             <span>Industrial Ring 3 9491, Ruggell, Liechtenstein</span>
           </p>
-          
+
           <p className="text-sm text-neutral-500 mt-2">
-            &copy; {currentYear} Touchstone Wealth Ltd, (Touchstone Education) a cell of Duneira Enterprises Ltd PPC. All rights reserved.
+            &copy; {currentYear} Touchstone Wealth Ltd, (Touchstone Education) a
+            cell of Duneira Enterprises Ltd PPC. All rights reserved.
           </p>
         </div>
       </div>
