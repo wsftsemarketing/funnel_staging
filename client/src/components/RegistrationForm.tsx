@@ -118,129 +118,53 @@ export default function RegistrationForm() {
                         finalFormUrl = `${baseFormUrl}?${urlParams.toString()}`;
                         console.log('✅ Generated WebinarJam URL with tracking:', finalFormUrl);
                         
-                        // Set up form submission listener and UTM injection
-                        setTimeout(() => {
-                          const formElement = el.querySelector('form');
-                          if (formElement) {
-                            // Track form interaction start
-                            const inputs = formElement.querySelectorAll('input');
-                            inputs.forEach(input => {
-                              input.addEventListener('focus', () => {
-                                if (!localStorage.getItem('form_interaction_tracked')) {
-                                  localStorage.setItem('form_interaction_tracked', 'true');
-                                  mixpanelTracker.trackFormInteractionStart();
-                                  mixpanelTracker.track("Form Interaction", {
-                                    interaction_type: 'input_focus',
-                                    form_type: 'webinar_registration'
-                                  });
-                                }
-                              }, { once: true });
-                            });
+                        // Set up form submission listener and UTM injection with proper timing
+                        const setupFormTracking = (attempt = 1, maxAttempts = 10) => {
+                          setTimeout(() => {
+                            const formElement = el.querySelector('form');
+                            const inputs = el.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+                            
+                            if (formElement && inputs.length > 0) {
+                              console.log(`✅ WebinarJam form found on attempt ${attempt}, setting up tracking for ${inputs.length} inputs`);
+                              
+                              // Track form interaction start
+                              inputs.forEach(input => {
+                                input.addEventListener('focus', () => {
+                                  if (!localStorage.getItem('form_interaction_tracked')) {
+                                    localStorage.setItem('form_interaction_tracked', 'true');
+                                    mixpanelTracker.trackFormInteractionStart();
+                                    mixpanelTracker.track("Form Interaction Started", {
+                                      interaction_type: 'input_focus',
+                                      form_type: 'webinar_registration',
+                                      input_count: inputs.length
+                                    });
+                                    console.log('📝 Form Interaction Started tracked');
+                                  }
+                                }, { once: true });
+                              });
 
-                            // Track individual field interactions
-                            inputs.forEach((input, index) => {
-                              input.addEventListener('input', () => {
-                                mixpanelTracker.track("Form Field Interaction", {
-                                  field_name: input.name || `field_${index}`,
-                                  field_type: input.type,
-                                  form_type: 'webinar_registration',
-                                  interaction_type: 'field_input'
+                              // Track individual field interactions
+                              inputs.forEach((input, index) => {
+                                input.addEventListener('input', () => {
+                                  mixpanelTracker.track("Form Field Interaction", {
+                                    field_name: input.name || input.placeholder || `field_${index}`,
+                                    field_type: input.type,
+                                    form_type: 'webinar_registration',
+                                    interaction_type: 'field_input'
+                                  });
+                                  console.log(`📝 Form Field Interaction tracked: ${input.name || input.placeholder || `field_${index}`}`);
                                 });
                               });
-                            });
-
-                            // Enhanced UTM parameter injection - both hidden fields AND form action URL modification
-                            formElement.addEventListener('submit', (e) => {
-                              // Use the same merged UTM data from form generation
-                              const utmData = mergedUtmData;
-
-                              // UTM parameters to inject
-                              const utmParams = [
-                                'utm_source', 'utm_medium', 'utm_campaign', 
-                                'utm_term', 'utm_content', 'utm_id',
-                                'gclid', 'fbclid', 'tag', 'hyros_tag'
-                              ];
-
-                              // Method 1: Add UTM parameters as hidden fields
-                              utmParams.forEach(param => {
-                                const value = utmData[param];
-                                if (value && !formElement.querySelector(`input[name="${param}"]`)) {
-                                  const hiddenInput = document.createElement('input');
-                                  hiddenInput.type = 'hidden';
-                                  hiddenInput.name = param;
-                                  hiddenInput.value = value;
-                                  formElement.appendChild(hiddenInput);
-                                  console.log(`✅ Injected hidden field ${param}=${value} into WebinarJam form`);
-                                }
-                              });
-
-                              // Method 2: Modify form action URL to include UTM parameters
-                              const currentAction = formElement.action;
-                              if (currentAction && Object.keys(utmData).length > 0) {
-                                try {
-                                  const actionUrl = new URL(currentAction);
-                                  
-                                  // Add UTM parameters to the action URL
-                                  utmParams.forEach(param => {
-                                    const value = utmData[param];
-                                    if (value) {
-                                      actionUrl.searchParams.set(param, value);
-                                    }
-                                  });
-                                  
-                                  // Update the form action with UTM parameters
-                                  formElement.action = actionUrl.toString();
-                                  console.log(`🔗 Updated WebinarJam form action URL with UTM parameters:`, actionUrl.toString());
-                                } catch (error) {
-                                  console.warn('⚠️ Could not modify form action URL:', error);
-                                }
-                              }
-
-                              // Also add our tracking identifiers
-                              const trackingParams = {
-                                'mp_user_id': trackingData.userId,
-                                'mp_session_id': trackingData.sessionId,
-                                'mp_timestamp': Date.now().toString()
-                              };
-
-                              Object.entries(trackingParams).forEach(([param, value]) => {
-                                if (value && !formElement.querySelector(`input[name="${param}"]`)) {
-                                  const hiddenInput = document.createElement('input');
-                                  hiddenInput.type = 'hidden';
-                                  hiddenInput.name = param;
-                                  hiddenInput.value = value;
-                                  formElement.appendChild(hiddenInput);
-                                  console.log(`✅ Injected tracking ID ${param}=${value} into WebinarJam form`);
-                                }
-                              });
-
-                              console.log('🚀 UTM parameters injected via both hidden fields AND form action URL modification');
-
-                              // Track registration submission
-                              mixpanelTracker.trackRegistrationSubmission({
-                                form_type: 'webinarjam_embed',
-                                webinar_hash: 'y86q9a7p',
-                                utm_data_injected: Object.keys(utmData).length > 0,
-                                injected_params: Object.keys(utmData)
-                              });
-
-                              // Also track as general form submission
-                              mixpanelTracker.trackFormSubmission('webinar_registration', {
-                                form_type: 'webinarjam_embed',
-                                webinar_hash: 'y86q9a7p',
-                                utm_data_present: Object.keys(utmData).length > 0
-                              });
-                              
-                              // Track the actual redirect event now
-                              mixpanelTracker.track('Webinar Redirect', {
-                                destination: 'webinarjam',
-                                destination_url: baseFormUrl,
-                                form_type: 'webinarjam_embed',
-                                utm_params_included: true
-                              });
-                            });
-                          }
-                        }, 2000); // Wait for WebinarJam form to load
+                            } else if (attempt < maxAttempts) {
+                              console.log(`⏳ WebinarJam form not ready yet (attempt ${attempt}/${maxAttempts}), retrying...`);
+                              setupFormTracking(attempt + 1, maxAttempts);
+                            } else {
+                              console.warn('❌ Failed to find WebinarJam form after maximum attempts');
+                            }
+                          }, attempt === 1 ? 3000 : 1000); // Initial delay of 3s, then 1s between retries
+                        };
+                        
+                        setupFormTracking();
                         
                       } catch (error) {
                         console.error('❌ Error generating cross-domain URL:', error);
@@ -253,6 +177,145 @@ export default function RegistrationForm() {
                       
                       script.onload = () => {
                         console.log('✅ WebinarJam form script loaded successfully');
+                        
+                        // Set up form tracking after script loads
+                        const setupFormTracking = (attempt = 1, maxAttempts = 10) => {
+                          setTimeout(() => {
+                            const formElement = el.querySelector('form');
+                            const inputs = el.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+                            
+                            if (formElement && inputs.length > 0) {
+                              console.log(`✅ WebinarJam form found on attempt ${attempt}, setting up tracking for ${inputs.length} inputs`);
+                              
+                              // Track form interaction start
+                              inputs.forEach(input => {
+                                input.addEventListener('focus', () => {
+                                  if (!localStorage.getItem('form_interaction_tracked')) {
+                                    localStorage.setItem('form_interaction_tracked', 'true');
+                                    mixpanelTracker.trackFormInteractionStart();
+                                    mixpanelTracker.track("Form Interaction Started", {
+                                      interaction_type: 'input_focus',
+                                      form_type: 'webinar_registration',
+                                      input_count: inputs.length
+                                    });
+                                    console.log('📝 Form Interaction Started tracked');
+                                  }
+                                }, { once: true });
+                              });
+
+                              // Track individual field interactions
+                              inputs.forEach((input, index) => {
+                                input.addEventListener('input', () => {
+                                  mixpanelTracker.track("Form Field Interaction", {
+                                    field_name: input.name || input.placeholder || `field_${index}`,
+                                    field_type: input.type,
+                                    form_type: 'webinar_registration',
+                                    interaction_type: 'field_input'
+                                  });
+                                  console.log(`📝 Form Field Interaction tracked: ${input.name || input.placeholder || `field_${index}`}`);
+                                });
+                              });
+
+                              // Enhanced UTM parameter injection - both hidden fields AND form action URL modification
+                              formElement.addEventListener('submit', (e) => {
+                                // Use the same merged UTM data from form generation
+                                const utmData = mergedUtmData;
+
+                                // UTM parameters to inject
+                                const utmParams = [
+                                  'utm_source', 'utm_medium', 'utm_campaign', 
+                                  'utm_term', 'utm_content', 'utm_id',
+                                  'gclid', 'fbclid', 'tag', 'hyros_tag'
+                                ];
+
+                                // Method 1: Add UTM parameters as hidden fields
+                                utmParams.forEach(param => {
+                                  const value = utmData[param];
+                                  if (value && !formElement.querySelector(`input[name="${param}"]`)) {
+                                    const hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = param;
+                                    hiddenInput.value = value;
+                                    formElement.appendChild(hiddenInput);
+                                    console.log(`✅ Injected hidden field ${param}=${value} into WebinarJam form`);
+                                  }
+                                });
+
+                                // Method 2: Modify form action URL to include UTM parameters
+                                const currentAction = formElement.action;
+                                if (currentAction && Object.keys(utmData).length > 0) {
+                                  try {
+                                    const actionUrl = new URL(currentAction);
+                                    
+                                    // Add UTM parameters to the action URL
+                                    utmParams.forEach(param => {
+                                      const value = utmData[param];
+                                      if (value) {
+                                        actionUrl.searchParams.set(param, value);
+                                      }
+                                    });
+                                    
+                                    // Update the form action with UTM parameters
+                                    formElement.action = actionUrl.toString();
+                                    console.log(`🔗 Updated WebinarJam form action URL with UTM parameters:`, actionUrl.toString());
+                                  } catch (error) {
+                                    console.warn('⚠️ Could not modify form action URL:', error);
+                                  }
+                                }
+
+                                // Also add our tracking identifiers
+                                const trackingParams = {
+                                  'mp_user_id': trackingData.userId,
+                                  'mp_session_id': trackingData.sessionId,
+                                  'mp_timestamp': Date.now().toString()
+                                };
+
+                                Object.entries(trackingParams).forEach(([param, value]) => {
+                                  if (value && !formElement.querySelector(`input[name="${param}"]`)) {
+                                    const hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = param;
+                                    hiddenInput.value = value;
+                                    formElement.appendChild(hiddenInput);
+                                    console.log(`✅ Injected tracking ID ${param}=${value} into WebinarJam form`);
+                                  }
+                                });
+
+                                console.log('🚀 UTM parameters injected via both hidden fields AND form action URL modification');
+
+                                // Track registration submission
+                                mixpanelTracker.trackRegistrationSubmission({
+                                  form_type: 'webinarjam_embed',
+                                  webinar_hash: 'y86q9a7p',
+                                  utm_data_injected: Object.keys(utmData).length > 0,
+                                  injected_params: Object.keys(utmData)
+                                });
+
+                                // Also track as general form submission
+                                mixpanelTracker.trackFormSubmission('webinar_registration', {
+                                  form_type: 'webinarjam_embed',
+                                  webinar_hash: 'y86q9a7p',
+                                  utm_data_present: Object.keys(utmData).length > 0
+                                });
+                                
+                                // Track the actual redirect event now
+                                mixpanelTracker.track('Webinar Redirect', {
+                                  destination: 'webinarjam',
+                                  destination_url: baseFormUrl,
+                                  form_type: 'webinarjam_embed',
+                                  utm_params_included: true
+                                });
+                              });
+                            } else if (attempt < maxAttempts) {
+                              console.log(`⏳ WebinarJam form not ready yet (attempt ${attempt}/${maxAttempts}), retrying...`);
+                              setupFormTracking(attempt + 1, maxAttempts);
+                            } else {
+                              console.warn('❌ Failed to find WebinarJam form after maximum attempts');
+                            }
+                          }, attempt === 1 ? 3000 : 1000); // Initial delay of 3s, then 1s between retries
+                        };
+                        
+                        setupFormTracking();
                       };
                       
                       script.onerror = () => {

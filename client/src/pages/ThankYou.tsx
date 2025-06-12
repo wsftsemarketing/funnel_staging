@@ -427,7 +427,7 @@ See you there!`,
                     {" "}
                     Wealth Through Property
                   </span>{" "}
-                  live event now!
+                  live event <Highlight type="secondary">now!</Highlight>
                 </p>
 
                 {/* Pricing Display */}
@@ -458,18 +458,18 @@ See you there!`,
                   </div>
                   <div className="flex items-center gap-3 text-left">
                     <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
-                    <span className="text-sm">Direct access to Paul Smith</span>
+                    <span className="text-sm">Direct access to property experts</span>
                   </div>
                   <div className="flex items-center gap-3 text-left">
                     <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
                     <span className="text-sm">
-                      Exclusive deal analysis workshop
+                      CPD Certificates for graduates
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-left">
                     <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
                     <span className="text-sm">
-                      Private networking opportunities
+                      Personalised wealth plan
                     </span>
                   </div>
                   <div className="flex items-center gap-3 text-left">
