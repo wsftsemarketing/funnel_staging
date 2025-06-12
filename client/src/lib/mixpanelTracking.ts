@@ -235,6 +235,44 @@ class MixpanelTracker {
     });
   }
 
+  public trackFormSubmission(formName: string, properties: TrackingData = {}): void {
+    this.track("Registration Form Submitted", {
+      form_name: formName,
+      form_type: 'webinar_registration',
+      session_id: this.sessionId,
+      event_type: 'form_submission',
+      ...properties
+    });
+  }
+
+  public trackButtonClick(buttonText: string, location: string, properties: TrackingData = {}): void {
+    this.track("Button Click", {
+      button_text: buttonText,
+      button_location: location,
+      session_id: this.sessionId,
+      event_type: 'button_click',
+      ...properties
+    });
+  }
+
+  public trackFormInteraction(interactionType: string, properties: TrackingData = {}): void {
+    this.track("Form Interaction", {
+      interaction_type: interactionType,
+      session_id: this.sessionId,
+      event_type: 'form_interaction',
+      ...properties
+    });
+  }
+
+  public trackConversion(conversionType: string, properties: TrackingData = {}): void {
+    this.track("Conversion", {
+      conversion_type: conversionType,
+      session_id: this.sessionId,
+      event_type: 'conversion',
+      ...properties
+    });
+  }
+
   public trackCalendarAdd(calendarType: string): void {
     this.track("Calendar Event Added", {
       calendar_type: calendarType,

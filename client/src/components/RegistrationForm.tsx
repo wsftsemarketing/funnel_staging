@@ -129,8 +129,24 @@ export default function RegistrationForm() {
                                 if (!localStorage.getItem('form_interaction_tracked')) {
                                   localStorage.setItem('form_interaction_tracked', 'true');
                                   mixpanelTracker.trackFormInteractionStart();
+                                  mixpanelTracker.track("Form Interaction", {
+                                    interaction_type: 'input_focus',
+                                    form_type: 'webinar_registration'
+                                  });
                                 }
                               }, { once: true });
+                            });
+
+                            // Track individual field interactions
+                            inputs.forEach((input, index) => {
+                              input.addEventListener('input', () => {
+                                mixpanelTracker.track("Form Field Interaction", {
+                                  field_name: input.name || `field_${index}`,
+                                  field_type: input.type,
+                                  form_type: 'webinar_registration',
+                                  interaction_type: 'field_input'
+                                });
+                              });
                             });
 
                             // Enhanced UTM parameter injection - both hidden fields AND form action URL modification
@@ -206,6 +222,13 @@ export default function RegistrationForm() {
                                 webinar_hash: 'y86q9a7p',
                                 utm_data_injected: Object.keys(utmData).length > 0,
                                 injected_params: Object.keys(utmData)
+                              });
+
+                              // Also track as general form submission
+                              mixpanelTracker.trackFormSubmission('webinar_registration', {
+                                form_type: 'webinarjam_embed',
+                                webinar_hash: 'y86q9a7p',
+                                utm_data_present: Object.keys(utmData).length > 0
                               });
                               
                               // Track the actual redirect event now
