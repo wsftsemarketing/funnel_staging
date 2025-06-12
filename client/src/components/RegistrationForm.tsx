@@ -165,9 +165,59 @@ export default function RegistrationForm() {
                         };
                         
                         setupFormTracking();
+                        
+                      } catch (error) {
+                        console.error('❌ Error generating cross-domain URL:', error);
+                        const urlParams = new URLSearchParams(formParams);
+                        finalFormUrl = `${baseFormUrl}?${urlParams.toString()}`;
+                      }
 
-                            // Enhanced UTM parameter injection - both hidden fields AND form action URL modification
-                            formElement.addEventListener('submit', (e) => {
+                      const script = document.createElement('script');
+                      script.src = finalFormUrl;
+                      
+                      script.onload = () => {
+                        console.log('✅ WebinarJam form script loaded successfully');
+                        
+                        // Set up form tracking after script loads
+                        const setupFormTracking = (attempt = 1, maxAttempts = 10) => {
+                          setTimeout(() => {
+                            const formElement = el.querySelector('form');
+                            const inputs = el.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+                            
+                            if (formElement && inputs.length > 0) {
+                              console.log(`✅ WebinarJam form found on attempt ${attempt}, setting up tracking for ${inputs.length} inputs`);
+                              
+                              // Track form interaction start
+                              inputs.forEach(input => {
+                                input.addEventListener('focus', () => {
+                                  if (!localStorage.getItem('form_interaction_tracked')) {
+                                    localStorage.setItem('form_interaction_tracked', 'true');
+                                    mixpanelTracker.trackFormInteractionStart();
+                                    mixpanelTracker.track("Form Interaction Started", {
+                                      interaction_type: 'input_focus',
+                                      form_type: 'webinar_registration',
+                                      input_count: inputs.length
+                                    });
+                                    console.log('📝 Form Interaction Started tracked');
+                                  }
+                                }, { once: true });
+                              });
+
+                              // Track individual field interactions
+                              inputs.forEach((input, index) => {
+                                input.addEventListener('input', () => {
+                                  mixpanelTracker.track("Form Field Interaction", {
+                                    field_name: input.name || input.placeholder || `field_${index}`,
+                                    field_type: input.type,
+                                    form_type: 'webinar_registration',
+                                    interaction_type: 'field_input'
+                                  });
+                                  console.log(`📝 Form Field Interaction tracked: ${input.name || input.placeholder || `field_${index}`}`);
+                                });
+                              });
+
+                              // Enhanced UTM parameter injection - both hidden fields AND form action URL modification
+                              formElement.addEventListener('submit', (e) => {
                               // Use the same merged UTM data from form generation
                               const utmData = mergedUtmData;
 
@@ -255,21 +305,16 @@ export default function RegistrationForm() {
                                 form_type: 'webinarjam_embed',
                                 utm_params_included: true
                               });
-                            });
-                          }
-                        }, 2000); // Wait for WebinarJam form to load
+                            } else if (attempt < maxAttempts) {
+                              console.log(`⏳ WebinarJam form not ready yet (attempt ${attempt}/${maxAttempts}), retrying...`);
+                              setupFormTracking(attempt + 1, maxAttempts);
+                            } else {
+                              console.warn('❌ Failed to find WebinarJam form after maximum attempts');
+                            }
+                          }, attempt === 1 ? 3000 : 1000); // Initial delay of 3s, then 1s between retries
+                        };
                         
-                      } catch (error) {
-                        console.error('❌ Error generating cross-domain URL:', error);
-                        const urlParams = new URLSearchParams(formParams);
-                        finalFormUrl = `${baseFormUrl}?${urlParams.toString()}`;
-                      }
-
-                      const script = document.createElement('script');
-                      script.src = finalFormUrl;
-                      
-                      script.onload = () => {
-                        console.log('✅ WebinarJam form script loaded successfully');
+                        setupFormTracking();
                       };
                       
                       script.onerror = () => {
