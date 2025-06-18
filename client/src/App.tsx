@@ -6,7 +6,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 // Eagerly load the Home page for fastest initial load
-import Home from "@/pages/Home";
+import Home from './pages/Home'
+import PaulsSeries from './pages/PaulsSeries'
+import ThankYou from './pages/ThankYou'
+import NotFound from './pages/not-found'
 
 // Lazy load all other pages to improve initial load time
 const NotFound = lazy(() => import("@/pages/not-found"));
