@@ -1,0 +1,21 @@
+i want to take the main landing page of this project and create a version B of it! 
+
+There will be two main changes to this version b:
+- Experience 
+- Layout
+
+The new B version will have 50% of traffic going to it, with the original page we've built having the remaining 50% traffic going to it. That way, we can effectively measure which page performs the best based on the conversion events we will touch on shortly.
+
+I want you to take the existing homepage and duplicate it to create the foundation for our B version. I want to title the page "pauls-series" in the directory and URL. It will help us identify what journey/experience this page has created, and also should line up nicely with how we're pushing paid traffic to the page - by way of mentioning a series of videos a user can watch for free when they land on the page.
+
+For the layout and experience of this page, i want us to build on top of what we already have. The major different here will be the layout and functionality of one of the new sections. We should retain the mobile-first approach and optimisation, and I want us to keep the aesthetic, design and UI style the same as what we currently have. Any new components should match and be visually consistent with our existing styles used throughout components. 
+
+What we want is to have a new hero section that does the following: offers a selection of 4 videos (from the same series, they are part of one collection) for a user to watch for free. We would either have one video ready to play, or we would create some sort of experience where the user can pick and choose what video to watch first, and how much of it etc. Kind of like how they'd be in charge of a netflix series or playlist on YouTube/Disney+
+
+The goal here is to create an experience whereby people who have been attracted by paid ads can come onto our page, and get further enticed by having 4 free educational, training videos that have value whe it comes to discussing commercial property investing. Below that 4 video section, we can then introduce them to the webinar we're trying to get signups for. With the current version, we're creating an experience whereby the user can very easily and smoothly registered for the webinar, so this new experience aims to give them free content to entice them to sign up to the webinar even more. 
+
+The initial idea would be to also have a checklist of all of the outcomes of each video, or a sort of mini agenda and whats inside each video called out in its own section below or to the side of the video. I would go with what your proposal would be for something like this. 
+
+We will call this new hero section the 4 video section, for future context. I want to make sure its very aesthetically pleasing, easy to embed the videos (from Vimeo), and has a focus on nurturing people and encouraging them to sign up to the webinar with CTAs, and a good layout for flow; all whilst remaining on brand and visually consistent site-wide.
+
+For another section under the 4 video section, we would have a new headline section. I would say its best to use the existing hero section we have on the original commercial landing page, but we would slightly tweak it to not have an as big headline title, as its not only no longer the first section but because the headlines we will include will be so big! for this headline section to sit underneath the 4 video nurture section, i have attached a very very rough wireframe of how i imagine the content sitting. but once again, i will leave this entirely with you to play with and propose the most optimal - in terms of mobile responsiveness and for conversion and website design best practices - just be sure to take the copy and content, such as the headlines and subheadlines from the screenshot , into the build of the section. 
