@@ -8,10 +8,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 // Eagerly load the Home page for fastest initial load
 import Home from './pages/Home'
 import PaulsSeries from './pages/PaulsSeries'
-import ThankYou from './pages/ThankYou'
-import NotFound from './pages/not-found'
-
-// Lazy load all other pages to improve initial load time
 const NotFound = lazy(() => import("@/pages/not-found"));
 const EmailTemplate = lazy(() => import("@/pages/EmailTemplate"));
 const EmailTemplate2 = lazy(() => import("@/pages/EmailTemplate2"));
@@ -35,6 +31,9 @@ function Router() {
     <Switch>
       {/* Home page is eagerly loaded for fastest main route render */}
       <Route path="/" component={Home} />
+      
+      {/* Paul's Series page is eagerly loaded */}
+      <Route path="/pauls-series" component={PaulsSeries} />
 
       {/* All other routes are lazy-loaded */}
       <Route path="/email-1">
