@@ -9,6 +9,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from './pages/Home'
 import PaulsSeries from './pages/PaulsSeries'
 import EquityReleaseLanding from './pages/equity_release/Landing'
+import { EquityReleaseThankYou, EquityReleaseFinal } from './pages/equity_release'
 const NotFound = lazy(() => import("@/pages/not-found"));
 const EmailTemplate = lazy(() => import("@/pages/EmailTemplate"));
 const EmailTemplate2 = lazy(() => import("@/pages/EmailTemplate2"));
@@ -38,6 +39,10 @@ function Router() {
       
       {/* Equity Release Landing page is eagerly loaded */}
       <Route path="/equity-release" component={EquityReleaseLanding} />
+      
+      {/* Equity Release Thank You and Final pages */}
+      <Route path="/equity-release/thank-you" component={EquityReleaseThankYou} />
+      <Route path="/equity-release/final" component={EquityReleaseFinal} />
 
       {/* All other routes are lazy-loaded */}
       <Route path="/email-1">
