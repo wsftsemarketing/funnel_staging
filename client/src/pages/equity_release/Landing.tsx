@@ -25,7 +25,7 @@ import Navbar from "@/components/Navbar";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { Highlight } from "@/components/ui/highlight";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AskQuestionsSection from "@/components/AskQuestionsSection";
+import AskQuestionSection from "@/components/AskQuestionSection";
 import AskQuestionsSectionCompact from "@/components/AskQuestionsSectionCompact";
 import Footer from "@/components/Footer";
 
@@ -922,7 +922,7 @@ export default function EquityReleaseLanding() {
       <TrustPilotReviews />
 
       {/* Ask Questions Section */}
-      <AskQuestionsSection />
+      <AskQuestionSection />
 
       <AskQuestionsSectionCompact />
 
