@@ -64,13 +64,13 @@ const AskQuestionsSection = () => {
             </div>
             <div className="inline-flex items-center px-3 py-1 mb-6 text-xs font-bold text-primary bg-primary/5 rounded-full border border-primary/10">
               <MessageCircle className="w-3 h-3 mr-1" />
-              EXPERT SUPPORT
+              DUMMY SECTION! 
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
               Still Have <Highlight type="primary">Questions?</Highlight>
             </h2>
             <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              Our equity release specialists are here to help you understand your options and make informed decisions about your property wealth.
+              Our specialists are here to help you understand your options and make informed decisions about your property wealth.
             </p>
           </div>
 
