@@ -1,11 +1,12 @@
-
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { Highlight } from "@/components/ui/highlight";
 import { Play, CheckCircle, Lock, Award, Video, Clock, Users } from "lucide-react";
-import { mixpanelTracker } from "@/lib/mixpanelTracking";
+import { mixpanelTracker } from "@/lib/mixpanelTracker";
+import { ArrowRight, Shield } from "lucide-react";
+
 
 interface OptInProps {
   onSubmit?: (data: { name: string; email: string; phone: string }) => void;
@@ -22,15 +23,17 @@ export default function OptIn({ onSubmit }: OptInProps) {
   const option1Ref = useRef<HTMLDivElement>(null);
   const option2Ref = useRef<HTMLDivElement>(null);
   const option3Ref = useRef<HTMLDivElement>(null);
+  const option4Ref = useRef<HTMLDivElement>(null); // Ref for the new option
 
   const option1InView = useIntersectionObserver(option1Ref, { threshold: 0.1 });
   const option2InView = useIntersectionObserver(option2Ref, { threshold: 0.1 });
   const option3InView = useIntersectionObserver(option3Ref, { threshold: 0.1 });
+  const option4InView = useIntersectionObserver(option4Ref, { threshold: 0.1 }); // Observer for the new option
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Track form submission
     mixpanelTracker.track("Video Series Opt-In Submitted", {
       form_type: "video_series_opt_in",
@@ -71,11 +74,11 @@ export default function OptIn({ onSubmit }: OptInProps) {
                     Exclusive Video Series
                   </span>
                 </div>
-                
+
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
                   Unlock Paul Smith's <Highlight type="primary">Commercial Property</Highlight> Masterclass
                 </h1>
-                
+
                 <p className="text-xl text-neutral-600 leading-relaxed">
                   Get instant access to 4 exclusive training videos revealing the exact strategies used by successful commercial property investors.
                 </p>
@@ -202,11 +205,11 @@ export default function OptIn({ onSubmit }: OptInProps) {
                   🔥 Limited Time Access
                 </span>
               </div>
-              
+
               <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
                 Master Commercial Property with <Highlight type="marker">Paul Smith's</Highlight> Private Video Series
               </h1>
-              
+
               <p className="text-xl text-neutral-600 mb-8 leading-relaxed">
                 Join 15,000+ successful property investors who've unlocked the secrets to commercial property success
               </p>
@@ -415,6 +418,182 @@ export default function OptIn({ onSubmit }: OptInProps) {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Option 4: Homepage-Inspired Design */}
+      <section 
+        ref={option4Ref}
+        className={`relative pt-6 md:pt-6 pb-8 md:pb-24 overflow-hidden bg-white transform transition-all duration-700 ${
+          option4InView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        }`}
+      >
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="max-w-4xl mx-auto text-center transform transition-all duration-700">
+            <div className="inline-block px-3 py-1 mb-4 text-sm font-bold text-primary uppercase tracking-wide">
+              FREE VIDEO SERIES
+            </div>
+
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 leading-[1.05] tracking-tight capitalize">
+              <Highlight type="secondary">Maximise</Highlight> Your Commercial
+              Property <Highlight type="green">Returns</Highlight>
+            </h1>
+
+            <p className="text-lg md:text-2xl text-foreground/90 mb-6 max-w-2xl mx-auto font-medium">
+              Watch our exclusive 4-part video series to discover how investors are locking in{" "}
+              <span className="font-extrabold text-primary">
+                <Highlight type="marker">10–15% returns </Highlight>
+              </span>{" "}
+              and securing long-term leases with commercial property.
+            </p>
+
+            <div className="mb-8 max-w-xl mx-auto">
+              <div className="flex justify-center gap-4 items-center mb-10">
+                <div className="flex items-center">
+                  <Clock className="h-4 w-4 text-primary mr-1" />
+                  <span className="text-sm text-foreground/70">4 Videos</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-primary mr-1" />
+                  <span className="text-sm text-foreground/70">
+                    Instant Access
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <Award className="h-4 w-4 text-primary mr-1" />
+                  <span className="text-sm text-foreground/70">
+                    CPD Accredited
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <div className="relative group">
+              <div className="relative overflow-hidden rounded-lg shadow-lg">
+                <div className="absolute inset-0 bg-gradient-to-r from-ring/40 to-ring/20 z-10 group-hover:opacity-75 transition-opacity"></div>
+
+                <img
+                  src="https://cdn.prod.website-files.com/6826134ab6b3f623513959ec/682d9361c04b429e996beafc_2%20(2).png"
+                  alt="Paul Smith commercial property video series"
+                  className="w-full object-cover aspect-video"
+                />
+
+                <div className="absolute bottom-0 left-0 right-0 py-6 px-4 bg-gradient-to-t from-ring/80 via-ring/40 to-transparent z-20 text-white">
+                  <div className="flex flex-col md:flex-row md:justify-between">
+                    <div className="mb-0 flex-grow">
+                      <h2 className="text-lg md:text-2xl font-black text-white leading-tight">
+                        The Commercial Property Edge
+                      </h2>
+                      <p className="text-sm md:text-lg text-white/90 mb-2 max-w-md font-medium">
+                        Discover the strategy powering modern property investment portfolios.
+                      </p>  
+                    </div>
+
+                    <div className="flex items-center md:justify-end">
+                      <img
+                        src="https://touchstoneeducation.com/hs-fs/hubfs/touchstone%20paul%20smith.png"
+                        alt="Paul Smith"
+                        className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-white object-cover"
+                      />
+                      <div className="text-left md:text-left max-w-full ml-3">
+                        <p className="text-sm md:text-lg font-bold">
+                          With Paul Smith
+                        </p>
+                        <p className="text-xs md:text-sm text-white/80">
+                          Commercial Property Expert
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ROI stats box positioned outside the thumbnail container for proper layering */}
+              <div className="absolute -top-4 -right-2 bg-white p-3 rounded-md shadow-lg border border-neutral-100 z-50">
+                <div className="flex items-center gap-3">
+                  <div className="font-black text-3xl text-green-600/90">
+                    12%+
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm">Avg. Yield</p>
+                    <p className="text-xs text-foreground/70">From day one</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Registration Form */}
+          <div className="max-w-lg mx-auto mt-12 bg-white p-8 rounded-2xl shadow-xl border border-neutral-100">
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-black text-foreground mb-2">
+                Watch Now
+              </h3>
+              <p className="text-foreground/70">
+                Register below to access the video series.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Input
+                  type="text"
+                  placeholder="First Name *"
+                  className="w-full px-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  value={formData.name}
+                  onChange={handleInputChange('name')}
+                  required
+                />
+              </div>
+              <div>
+                <Input
+                  type="email"
+                  placeholder="Email Address *"
+                  className="w-full px-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  value={formData.email}
+                  onChange={handleInputChange('email')}
+                  required
+                />
+              </div>
+              <div>
+                <Input
+                  type="tel"
+                  placeholder="Phone Number *"
+                  className="w-full px-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  value={formData.phone}
+                  onChange={handleInputChange('phone')}
+                  required
+                />
+              </div>
+              <Button 
+                type="submit"
+                className="conversion-btn w-full text-center py-4 uppercase"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Processing..." : "Watch Free Training Now"} <ArrowRight className="ml-2 inline-block" size={18} />
+              </Button>
+            </form>
+
+            <div className="mt-6 space-y-2 text-sm text-foreground/60">
+              <div className="flex items-center">
+                <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                <span>You'll receive your video links after registration.</span>
+              </div>
+              <div className="flex items-center">
+                <Shield className="w-4 h-4 text-green-500 mr-2" />
+                <span>Your information is secure and will not be shared.</span>
+              </div>
+            </div>
+
+            <div className="mt-6 text-center">
+              <div className="inline-flex items-center justify-center bg-neutral-50 px-4 py-2 rounded-lg">
+                <Award className="w-4 h-4 text-primary mr-2" />
+                <span className="text-xs font-medium text-foreground/70">CPD CERTIFIED TRAINING</span>
               </div>
             </div>
           </div>
