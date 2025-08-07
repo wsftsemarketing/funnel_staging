@@ -1,6 +1,7 @@
 
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import OptIn from "@/components/OptIn";
 import VideoSeriesHero from "@/components/VideoSeriesHero";
 import ModifiedHero from "@/components/ModifiedHero";
 import CaseStudies from "@/components/CaseStudies";
@@ -21,6 +22,7 @@ export default function PaulsSeries() {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
+      <OptIn />
       <VideoSeriesHero />
       <ModifiedHero />
       <WebinarOutcomes />
