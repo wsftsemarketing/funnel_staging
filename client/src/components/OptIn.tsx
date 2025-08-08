@@ -605,21 +605,21 @@ export default function OptIn({ onSubmit }: OptInProps) {
       {/* OPTION 5: Premium Conversion-Focused Lead Capture */}
       <section 
         ref={option5Ref}
-        className={`relative py-16 md:py-24 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 transform transition-all duration-700 ${
+        className={`relative py-16 md:py-24 overflow-hidden bg-neutral-50 transform transition-all duration-700 ${
           option5InView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
         {/* Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+          <div className="absolute top-0 left-0 w-72 h-72 bg-primary/3 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/3 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-7xl mx-auto">
             {/* Top Section - Urgency Banner */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full text-sm font-bold mb-6 shadow-lg animate-pulse">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-full text-sm font-bold mb-6 shadow-lg animate-pulse">
                 <Lock className="w-4 h-4" />
                 <span>EXCLUSIVE ACCESS REQUIRED</span>
               </div>
@@ -631,12 +631,12 @@ export default function OptIn({ onSubmit }: OptInProps) {
                 <div className="text-left">
                   <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight text-slate-900">
                     Unlock Paul Smith's 
-                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary animate-gradient-x">
+                    <span className="block text-primary">
                       £100M+ Property Empire
                     </span>
                     <span className="block text-slate-700">Training Vault</span>
                   </h1>
-                  
+
                   <p className="text-xl md:text-2xl text-slate-600 mb-8 leading-relaxed">
                     Get exclusive behind-the-scenes access to the exact strategies that built a 
                     <span className="font-black text-primary"> £100+ million property portfolio</span>
@@ -660,9 +660,9 @@ export default function OptIn({ onSubmit }: OptInProps) {
                             <p className="text-xs font-bold uppercase tracking-wide">LOCKED</p>
                           </div>
                         </div>
-                        
+
                         {/* Video Content */}
-                        <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-3 relative">
+                        <div className="aspect-video bg-neutral-100 rounded-lg mb-3 relative">
                           <div className="absolute inset-0 bg-slate-800/20 rounded-lg flex items-center justify-center">
                             <Play className="w-8 h-8 text-white" />
                           </div>
@@ -670,7 +670,7 @@ export default function OptIn({ onSubmit }: OptInProps) {
                             {video.duration}
                           </div>
                         </div>
-                        
+
                         <h4 className="font-bold text-sm mb-1">{video.title}</h4>
                         <div className="flex justify-between items-center">
                           <span className="text-xs text-slate-500">Training Value</span>
@@ -683,15 +683,15 @@ export default function OptIn({ onSubmit }: OptInProps) {
 
                 {/* Value Props */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+                  <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                     <div className="text-2xl font-black text-green-700 mb-1">£9,600</div>
                     <p className="text-sm text-green-600 font-semibold">Total Training Value</p>
                   </div>
-                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
+                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                     <div className="text-2xl font-black text-blue-700 mb-1">15K+</div>
                     <p className="text-sm text-blue-600 font-semibold">Students Enrolled</p>
                   </div>
-                  <div className="bg-gradient-to-r from-amber-50 to-amber-100 rounded-lg p-4 border border-amber-200">
+                  <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
                     <div className="text-2xl font-black text-amber-700 mb-1">4.9★</div>
                     <p className="text-sm text-amber-600 font-semibold">Average Rating</p>
                   </div>
@@ -703,7 +703,7 @@ export default function OptIn({ onSubmit }: OptInProps) {
                 <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 p-8 relative">
                   {/* Premium Badge */}
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-primary to-secondary text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                    <div className="bg-primary text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
                       🔥 INSTANT ACCESS
                     </div>
                   </div>
@@ -722,7 +722,7 @@ export default function OptIn({ onSubmit }: OptInProps) {
                   <div className="flex justify-center mb-6">
                     <div className="flex -space-x-2">
                       {[1,2,3,4,5].map((i) => (
-                        <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary border-2 border-white flex items-center justify-center text-white text-xs font-bold">
+                        <div key={i} className="w-8 h-8 rounded-full bg-primary border-2 border-white flex items-center justify-center text-white text-xs font-bold">
                           {String.fromCharCode(64 + i)}
                         </div>
                       ))}
@@ -772,7 +772,7 @@ export default function OptIn({ onSubmit }: OptInProps) {
                     <div className="space-y-3">
                       <Button 
                         type="submit" 
-                        className="w-full h-14 text-lg font-black bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
+                        className="w-full h-14 text-lg font-black bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? (
@@ -787,7 +787,7 @@ export default function OptIn({ onSubmit }: OptInProps) {
                           </>
                         )}
                       </Button>
-                      
+
                       <p className="text-center text-xs text-slate-500">
                         By clicking above, you agree to receive training materials and updates
                       </p>
@@ -813,7 +813,7 @@ export default function OptIn({ onSubmit }: OptInProps) {
                   </div>
 
                   {/* Urgency Timer */}
-                  <div className="mt-6 bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-4 border border-red-200">
+                  <div className="mt-6 bg-red-50 rounded-lg p-4 border border-red-200">
                     <div className="text-center">
                       <p className="text-sm font-bold text-red-700 mb-2">⏰ Limited Time Access</p>
                       <p className="text-xs text-red-600">This exclusive training may be removed without notice</p>
