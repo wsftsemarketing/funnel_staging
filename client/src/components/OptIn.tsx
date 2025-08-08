@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { useIntersectionObserver } from "@/lib/utils/animations";
 import { Highlight } from "@/components/ui/highlight";
 import { Play, CheckCircle, Lock, Award, Video, Clock, Users } from "lucide-react";
-import { mixpanelTracker } from "@/lib/mixpanelTracker";
 import { ArrowRight, Shield } from "lucide-react";
 
 
