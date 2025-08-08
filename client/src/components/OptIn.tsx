@@ -5,6 +5,7 @@ import { useIntersectionObserver } from "@/lib/utils/animations";
 import { Highlight } from "@/components/ui/highlight";
 import { Play, CheckCircle, Lock, Award, Video, Clock, Users } from "lucide-react";
 import { ArrowRight, Shield } from "lucide-react";
+import { mixpanelTracker } from "@/lib/mixpanelTracking";
 
 
 interface OptInProps {
@@ -22,12 +23,14 @@ export default function OptIn({ onSubmit }: OptInProps) {
   const option1Ref = useRef<HTMLDivElement>(null);
   const option2Ref = useRef<HTMLDivElement>(null);
   const option3Ref = useRef<HTMLDivElement>(null);
-  const option4Ref = useRef<HTMLDivElement>(null); // Ref for the new option
+  const option4Ref = useRef<HTMLDivElement>(null);
+  const option5Ref = useRef<HTMLDivElement>(null); // Ref for option 5
 
   const option1InView = useIntersectionObserver(option1Ref, { threshold: 0.1 });
   const option2InView = useIntersectionObserver(option2Ref, { threshold: 0.1 });
   const option3InView = useIntersectionObserver(option3Ref, { threshold: 0.1 });
-  const option4InView = useIntersectionObserver(option4Ref, { threshold: 0.1 }); // Observer for the new option
+  const option4InView = useIntersectionObserver(option4Ref, { threshold: 0.1 });
+  const option5InView = useIntersectionObserver(option5Ref, { threshold: 0.1 }); // Observer for option 5
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -593,6 +596,250 @@ export default function OptIn({ onSubmit }: OptInProps) {
               <div className="inline-flex items-center justify-center bg-neutral-50 px-4 py-2 rounded-lg">
                 <Award className="w-4 h-4 text-primary mr-2" />
                 <span className="text-xs font-medium text-foreground/70">CPD CERTIFIED TRAINING</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* OPTION 5: Premium Conversion-Focused Lead Capture */}
+      <section 
+        ref={option5Ref}
+        className={`relative py-16 md:py-24 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 transform transition-all duration-700 ${
+          option5InView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        }`}
+      >
+        {/* Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-7xl mx-auto">
+            {/* Top Section - Urgency Banner */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full text-sm font-bold mb-6 shadow-lg animate-pulse">
+                <Lock className="w-4 h-4" />
+                <span>EXCLUSIVE ACCESS REQUIRED</span>
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-12 gap-8 items-center">
+              {/* Left Column - Video Content Showcase */}
+              <div className="lg:col-span-7 space-y-8">
+                <div className="text-left">
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight text-slate-900">
+                    Unlock Paul Smith's 
+                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary animate-gradient-x">
+                      £100M+ Property Empire
+                    </span>
+                    <span className="block text-slate-700">Training Vault</span>
+                  </h1>
+                  
+                  <p className="text-xl md:text-2xl text-slate-600 mb-8 leading-relaxed">
+                    Get exclusive behind-the-scenes access to the exact strategies that built a 
+                    <span className="font-black text-primary"> £100+ million property portfolio</span>
+                  </p>
+                </div>
+
+                {/* Locked Video Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { title: "Market Analysis Secrets", value: "£2,500", duration: "18 min", locked: true },
+                    { title: "Deal Sourcing Mastery", value: "£3,200", duration: "22 min", locked: true },
+                    { title: "Due Diligence Blueprint", value: "£1,800", duration: "15 min", locked: true },
+                    { title: "Exit Strategy Playbook", value: "£2,100", duration: "20 min", locked: true }
+                  ].map((video, index) => (
+                    <div key={index} className="relative group">
+                      <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-4 relative overflow-hidden">
+                        {/* Lock Overlay */}
+                        <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-20 rounded-xl">
+                          <div className="text-center text-white">
+                            <Lock className="w-8 h-8 mx-auto mb-2" />
+                            <p className="text-xs font-bold uppercase tracking-wide">LOCKED</p>
+                          </div>
+                        </div>
+                        
+                        {/* Video Content */}
+                        <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-3 relative">
+                          <div className="absolute inset-0 bg-slate-800/20 rounded-lg flex items-center justify-center">
+                            <Play className="w-8 h-8 text-white" />
+                          </div>
+                          <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                            {video.duration}
+                          </div>
+                        </div>
+                        
+                        <h4 className="font-bold text-sm mb-1">{video.title}</h4>
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-slate-500">Training Value</span>
+                          <span className="font-bold text-primary text-sm">{video.value}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Value Props */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+                    <div className="text-2xl font-black text-green-700 mb-1">£9,600</div>
+                    <p className="text-sm text-green-600 font-semibold">Total Training Value</p>
+                  </div>
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
+                    <div className="text-2xl font-black text-blue-700 mb-1">15K+</div>
+                    <p className="text-sm text-blue-600 font-semibold">Students Enrolled</p>
+                  </div>
+                  <div className="bg-gradient-to-r from-amber-50 to-amber-100 rounded-lg p-4 border border-amber-200">
+                    <div className="text-2xl font-black text-amber-700 mb-1">4.9★</div>
+                    <p className="text-sm text-amber-600 font-semibold">Average Rating</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column - Lead Capture Form */}
+              <div className="lg:col-span-5">
+                <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 p-8 relative">
+                  {/* Premium Badge */}
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-primary to-secondary text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                      🔥 INSTANT ACCESS
+                    </div>
+                  </div>
+
+                  <div className="text-center mb-8 mt-4">
+                    <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3">
+                      Unlock Your Access Now
+                    </h3>
+                    <p className="text-slate-600 leading-relaxed">
+                      Join <span className="font-bold text-primary">15,000+ successful investors</span> who've 
+                      already accessed this exclusive training
+                    </p>
+                  </div>
+
+                  {/* Social Proof Avatars */}
+                  <div className="flex justify-center mb-6">
+                    <div className="flex -space-x-2">
+                      {[1,2,3,4,5].map((i) => (
+                        <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary border-2 border-white flex items-center justify-center text-white text-xs font-bold">
+                          {String.fromCharCode(64 + i)}
+                        </div>
+                      ))}
+                      <div className="w-8 h-8 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center text-slate-600 text-xs font-bold">
+                        +15K
+                      </div>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-5">
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 mb-2">Full Name *</label>
+                        <Input
+                          type="text"
+                          value={formData.name}
+                          onChange={handleInputChange('name')}
+                          required
+                          className="h-12 text-base bg-slate-50 border-slate-300 focus:border-primary focus:ring-primary/20"
+                          placeholder="Enter your full name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 mb-2">Email Address *</label>
+                        <Input
+                          type="email"
+                          value={formData.email}
+                          onChange={handleInputChange('email')}
+                          required
+                          className="h-12 text-base bg-slate-50 border-slate-300 focus:border-primary focus:ring-primary/20"
+                          placeholder="Enter your email address"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 mb-2">Phone Number *</label>
+                        <Input
+                          type="tel"
+                          value={formData.phone}
+                          onChange={handleInputChange('phone')}
+                          required
+                          className="h-12 text-base bg-slate-50 border-slate-300 focus:border-primary focus:ring-primary/20"
+                          placeholder="Enter your phone number"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Button 
+                        type="submit" 
+                        className="w-full h-14 text-lg font-black bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                            Unlocking Your Videos...
+                          </>
+                        ) : (
+                          <>
+                            🚀 Get Instant Access Now
+                            <ArrowRight className="ml-2" size={20} />
+                          </>
+                        )}
+                      </Button>
+                      
+                      <p className="text-center text-xs text-slate-500">
+                        By clicking above, you agree to receive training materials and updates
+                      </p>
+                    </div>
+                  </form>
+
+                  {/* Trust Indicators */}
+                  <div className="mt-8 pt-6 border-t border-slate-200">
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      <div className="space-y-1">
+                        <CheckCircle className="w-5 h-5 text-green-600 mx-auto" />
+                        <p className="text-xs font-semibold text-slate-700">Instant Access</p>
+                      </div>
+                      <div className="space-y-1">
+                        <Shield className="w-5 h-5 text-blue-600 mx-auto" />
+                        <p className="text-xs font-semibold text-slate-700">100% Secure</p>
+                      </div>
+                      <div className="space-y-1">
+                        <Award className="w-5 h-5 text-amber-600 mx-auto" />
+                        <p className="text-xs font-semibold text-slate-700">CPD Certified</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Urgency Timer */}
+                  <div className="mt-6 bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-4 border border-red-200">
+                    <div className="text-center">
+                      <p className="text-sm font-bold text-red-700 mb-2">⏰ Limited Time Access</p>
+                      <p className="text-xs text-red-600">This exclusive training may be removed without notice</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Section - Additional Social Proof */}
+            <div className="mt-16 text-center">
+              <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6 max-w-4xl mx-auto">
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <div className="text-3xl font-black text-primary">£8M+</div>
+                    <p className="text-sm text-slate-600">Property portfolio built in 8 years</p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-3xl font-black text-secondary">15,000+</div>
+                    <p className="text-sm text-slate-600">Students trained worldwide</p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-3xl font-black text-green-600">97%</div>
+                    <p className="text-sm text-slate-600">Student satisfaction rate</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
