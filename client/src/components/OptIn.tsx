@@ -700,13 +700,8 @@ export default function OptIn({ onSubmit }: OptInProps) {
 
               {/* Right Column - Lead Capture Form */}
               <div className="lg:col-span-5">
-                <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 p-8 relative">
+                <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 relative">
                   {/* Premium Badge */}
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-primary text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
-                      🔥 INSTANT ACCESS
-                    </div>
-                  </div>
 
                   <div className="text-center mb-8 mt-4">
                     <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-3">
@@ -722,11 +717,11 @@ export default function OptIn({ onSubmit }: OptInProps) {
                   <div className="flex justify-center mb-6">
                     <div className="flex -space-x-2">
                       {[1,2,3,4,5].map((i) => (
-                        <div key={i} className="w-8 h-8 rounded-full bg-primary border-2 border-white flex items-center justify-center text-white text-xs font-bold">
+                        <div key={i} className="w-8 h-8 rounded-full bg-secondary border-2 border-white flex items-center justify-center text-white text-xs font-bold">
                           {String.fromCharCode(64 + i)}
                         </div>
                       ))}
-                      <div className="w-8 h-8 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center text-slate-600 text-xs font-bold">
+                      <div className="w-8 h-8 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center text-slate-600 text-xs">
                         +15K
                       </div>
                     </div>
@@ -772,7 +767,7 @@ export default function OptIn({ onSubmit }: OptInProps) {
                     <div className="space-y-3">
                       <Button 
                         type="submit" 
-                        className="w-full h-14 text-lg font-black bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
+                        className="w-full h-14 text-lg font-bold bg-secondary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 animate-expand-wobble"
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? (
@@ -782,7 +777,7 @@ export default function OptIn({ onSubmit }: OptInProps) {
                           </>
                         ) : (
                           <>
-                            🚀 Get Instant Access Now
+                            Get Instant Access Now
                             <ArrowRight className="ml-2" size={20} />
                           </>
                         )}
@@ -791,6 +786,27 @@ export default function OptIn({ onSubmit }: OptInProps) {
                       <p className="text-center text-xs text-slate-500">
                         By clicking above, you agree to receive training materials and updates
                       </p>
+                      <div className="bg-neutral-50 rounded-xl p-4">
+                        <p className="text-center text-sm font-semibold text-neutral-800 mb-3">What You'll Get:</p>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="flex items-center gap-2 text-xs text-neutral-600">
+                            <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0" />
+                            <span>4 HD training videos</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-neutral-600">
+                            <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0" />
+                            <span>Downloadable worksheets</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-neutral-600">
+                            <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0" />
+                            <span>Mobile & desktop access</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-neutral-600">
+                            <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0" />
+                            <span>Lifetime access</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </form>
 

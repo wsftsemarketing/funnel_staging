@@ -9,6 +9,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from './pages/Home'
 import PaulsSeries from './pages/PaulsSeries'
 import EquityReleaseLanding from './pages/equity_release/Landing'
+import DTOFunnel from './pages/dto-funnel/wsf_DTO'
 import { EquityReleaseThankYou, EquityReleaseFinal } from './pages/equity_release'
 const NotFound = lazy(() => import("@/pages/not-found"));
 const EmailTemplate = lazy(() => import("@/pages/EmailTemplate"));
@@ -20,7 +21,6 @@ const ThankYou = lazy(() => import("@/pages/ThankYou"));
 const Sections = lazy(() => import("@/pages/Sections"));
 const FullPageComponents = lazy(() => import("@/pages/full-page-components"));
 const EmailsAll = lazy(() => import("@/pages/Emails-all"));
-
 // Loading fallback component
 const PageLoading = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -44,6 +44,11 @@ function Router() {
       <Route path="/equity-release/thank-you" component={EquityReleaseThankYou} />
       <Route path="/equity-release/final" component={EquityReleaseFinal} />
 
+      <Route path="/direct-offer">
+        <Suspense fallback={<PageLoading />}>
+          <DTOFunnel />
+        </Suspense>
+      </Route>
       {/* All other routes are lazy-loaded */}
       <Route path="/email-1">
         <Suspense fallback={<PageLoading />}>
