@@ -6,9 +6,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 // Eagerly load the Home page for fastest initial load
-import Home from "@/pages/Home";
-
-// Lazy load all other pages to improve initial load time
+import Home from './pages/Home'
+import PaulsSeries from './pages/PaulsSeries'
+import EquityReleaseLanding from './pages/equity_release/Landing'
+import DTOFunnel from './pages/dto-funnel/wsf_DTO'
+import { EquityReleaseThankYou, EquityReleaseFinal } from './pages/equity_release'
 const NotFound = lazy(() => import("@/pages/not-found"));
 const EmailTemplate = lazy(() => import("@/pages/EmailTemplate"));
 const EmailTemplate2 = lazy(() => import("@/pages/EmailTemplate2"));
@@ -19,7 +21,6 @@ const ThankYou = lazy(() => import("@/pages/ThankYou"));
 const Sections = lazy(() => import("@/pages/Sections"));
 const FullPageComponents = lazy(() => import("@/pages/full-page-components"));
 const EmailsAll = lazy(() => import("@/pages/Emails-all"));
-
 // Loading fallback component
 const PageLoading = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -32,7 +33,22 @@ function Router() {
     <Switch>
       {/* Home page is eagerly loaded for fastest main route render */}
       <Route path="/" component={Home} />
+      
+      {/* Paul's Series page is eagerly loaded */}
+      <Route path="/pauls-series" component={PaulsSeries} />
+      
+      {/* Equity Release Landing page is eagerly loaded */}
+      <Route path="/equity-release" component={EquityReleaseLanding} />
+      
+      {/* Equity Release Thank You and Final pages */}
+      <Route path="/equity-release/thank-you" component={EquityReleaseThankYou} />
+      <Route path="/equity-release/final" component={EquityReleaseFinal} />
 
+      <Route path="/direct-offer">
+        <Suspense fallback={<PageLoading />}>
+          <DTOFunnel />
+        </Suspense>
+      </Route>
       {/* All other routes are lazy-loaded */}
       <Route path="/email-1">
         <Suspense fallback={<PageLoading />}>

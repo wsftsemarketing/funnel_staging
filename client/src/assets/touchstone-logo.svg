@@ -1,0 +1,22 @@
+
+<svg width="300" height="60" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Touchstone text (serif font, black weight) -->
+  <text x="0" y="45" 
+        font-family="Georgia, 'Times New Roman', Times, serif" 
+        font-weight="900" 
+        font-size="32" 
+        fill="#111827" 
+        letter-spacing="-0.025em">
+    Touchstone
+  </text>
+  
+  <!-- Education text (sans font, bold weight) -->
+  <text x="165" y="45" 
+        font-family="'Albert Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+        font-weight="700" 
+        font-size="32" 
+        fill="#976B47" 
+        letter-spacing="normal">
+    Education
+  </text>
+</svg>
