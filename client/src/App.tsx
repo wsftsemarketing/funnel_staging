@@ -11,6 +11,7 @@ import PaulsSeries from './pages/PaulsSeries'
 import EquityReleaseLanding from './pages/equity_release/Landing'
 import DTOFunnel from './pages/dto-funnel/wsf_DTO'
 import { EquityReleaseThankYou, EquityReleaseFinal } from './pages/equity_release'
+import SalesOfferPage from "@/pages/sales_pages/SalesOfferPage";
 const NotFound = lazy(() => import("@/pages/not-found"));
 const EmailTemplate = lazy(() => import("@/pages/EmailTemplate"));
 const EmailTemplate2 = lazy(() => import("@/pages/EmailTemplate2"));
@@ -96,6 +97,14 @@ function Router() {
         </Suspense>
       </Route>
 
+      {/* Sales Offer Page */}
+      <Route path="/sales-offer">
+        <Suspense fallback={<PageLoading />}>
+          <SalesOfferPage />
+        </Suspense>
+      </Route>
+
+      
       {/* Fallback 404 route (also lazy-loaded) */}
       <Route>
         <Suspense fallback={<PageLoading />}>
